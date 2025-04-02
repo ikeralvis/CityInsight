@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciudadano - Gestión Urbana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stylesv2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <!-- Menú Lateral -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Ciudadano</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="indexv2.html" class="menu-item"><i class="fas fa-tachometer-alt"></i> Volver al Dashboard</a></li>
+            <li><a href="#propuestas" class="menu-item"><i class="fas fa-thumbs-up"></i> Ver Propuestas</a></li>
+            <li><a href="#encuestas" class="menu-item"><i class="fas fa-poll"></i> Participar en Encuestas</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div id="main-content" class="main-content">
+        
+        <!-- Barra de navegación superior -->
+        <header id="top-bar">
+            <div class="logo">
+                <h1>Ciudadano</h1>
+            </div>
+            <div class="user-info">
+                <span>Bienvenido, Ciudadano</span>
+            </div>
+        </header>
+
+        <!-- Zona Ciudadano -->
+        <section id="ciudadano" class="ciudadano">
+            <div class="ciudadano-header">
+                <h2>Propuestas y Encuestas</h2>
+            </div>
+            <p>Aquí puedes ver las propuestas y encuestas para mejorar tu ciudad.</p>
+            <div class="propuestas-container">
+                <div class="propuesta">
+                    <h3>Propuesta 1: Más Zonas Verdes</h3>
+                    <p>¿Qué opinas sobre la expansión de las zonas verdes en tu barrio?</p>
+                </div>
+                <div class="propuesta">
+                    <h3>Propuesta 2: Mejora del Transporte Público</h3>
+                    <p>¿Consideras que se deberían añadir más rutas de transporte público?</p>
+                </div>
+            </div>
+            <div class="encuestas-container">
+                <h3>Participa en la encuesta:</h3>
+                <p>¿Estás de acuerdo con la ampliación de las zonas verdes?</p>
+                <button>Votar</button>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityInsight - Gestion de Zonas Urbanisticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stylesv2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <!-- Menú Lateral -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>CityInsight</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#dashboard" class="menu-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="ciudadano.html" class="menu-item"><i class="fas fa-user"></i> Cambiar a Ciudadano</a></li>
+            <li><a href="#encuestas" class="menu-item"><i class="fas fa-poll"></i> Encuestas</a></li>
+            <li><a href="#propuestas" class="menu-item"><i class="fas fa-thumbs-up"></i> Propuestas</a></li>
+            <li><a href="#estadisticas" class="menu-item"><i class="fas fa-chart-pie"></i> Estadísticas</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div id="main-content" class="main-content">
+        
+        <!-- Barra de navegación superior -->
+        <header id="top-bar">
+            <div class="logo">
+                <h1>Ayuntamiento</h1>
+            </div>
+            <div class="user-info">
+                <span>Bienvenido, Administrador</span>
+            </div>
+        </header>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2>Zona de Gestión Urbana</h2>
+            </div>
+
+            <!-- Gráficos de Gestión Urbana -->
+            <div class="charts-container">
+                <div class="chart">
+                    <h3>Zonas Verdes (%)</h3>
+                    <canvas id="greenZonesChart"></canvas>
+                </div>
+                <div class="chart">
+                    <h3>Densidad Poblacional (personas/km²)</h3>
+                    <canvas id="populationDensityChart"></canvas>
+                </div>
+                <div class="chart">
+                    <h3>Infraestructura Urbana (m² por habitante)</h3>
+                    <canvas id="infrastructureChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
