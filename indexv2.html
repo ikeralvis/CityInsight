@@ -154,7 +154,10 @@
                         </select>
                     </div>
                     <div class="chart-container">
-                        <canvas id="neighborhoodSatisfactionChart"></canvas>
+                        <canvas id="neighborhoodSatisfactionChart" data-chart-type="bar" data-chart-title="Satisfacción por Barrios"></canvas>
+                        <div class="chart-legend">
+                            <p class="chart-description">Muestra la satisfacción ciudadana (%) en los principales barrios de la ciudad</p>
+                        </div>
                     </div>
                     <div class="stats-summary">
                         <div class="stats-item">
@@ -329,7 +332,98 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="script.js"></script>
+
+    <!-- Initialize Charts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if Chart.js is loaded and the canvas exists
+            if (typeof Chart !== 'undefined' && document.getElementById('satisfactionTrendsChart')) {
+                // Initialize the satisfaction trends chart
+                const ctx = document.getElementById('satisfactionTrendsChart').getContext('2d');
+                const satisfactionChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                        datasets: [{
+                            label: 'Satisfacción General',
+                            data: [75, 78, 76, 79, 82],
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Tendencia de Satisfacción Ciudadana 2023'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 70,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Initialize the neighborhood satisfaction chart
+            if (typeof Chart !== 'undefined' && document.getElementById('neighborhoodSatisfactionChart')) {
+                const neighborhoodCtx = document.getElementById('neighborhoodSatisfactionChart').getContext('2d');
+                const neighborhoodChart = new Chart(neighborhoodCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Centro', 'Norte', 'Sur', 'Este', 'Oeste', 'Industrial Norte', 'Rivera Este'],
+                        datasets: [{
+                            label: 'Satisfacción Ciudadana (%)',
+                            data: [92, 78, 83, 75, 81, 68, 85],
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)',
+                                'rgba(255, 159, 64, 0.7)',
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(255, 205, 86, 0.7)',
+                                'rgba(201, 203, 207, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgb(54, 162, 235)',
+                                'rgb(75, 192, 192)',
+                                'rgb(153, 102, 255)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 205, 86)',
+                                'rgb(201, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Satisfacción por Barrios'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 60,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

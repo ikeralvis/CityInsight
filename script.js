@@ -90,3 +90,24 @@ const trafficDensityChart = new Chart(trafficDensityCtx, {
         }
     }
 });
+
+// Función para mostrar el modal de información
+function showInfoModal() {
+    const modal = document.getElementById('infoModal');
+    modal.style.display = 'block';
+}
+
+// Función para cerrar el modal de información
+
+function closeInfoModal() 
+{
+    const modal = document.getElementById('infoModal');
+    modal.style.display = 'none';
+}
+
+// Añadir evento de clic al botón de información
+const infoButton = document.getElementById('info-button');
+infoButton.addEventListener('click', showInfoModal);
+
+
+
