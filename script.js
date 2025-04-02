@@ -1,74 +1,91 @@
 // script.js
 
-// Datos para los gráficos de gestión urbana
+// Función para cambiar entre modo claro y oscuro
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+
+// Función de cambio de tema
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    themeIcon.classList.toggle('fa-sun', isDarkMode);
+    themeIcon.classList.toggle('fa-moon', !isDarkMode);
+    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+}
+
+// Verificar el estado del modo nocturno al cargar la página
+window.addEventListener('load', () => {
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+        themeIcon.classList.add('fa-sun');
+        themeIcon.classList.remove('fa-moon');
+    } else {
+        document.body.classList.remove('dark-mode');
+        themeIcon.classList.add('fa-moon');
+        themeIcon.classList.remove('fa-sun');
+    }
+});
+
+// Añadir evento de clic al botón de cambio de tema
+themeToggle.addEventListener('click', toggleTheme);
+
+// Configuración de los gráficos con Chart.js
 const greenZonesData = {
-    labels: ['Zona A', 'Zona B', 'Zona C', 'Zona D', 'Zona E'],
-    datasets: [{
-        label: 'Zonas Verdes (%)',
-        data: [40, 25, 10, 15, 30], // Datos de ejemplo
-        backgroundColor: 'rgba(76, 175, 80, 0.6)',
-        borderColor: 'rgba(76, 175, 80, 1)',
-        borderWidth: 1
-    }]
-};
-
-const populationDensityData = {
     labels: ['Barrio 1', 'Barrio 2', 'Barrio 3', 'Barrio 4', 'Barrio 5'],
     datasets: [{
-        label: 'Densidad Poblacional (personas/km²)',
-        data: [1200, 1800, 800, 1500, 2000],
-        backgroundColor: 'rgba(41, 128, 185, 0.6)',
-        borderColor: 'rgba(41, 128, 185, 1)',
+        label: 'Zonas Verdes (m² por habitante)',
+        data: [16.5, 18.2, 14.8, 15.6, 17.0],
+        backgroundColor: 'rgba(39, 174, 96, 0.6)',
+        borderColor: 'rgba(39, 174, 96, 1)',
         borderWidth: 1
     }]
 };
 
-const infrastructureData = {
+const trafficDensityData = {
     labels: ['Barrio 1', 'Barrio 2', 'Barrio 3', 'Barrio 4', 'Barrio 5'],
     datasets: [{
-        label: 'Infraestructura Urbana (m² por habitante)',
-        data: [50, 80, 60, 70, 90],
-        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-        borderColor: 'rgba(255, 99, 132, 1)',
+        label: 'Densidad de Tráfico (vehículos/km²)',
+        data: [1200, 1500, 1100, 1300, 1400],
+        backgroundColor: 'rgba(241, 196, 15, 0.6)',
+        borderColor: 'rgba(241, 196, 15, 1)',
         borderWidth: 1
     }]
 };
 
-// Crear los gráficos
-const greenZonesChart = new Chart(document.getElementById('greenZonesChart'), {
+// Crear gráfico de Zonas Verdes
+const greenZonesCtx = document.getElementById('greenZonesChart').getContext('2d');
+const greenZonesChart = new Chart(greenZonesCtx, {
     type: 'bar',
     data: greenZonesData,
     options: {
         responsive: true,
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'm² por habitante'
+                }
             }
         }
     }
 });
 
-const populationDensityChart = new Chart(document.getElementById('populationDensityChart'), {
+// Crear gráfico de Densidad de Tráfico
+const trafficDensityCtx = document.getElementById('trafficDensityChart').getContext('2d');
+const trafficDensityChart = new Chart(trafficDensityCtx, {
     type: 'bar',
-    data: populationDensityData,
+    data: trafficDensityData,
     options: {
         responsive: true,
         scales: {
             y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-
-const infrastructureChart = new Chart(document.getElementById('infrastructureChart'), {
-    type: 'bar',
-    data: infrastructureData,
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'vehículos/km²'
+                }
             }
         }
     }

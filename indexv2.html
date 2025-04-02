@@ -3,66 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CityInsight - Gestion de Zonas Urbanisticas</title>
+    <title>CityInsight - Panel de Gestión Municipal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylesv2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
 </head>
 <body>
-
-    <!-- Menú Lateral -->
-    <nav id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h2>CityInsight</h2>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="#dashboard" class="menu-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="ciudadano.html" class="menu-item"><i class="fas fa-user"></i> Cambiar a Ciudadano</a></li>
-            <li><a href="#encuestas" class="menu-item"><i class="fas fa-poll"></i> Encuestas</a></li>
-            <li><a href="#propuestas" class="menu-item"><i class="fas fa-thumbs-up"></i> Propuestas</a></li>
-            <li><a href="#estadisticas" class="menu-item"><i class="fas fa-chart-pie"></i> Estadísticas</a></li>
-        </ul>
-    </nav>
-
-    <!-- Contenido Principal -->
-    <div id="main-content" class="main-content">
-        
-        <!-- Barra de navegación superior -->
-        <header id="top-bar">
-            <div class="logo">
-                <h1>Ayuntamiento</h1>
-            </div>
-            <div class="user-info">
-                <span>Bienvenido, Administrador</span>
-            </div>
-        </header>
-
-        <!-- Dashboard -->
-        <section id="dashboard" class="dashboard">
-            <div class="dashboard-header">
-                <h2>Zona de Gestión Urbana</h2>
-            </div>
-
-            <!-- Gráficos de Gestión Urbana -->
-            <div class="charts-container">
-                <div class="chart">
-                    <h3>Zonas Verdes (%)</h3>
-                    <canvas id="greenZonesChart"></canvas>
-                </div>
-                <div class="chart">
-                    <h3>Densidad Poblacional (personas/km²)</h3>
-                    <canvas id="populationDensityChart"></canvas>
-                </div>
-                <div class="chart">
-                    <h3>Infraestructura Urbana (m² por habitante)</h3>
-                    <canvas id="infrastructureChart"></canvas>
-                </div>
-            </div>
-        </section>
-
+    <!-- Modo Nocturno Toggle -->
+    <div id="theme-toggle" class="theme-toggle">
+        <i id="theme-icon" class="fas fa-moon"></i>
     </div>
 
-    <!-- Scripts -->
+    <!-- Contenedor Principal -->
+    <div class="container">
+        <!-- Barra Lateral -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-city"></i> CityInsight</h2>
+            </div>
+            <div class="user-info">
+                <p>Ayuntamiento de Ciudad</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard" class="menu-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#projects" class="menu-item"><i class="fas fa-project-diagram"></i> Proyectos</a></li>
+                <li><a href="#districts" class="menu-item"><i class="fas fa-map-marker-alt"></i> Barrios</a></li>
+                <li><a href="#budget" class="menu-item"><i class="fas fa-euro-sign"></i> Presupuestos</a></li>
+                <li><a href="#citizens" class="menu-item"><i class="fas fa-users"></i> Participación</a></li>
+                <li><a href="#reports" class="menu-item"><i class="fas fa-file-alt"></i> Informes</a></li>
+                <li><a href="#analytics" class="menu-item"><i class="fas fa-chart-line"></i> Análisis</a></li>
+                <li><a href="#notifications" class="menu-item"><i class="fas fa-bell"></i> Notificaciones</a></li>
+                <li><a href="ciudadano.html" class="menu-item"><i class="fas fa-user"></i> Portal Ciudadano</a></li>
+                <li><a href="#settings" class="menu-item"><i class="fas fa-cogs"></i> Configuración</a></li>
+            </ul>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Barra Superior -->
+            <header class="top-bar">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar...">
+                </div>
+                <div class="top-bar-actions">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">5</span>
+                    </div>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="current-date">15 Mayo 2023</span>
+                    </div>
+                </div>
+            </header>
+
+            <h1 class="page-title">Panel de Gestión Municipal</h1>
+
+            <!-- Indicadores Clave -->
+            <section class="kpi-section">
+                <div class="card kpi-card">
+                    <i class="fas fa-leaf card-icon green"></i>
+                    <div class="kpi-content">
+                        <h3>Índice de Calidad Urbana</h3>
+                        <p class="kpi-value">78.3/100</p>
+                        <div class="kpi-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>2.4% vs mes anterior</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card kpi-card">
+                    <i class="fas fa-tree card-icon"></i>
+                    <div class="kpi-content">
+                        <h3>Zonas Verdes</h3>
+                        <p class="kpi-value">16.5 m²/hab</p>
+                        <div class="kpi-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>0.8% vs mes anterior</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card kpi-card">
+                    <i class="fas fa-car-side card-icon orange"></i>
+                    <div class="kpi-content">
+                        <h3>Intensidad de Tráfico</h3>
+                        <p class="kpi-value">63.2%</p>
+                        <div class="kpi-trend negative">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>1.7% vs mes anterior</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card kpi-card">
+                    <i class="fas fa-smile card-icon blue"></i>
+                    <div class="kpi-content">
+                        <h3>Satisfacción Ciudadana</h3>
+                        <p class="kpi-value">82%</p>
+                        <div class="kpi-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>3.5% vs mes anterior</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mapa Interactivo y Estadísticas -->
+            <div class="content-row">
+                <!-- Mapa Interactivo -->
+                <section class="card map-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-map-marked-alt"></i> Mapa de Barrios</h2>
+                        <div class="section-actions">
+                            <button class="btn-action"><i class="fas fa-expand-alt"></i></button>
+                            <button class="btn-action"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="map-filters">
+                        <select id="map-data-select">
+                            <option value="satisfaction">Satisfacción ciudadana</option>
+                            <option value="green">Zonas verdes</option>
+                            <option value="traffic">Densidad de tráfico</option>
+                            <option value="projects">Proyectos activos</option>
+                        </select>
+                    </div>
+                    <div id="city-map" class="map-container"></div>
+                    <div class="map-legend">
+                        <div class="legend-item"><span class="color-box high"></span> Alto (80-100%)</div>
+                        <div class="legend-item"><span class="color-box medium"></span> Medio (50-79%)</div>
+                        <div class="legend-item"><span class="color-box low"></span> Bajo (0-49%)</div>
+                    </div>
+                </section>
+
+                <!-- Estadísticas -->
+                <section class="card stats-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-pie"></i> Estadísticas por Barrios</h2>
+                        <div class="section-actions">
+                            <button class="btn-action"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-action"><i class="fas fa-download"></i></button>
+                        </div>
+                    </div>
+                    <div class="stats-filters">
+                        <select id="stats-period-select">
+                            <option value="month">Último mes</option>
+                            <option value="quarter">Último trimestre</option>
+                            <option value="year">Último año</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="neighborhoodSatisfactionChart"></canvas>
+                    </div>
+                    <div class="stats-summary">
+                        <div class="stats-item">
+                            <h4>Barrio con mayor satisfacción</h4>
+                            <p>Centro (92%)</p>
+                        </div>
+                        <div class="stats-item">
+                            <h4>Barrio con menor satisfacción</h4>
+                            <p>Industrial Norte (68%)</p>
+                        </div>
+                        <div class="stats-item">
+                            <h4>Mayor crecimiento</h4>
+                            <p>Rivera Este (+8.5%)</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Proyectos Activos y Satisfacción Ciudadana -->
+            <div class="content-row">
+                <!-- Proyectos Activos -->
+                <section class="card projects-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-project-diagram"></i> Proyectos Activos</h2>
+                        <div class="section-actions">
+                            <a href="#projects" class="btn-link">Ver todos</a>
+                        </div>
+                    </div>
+                    <div class="projects-list">
+                        <div class="project-item">
+                            <div class="project-status on-track"></div>
+                            <div class="project-info">
+                                <h4>Renovación Parque Central</h4>
+                                <div class="project-meta">
+                                    <span><i class="fas fa-calendar-alt"></i> Finaliza: 30/09/2023</span>
+                                    <span><i class="fas fa-euro-sign"></i> 1.2M€</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 75%;">75%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-item">
+                            <div class="project-status delayed"></div>
+                            <div class="project-info">
+                                <h4>Red de Carril Bici Norte</h4>
+                                <div class="project-meta">
+                                    <span><i class="fas fa-calendar-alt"></i> Finaliza: 15/11/2023</span>
+                                    <span><i class="fas fa-euro-sign"></i> 850K€</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 38%;">38%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-item">
+                            <div class="project-status on-track"></div>
+                            <div class="project-info">
+                                <h4>Eficiencia Energética Alumbrado</h4>
+                                <div class="project-meta">
+                                    <span><i class="fas fa-calendar-alt"></i> Finaliza: 22/08/2023</span>
+                                    <span><i class="fas fa-euro-sign"></i> 620K€</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 82%;">82%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Satisfacción Ciudadana -->
+                <section class="card satisfaction-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-smile"></i> Satisfacción Ciudadana</h2>
+                        <div class="section-actions">
+                            <button class="btn-action"><i class="fas fa-filter"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="satisfactionTrendsChart"></canvas>
+                    </div>
+                    <div class="satisfaction-categories">
+                        <div class="category-item">
+                            <h4>Transporte Público</h4>
+                            <div class="category-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span>4.1/5</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <h4>Limpieza Urbana</h4>
+                            <div class="category-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span>3.6/5</span>
+                            </div>
+                        </div>
+                        <div class="category-item">
+                            <h4>Espacios Verdes</h4>
+                            <div class="category-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span>4.5/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Alertas y Notificaciones Recientes -->
+            <section class="card alerts-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-bell"></i> Alertas y Notificaciones Recientes</h2>
+                    <div class="section-actions">
+                        <a href="#alerts" class="btn-link">Ver todas</a>
+                    </div>
+                </div>
+                <div class="alerts-list">
+                    <div class="alert-item high">
+                        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="alert-content">
+                            <h4>Congestión de tráfico elevada</h4>
+                            <p>Zona Avenida Principal - Barrio Oeste</p>
+                            <span class="alert-time">Hace 35 minutos</span>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-action"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="alert-item medium">
+                        <div class="alert-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="alert-content">
+                            <h4>Mantenimiento programado</h4>
+                            <p>Red de agua - Barrio Norte - 20/05/2023</p>
+                            <span class="alert-time">Hace 2 horas</span>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-action"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="alert-item low">
+                        <div class="alert-icon"><i class="fas fa-clipboard-check"></i></div>
+                        <div class="alert-content">
+                            <h4>Proyecto completado</h4>
+                            <p>Instalación de puntos de recarga eléctrica - Centro</p>
+                            <span class="alert-time">Hace 1 día</span>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-action"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>

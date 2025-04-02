@@ -13,11 +13,13 @@
     <!-- Menú Lateral -->
     <nav id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h2>Ciudadano</h2>
+            <h2><i class="fas fa-city"></i> CityInsight</h2>
         </div>
         <ul class="sidebar-menu">
             <li><a href="indexv2.html" class="menu-item"><i class="fas fa-tachometer-alt"></i> Volver al Dashboard</a></li>
             <li><a href="#propuestas" class="menu-item"><i class="fas fa-thumbs-up"></i> Ver Propuestas</a></li>
+            <li><a href="#estadisticas" class="menu-item"><i class="fas fa-chart-bar"></i> Estadísticas del Barrio</a></li>
+            <li><a href="#buzon" class="menu-item"><i class="fas fa-envelope"></i> Buzón de Sugerencias</a></li>
             <li><a href="#encuestas" class="menu-item"><i class="fas fa-poll"></i> Participar en Encuestas</a></li>
         </ul>
     </nav>
@@ -38,24 +40,111 @@
         <!-- Zona Ciudadano -->
         <section id="ciudadano" class="ciudadano">
             <div class="ciudadano-header">
-                <h2>Propuestas y Encuestas</h2>
+                <h2>Portal Ciudadano</h2>
             </div>
-            <p>Aquí puedes ver las propuestas y encuestas para mejorar tu ciudad.</p>
-            <div class="propuestas-container">
-                <div class="propuesta">
-                    <h3>Propuesta 1: Más Zonas Verdes</h3>
-                    <p>¿Qué opinas sobre la expansión de las zonas verdes en tu barrio?</p>
+            <p>Bienvenido a tu portal ciudadano, donde puedes participar activamente en la mejora de tu barrio.</p>
+            
+            <!-- Estadísticas del Barrio -->
+            <section id="estadisticas" class="estadisticas-section">
+                <h3><i class="fas fa-chart-bar"></i> Estadísticas de tu Barrio</h3>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h4>Calidad del Aire</h4>
+                        <div class="stat-value">Buena</div>
+                        <div class="stat-graph">
+                            <div class="bar" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Uso de Transporte Público</h4>
+                        <div class="stat-value">65%</div>
+                        <div class="stat-graph">
+                            <div class="bar" style="width: 65%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Zonas Verdes</h4>
+                        <div class="stat-value">12 hectáreas</div>
+                        <div class="stat-graph">
+                            <div class="bar" style="width: 45%;"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="propuesta">
-                    <h3>Propuesta 2: Mejora del Transporte Público</h3>
-                    <p>¿Consideras que se deberían añadir más rutas de transporte público?</p>
+                <a href="#" class="more-stats">Ver todas las estadísticas</a>
+            </section>
+            
+            <!-- Buzón de Sugerencias -->
+            <section id="buzon" class="buzon-section">
+                <h3><i class="fas fa-envelope"></i> Buzón de Sugerencias</h3>
+                <p>Envía tus ideas para mejorar tu barrio. Todas las sugerencias serán valoradas por el ayuntamiento.</p>
+                <form class="sugerencia-form">
+                    <div class="form-group">
+                        <label for="categoria">Categoría:</label>
+                        <select id="categoria" name="categoria">
+                            <option value="infraestructura">Infraestructura</option>
+                            <option value="transporte">Transporte</option>
+                            <option value="medioambiente">Medio Ambiente</option>
+                            <option value="seguridad">Seguridad</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="titulo">Título:</label>
+                        <input type="text" id="titulo" name="titulo" placeholder="Título breve de tu sugerencia">
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describe detalladamente tu sugerencia"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ubicacion">Ubicación (opcional):</label>
+                        <input type="text" id="ubicacion" name="ubicacion" placeholder="Dirección o lugar específico">
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Sugerencia</button>
+                </form>
+            </section>
+            
+            <!-- Propuestas -->
+            <section id="propuestas" class="propuestas-section">
+                <h3><i class="fas fa-thumbs-up"></i> Propuestas Actuales</h3>
+                <div class="propuestas-container">
+                    <div class="propuesta">
+                        <h4>Propuesta 1: Más Zonas Verdes</h4>
+                        <p>¿Qué opinas sobre la expansión de las zonas verdes en tu barrio?</p>
+                        <div class="propuesta-actions">
+                            <button class="support-btn"><i class="fas fa-thumbs-up"></i> Apoyar</button>
+                            <span>127 apoyos</span>
+                        </div>
+                    </div>
+                    <div class="propuesta">
+                        <h4>Propuesta 2: Mejora del Transporte Público</h4>
+                        <p>¿Consideras que se deberían añadir más rutas de transporte público?</p>
+                        <div class="propuesta-actions">
+                            <button class="support-btn"><i class="fas fa-thumbs-up"></i> Apoyar</button>
+                            <span>93 apoyos</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="encuestas-container">
-                <h3>Participa en la encuesta:</h3>
-                <p>¿Estás de acuerdo con la ampliación de las zonas verdes?</p>
-                <button>Votar</button>
-            </div>
+            </section>
+            
+            <!-- Encuestas -->
+            <section id="encuestas" class="encuestas-section">
+                <h3><i class="fas fa-poll"></i> Encuestas Activas</h3>
+                <div class="encuestas-container">
+                    <div class="encuesta">
+                        <h4>Ampliación de zonas verdes</h4>
+                        <p>¿Estás de acuerdo con la ampliación de las zonas verdes en el barrio?</p>
+                        <div class="opciones">
+                            <label><input type="radio" name="encuesta1"> Totalmente de acuerdo</label>
+                            <label><input type="radio" name="encuesta1"> De acuerdo</label>
+                            <label><input type="radio" name="encuesta1"> Neutral</label>
+                            <label><input type="radio" name="encuesta1"> En desacuerdo</label>
+                            <label><input type="radio" name="encuesta1"> Totalmente en desacuerdo</label>
+                        </div>
+                        <button class="votar-btn">Votar</button>
+                    </div>
+                </div>
+            </section>
         </section>
     </div>
 
