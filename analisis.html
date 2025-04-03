@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityInsight - Análisis de Barrios</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --accent-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 1rem 2rem;
+            background-color: #fff;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #f8f9fa;
+            border-bottom: 3px solid #ddd;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Chat section */
+        .chat-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            padding: 1.5rem;
+            height: 400px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            max-width: 70%;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+        
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            border-top-right-radius: 2px;
+        }
+        
+        .ai-message {
+            background-color: #e9e9eb;
+            color: #333;
+            margin-right: auto;
+            border-top-left-radius: 2px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .chat-input button {
+            margin-left: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .chat-input button:hover {
+            background-color: #27ae60;
+        }
+        
+        /* Neighborhood section */
+        .neighborhood-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .neighborhood-card {
+            flex: 1;
+            min-width: 200px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+        
+        .neighborhood-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .neighborhood-card.selected {
+            border: 2px solid var(--secondary-color);
+        }
+        
+        .neighborhood-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .analysis-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .analysis-title {
+            flex: 1;
+        }
+        
+        .issues-list {
+            margin-bottom: 2rem;
+        }
+        
+        .issue-item {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .recommendations {
+            background-color: #f0f7f0;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .recommendation-icon {
+            background-color: var(--secondary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .recommendation-text {
+            flex: 1;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+            
+            .neighborhood-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CityInsight</h1>
+        <p>Análisis inteligente para mejoras urbanas</p>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" data-tab="chat">Chat con IA</button>
+            <button class="tab" data-tab="neighborhood">Análisis por Barrio</button>
+        </div>
+        
+        <div id="chat-tab" class="tab-content active">
+            <div class="chat-container">
+                <div class="chat-messages">
+                    <div class="message ai-message">
+                        Hola, soy CityInsight. ¿En qué puedo ayudarte hoy? Puedo analizar datos urbanos, recomendar mejoras o responder preguntas sobre desarrollo urbano sostenible.
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
+                    <button id="send-button">Enviar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="neighborhood-tab" class="tab-content">
+            <h2>Selecciona un barrio para ver el análisis</h2>
+            <div class="neighborhood-selector">
+                <div class="neighborhood-card" data-neighborhood="centro">
+                    <div class="neighborhood-icon">🏙️</div>
+                    <h3>Centro Histórico</h3>
+                </div>
+                <div class="neighborhood-card" data-neighborhood="norte">
+                    <div class="neighborhood-icon">🏡</div>
+                    <h3>Zona Norte</h3>
+                </div>
+                <div class="neighborhood-card" data-neighborhood="este">
+                    <div class="neighborhood-icon">🌆</div>
+                    <h3>Distrito Este</h3>
+                </div>
+                <div class="neighborhood-card" data-neighborhood="sur">
+                    <div class="neighborhood-icon">🏘️</div>
+                    <h3>Barrio Sur</h3>
+                </div>
+            </div>
+            
+            <div id="analysis-centro" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h2>Análisis: Centro Histórico</h2>
+                        <p>Última actualización: 23 de mayo, 2023</p>
+                    </div>
+                    <div class="analysis-status">
+                        <span class="status-badge">3 problemas detectados</span>
+                    </div>
+                </div>
+                
+                <div class="issues-list">
+                    <h3>Problemas Detectados</h3>
+                    <div class="issue-item">
+                        <h4>Escasez de espacios verdes</h4>
+                        <p>Se ha detectado una proporción de espacios verdes por habitante inferior al 15% recomendado por la OMS. El Centro Histórico cuenta actualmente con solo un 7% de espacios verdes accesibles.</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>Alta congestión vehicular</h4>
+                        <p>Los datos de tráfico muestran una saturación en las principales vías durante el 65% de las horas laborables.</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>Contaminación acústica</h4>
+                        <p>Los niveles de ruido superan los límites recomendados en un 70% del área analizada.</p>
+                    </div>
+                </div>
+                
+                <div class="recommendations">
+                    <h3>Recomendaciones de la IA</h3>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h4>Implementación de parques de bolsillo</h4>
+                            <p>Transformar pequeños espacios infrautilizados en mini parques. Se han identificado 12 ubicaciones potenciales que podrían incrementar en un 5% la superficie verde del barrio.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">2</div>
+                        <div class="recommendation-text">
+                            <h4>Proyecto de techos verdes</h4>
+                            <p>Programa de incentivos para la instalación de techos verdes en edificios públicos y privados. Esta iniciativa podría añadir hasta un 8% adicional de superficie verde.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">3</div>
+                        <div class="recommendation-text">
+                            <h4>Peatonalización selectiva</h4>
+                            <p>Convertir calles secundarias en zonas peatonales con vegetación. Esta medida mejoraría simultáneamente la calidad del aire, reduciría la congestión y crearía nuevos espacios verdes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="analysis-norte" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h2>Análisis: Zona Norte</h2>
+                        <p>Última actualización: 25 de mayo, 2023</p>
+                    </div>
+                    <div class="analysis-status">
+                        <span class="status-badge">2 problemas detectados</span>
+                    </div>
+                </div>
+                
+                <div class="issues-list">
+                    <h3>Problemas Detectados</h3>
+                    <div class="issue-item">
+                        <h4>Falta de parques infantiles</h4>
+                        <p>A pesar de ser una zona con alta densidad de familias, la Zona Norte cuenta con solo 2 parques infantiles para una población de más de 15,000 menores de 12 años.</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>Infraestructura deportiva insuficiente</h4>
+                        <p>El análisis muestra una demanda no satisfecha de espacios para actividades deportivas al aire libre.</p>
+                    </div>
+                </div>
+                
+                <div class="recommendations">
+                    <h3>Recomendaciones de la IA</h3>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h4>Plan de parques multifuncionales</h4>
+                            <p>Desarrollar tres nuevos parques que integren zonas infantiles, áreas deportivas y espacios para mayores. Las ubicaciones óptimas serían en los sectores A3, B7 y C4 del barrio.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">2</div>
+                        <div class="recommendation-text">
+                            <h4>Reconversión de espacios abandonados</h4>
+                            <p>Transformar la antigua fábrica en el sector D2 en un complejo deportivo y recreativo que podría dar servicio a más de 5,000 vecinos en un radio de 500 metros.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">3</div>
+                        <div class="recommendation-text">
+                            <h4>Corredores verdes conectores</h4>
+                            <p>Implementar una red de corredores verdes que conecten los nuevos espacios recreativos, facilitando la movilidad peatonal y ciclista entre las diferentes zonas del barrio.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="analysis-este" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h2>Análisis: Distrito Este</h2>
+                        <p>Última actualización: 20 de mayo, 2023</p>
+                    </div>
+                    <div class="analysis-status">
+                        <span class="status-badge">2 problemas detectados</span>
+                    </div>
+                </div>
+                
+                <div class="issues-list">
+                    <h3>Problemas Detectados</h3>
+                    <div class="issue-item">
+                        <h4>Parques mal distribuidos</h4>
+                        <p>Aunque el distrito cumple con la ratio de zona verde por habitante, el 80% de estos espacios están concentrados en el sector norte, dejando al sur sin acceso cercano a áreas verdes.</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>Baja calidad de los espacios existentes</h4>
+                        <p>El 60% de los parques existentes presentan deficiencias en mantenimiento y equipamiento.</p>
+                    </div>
+                </div>
+                
+                <div class="recommendations">
+                    <h3>Recomendaciones de la IA</h3>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h4>Creación de microparques en el sur</h4>
+                            <p>Implementar una red de pequeños parques en las plazoletas y solares disponibles del sector sur. Se han identificado 8 ubicaciones viables que podrían proporcionar acceso a zonas verdes a más de 7,000 residentes.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">2</div>
+                        <div class="recommendation-text">
+                            <h4>Plan de renovación integral</h4>
+                            <p>Modernizar los parques existentes con equipamiento inclusivo, zonas sombreadas y sistemas de riego eficiente con agua reciclada.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">3</div>
+                        <div class="recommendation-text">
+                            <h4>Huertos urbanos comunitarios</h4>
+                            <p>Destinar un 15% de la superficie de los nuevos espacios verdes a huertos urbanos gestionados por la comunidad, fomentando la sostenibilidad y la cohesión social.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="analysis-sur" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h2>Análisis: Barrio Sur</h2>
+                        <p>Última actualización: 22 de mayo, 2023</p>
+                    </div>
+                    <div class="analysis-status">
+                        <span class="status-badge">4 problemas detectados</span>
+                    </div>
+                </div>
+                
+                <div class="issues-list">
+                    <h3>Problemas Detectados</h3>
+                    <div class="issue-item">
+                        <h4>Grave déficit de zonas verdes</h4>
+                        <p>Con solo un 3% de superficie verde, el Barrio Sur presenta el mayor déficit de la ciudad. El análisis muestra que más del 85% de los residentes no tienen acceso a un parque a menos de 10 minutos a pie.</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>Isla de calor urbana</h4>
+                        <p>La falta de vegetación contribuye a que la temperatura media sea 3.5°C superior al resto de la ciudad durante los meses de verano.</p>
+                    </div>
+                </div>
+                
+                <div class="recommendations">
+                    <h3>Recomendaciones de la IA</h3>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h4>Creación de un parque central</h4>
+                            <p>Reconvertir la antigua zona industrial en un gran parque urbano de 5 hectáreas que podría dar servicio al 60% de la población del barrio. La inversión estimada tendría un retorno positivo en salud pública en menos de 5 años.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">2</div>
+                        <div class="recommendation-text">
+                            <h4>Programa de arbolado masivo</h4>
+                            <p>Plantar más de 2,000 árboles en calles y avenidas, priorizando especies autóctonas de bajo consumo hídrico y alta capacidad de sombra.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">3</div>
+                        <div class="recommendation-text">
+                            <h4>Corredores verdes escolares</h4>
+                            <p>Crear entornos verdes especialmente diseñados en los accesos a los 5 centros educativos del barrio, mejorando la seguridad y el bienestar de más de 3,000 estudiantes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+        
+        // Chat functionality
+        const chatInput = document.getElementById('chat-input-field');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.querySelector('.chat-messages');
+        
+        const aiResponses = [
+            "Basado en nuestro análisis, recomendamos aumentar las zonas verdes en el Centro Histórico implementando parques de bolsillo en espacios infrautilizados.",
+            "El análisis de la Zona Norte muestra una necesidad urgente de parques infantiles. Recomendamos crear al menos 3 nuevos espacios en los próximos 12 meses.",
+            "Las áreas residenciales con mayor densidad de población deberían priorizar la creación de espacios verdes multifuncionales que sirvan a diferentes grupos de edad.",
+            "Nuestros datos muestran que convertir el 10% de las calles secundarias en zonas verdes peatonales mejoraría significativamente la calidad ambiental y el bienestar ciudadano.",
+            "Una estrategia efectiva sería implementar un programa de incentivos para techos verdes, especialmente en edificios públicos y comerciales.",
+            "El análisis de patrones de movilidad sugiere que la creación de corredores verdes podría reducir el uso del vehículo privado en un 20% para trayectos cortos."
+        ];
+        
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function getAIResponse() {
+            const randomIndex = Math.floor(Math.random() * aiResponses.length);
+            return aiResponses[randomIndex];
+        }
+        
+        sendButton.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+                
+                // Simulate AI thinking
+                setTimeout(() => {
+                    addMessage(getAIResponse(), false);
+                }, 1000);
+            }
+        });
+        
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+        
+        // Neighborhood selection
+        document.querySelectorAll('.neighborhood-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.neighborhood-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                
+                // Hide all analysis containers
+                document.querySelectorAll('.analysis-container').forEach(container => {
+                    container.style.display = 'none';
+                });
+                
+                // Show selected neighborhood analysis
+                const analysisContainer = document.getElementById(`analysis-${card.dataset.neighborhood}`);
+                if (analysisContainer) {
+                    analysisContainer.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html></div>
