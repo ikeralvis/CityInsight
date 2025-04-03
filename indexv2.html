@@ -1,429 +1,944 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CityInsight - Panel de Gestión Municipal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesv2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-color: #424242;
+            --secondary-color: #757575;
+            --accent-color: #2196F3;
+            --dark-color: #212121;
+            --light-color: #f5f5f5;
+            --text-color: #e0e0e0;
+            --success-color: #81c784;
+            --error-color: #e57373;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: block;
+            background-color: #121212;
+            color: var(--text-color);
+        }
+
+        header {
+            padding: 1.5rem;
+            background-color: var(--dark-color);
+            border-bottom: 1px solid #333;
+        }
+
+        header h1 {
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        header p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        .container {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 2rem;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: var(--dark-color);
+            color: var(--text-color);
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .sidebar-header i {
+            font-size: 1.8rem;
+            margin-right: 1rem;
+            color: var(--accent-color);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 400;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav li:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav li.active {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .sidebar-nav i {
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-footer i {
+            margin-right: 0.5rem;
+        }
+
+        .section-title {
+            margin: 2rem 0 1.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+            font-weight: 400;
+            color: #fff;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--dark-color);
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background-color: var(--dark-color);
+            color: var(--text-color);
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .tab:hover:not(.active) {
+            background-color: #2a2a2a;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* KPI section */
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background-color: var(--dark-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            color: var(--accent-color);
+        }
+
+        .kpi-content h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .kpi-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .kpi-trend {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .kpi-trend.positive {
+            color: var(--success-color);
+        }
+
+        .kpi-trend.negative {
+            color: var(--error-color);
+        }
+
+        .kpi-trend i {
+            margin-right: 0.3rem;
+        }
+
+        /* Chat section */
+        .chat-container {
+            background-color: var(--dark-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .chat-messages {
+            padding: 1.5rem;
+            height: 350px;
+            overflow-y: auto;
+            background-color: #1a1a1a;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            max-width: 70%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            animation: messageFadeIn 0.5s ease;
+        }
+
+        .user-message {
+            background-color: var(--accent-color);
+            color: white;
+            margin-left: auto;
+            border-top-right-radius: 2px;
+        }
+
+        .ai-message {
+            background-color: #2a2a2a;
+            color: var(--text-color);
+            margin-right: auto;
+            border-top-left-radius: 2px;
+        }
+               
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background-color: #1a1a1a;
+            border-top: 1px solid #333;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #333;
+            border-radius: 20px;
+            outline: none;
+            background-color: #252525;
+            color: var(--text-color);
+            transition: border 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .chat-input button {
+            margin-left: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .chat-input button:hover {
+            background-color: #1976D2;
+            transform: scale(1.05);
+        }
+
+        /* Neighborhood section */
+        .neighborhood-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .neighborhood-card {
+            background-color: var(--dark-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .neighborhood-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .neighborhood-card.selected {
+            border: 2px solid var(--accent-color);
+        }
+
+        .neighborhood-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-container {
+            background-color: var(--dark-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .analysis-title {
+            flex: 1;
+        }
+
+        .status-badge {
+            background-color: var(--error-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .issues-list {
+            margin-bottom: 2rem;
+        }
+
+        .issue-item {
+            background-color: #1a1a1a;
+            border-left: 3px solid var(--error-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 5px 5px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .issue-item:hover {
+            transform: translateX(5px);
+        }
+
+        .recommendations {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .recommendation-item:hover {
+            transform: translateX(5px);
+        }
+
+        .recommendation-icon {
+            background-color: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .recommendation-text {
+            flex: 1;
+        }
+
+        /* Typing animation */
+        .typing {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            max-width: 70%;
+            animation: messageFadeIn 0.3s ease;
+        }
+
+        .typing-dots {
+            display: flex;
+            padding: 0.5rem 1rem;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #888;
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typingDot 1.3s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-header h2,
+            .sidebar-nav span,
+            .sidebar-footer span {
+                display: none;
+            }
+
+            .container {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+            .kpi-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes messageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typingDot {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
 </head>
-<body>
-    <!-- Modo Nocturno Toggle -->
-    <div id="theme-toggle" class="theme-toggle">
-        <i id="theme-icon" class="fas fa-moon"></i>
-    </div>
 
-    <!-- Contenedor Principal -->
-    <div class="container">
-        <!-- Barra Lateral -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-city"></i> CityInsight</h2>
-            </div>
-            <div class="user-info">
-                <p>Ayuntamiento de Ciudad</p>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a href="#dashboard" class="menu-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="#projects" class="menu-item"><i class="fas fa-project-diagram"></i> Proyectos</a></li>
-                <li><a href="#districts" class="menu-item"><i class="fas fa-map-marker-alt"></i> Barrios</a></li>
-                <li><a href="#budget" class="menu-item"><i class="fas fa-euro-sign"></i> Presupuestos</a></li>
-                <li><a href="#citizens" class="menu-item"><i class="fas fa-users"></i> Participación</a></li>
-                <li><a href="#reports" class="menu-item"><i class="fas fa-file-alt"></i> Informes</a></li>
-                <li><a href="analisis.html" class="menu-item"><i class="fas fa-chart-line"></i> Analisis IA</a></li>
-                <li><a href="#notifications" class="menu-item"><i class="fas fa-bell"></i> Notificaciones</a></li>
-                <li><a href="ciudadano.html" class="menu-item"><i class="fas fa-user"></i> Portal Ciudadano</a></li>
-                <li><a href="#settings" class="menu-item"><i class="fas fa-cogs"></i> Configuración</a></li>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-city"></i>
+            <h2>CityInsight</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                <li><i class="fas fa-leaf"></i> Medio Ambiente</li>
+                <li><i class="fas fa-road"></i> Infraestructura</li>
+                <li><i class="fas fa-users"></i> Servicios Sociales</li>
+                <li><i class="fas fa-dollar-sign"></i> Finanzas</li>
+                <li><i class="fas fa-shield-alt"></i> Seguridad</li>
+                <li><i class="fas fa-bus"></i> Transporte</li>
+                <li><a href="ciudadano.html" style="text-decoration: none; color: inherit;"><i class="fas fa-user-friends"></i> <span>Ciudadanos</span></a></li>
+                <li><i class="fas fa-cogs"></i> Configuración</li>
             </ul>
         </nav>
-
-        <!-- Contenido Principal -->
-        <main class="main-content">
-            <!-- Barra Superior -->
-            <header class="top-bar">
-                <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Buscar...">
-                </div>
-                <div class="top-bar-actions">
-                    <div class="notification-bell">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">5</span>
-                    </div>
-                    <div class="date-display">
-                        <i class="far fa-calendar-alt"></i>
-                        <span id="current-date">15 Mayo 2023</span>
-                    </div>
-                </div>
-            </header>
-
-            <h1 class="page-title">Panel de Gestión Municipal</h1>
-
-            <!-- Indicadores Clave -->
-            <section class="kpi-section">
-                <div class="card kpi-card">
-                    <i class="fas fa-leaf card-icon green"></i>
-                    <div class="kpi-content">
-                        <h3>Índice de Calidad Urbana</h3>
-                        <p class="kpi-value">78.3/100</p>
-                        <div class="kpi-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>2.4% vs mes anterior</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card kpi-card">
-                    <i class="fas fa-tree card-icon"></i>
-                    <div class="kpi-content">
-                        <h3>Zonas Verdes</h3>
-                        <p class="kpi-value">16.5 m²/hab</p>
-                        <div class="kpi-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>0.8% vs mes anterior</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card kpi-card">
-                    <i class="fas fa-car-side card-icon orange"></i>
-                    <div class="kpi-content">
-                        <h3>Intensidad de Tráfico</h3>
-                        <p class="kpi-value">63.2%</p>
-                        <div class="kpi-trend negative">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>1.7% vs mes anterior</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card kpi-card">
-                    <i class="fas fa-smile card-icon blue"></i>
-                    <div class="kpi-content">
-                        <h3>Satisfacción Ciudadana</h3>
-                        <p class="kpi-value">82%</p>
-                        <div class="kpi-trend positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>3.5% vs mes anterior</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Mapa Interactivo y Estadísticas -->
-            <div class="content-row">
-                <!-- Mapa Interactivo -->
-                <section class="card map-section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-map-marked-alt"></i> Mapa de Barrios</h2>
-                        <div class="section-actions">
-                            <button class="btn-action"><i class="fas fa-expand-alt"></i></button>
-                            <button class="btn-action"><i class="fas fa-download"></i></button>
-                        </div>
-                    </div>
-                    <div class="map-filters">
-                        <select id="map-data-select">
-                            <option value="satisfaction">Satisfacción ciudadana</option>
-                            <option value="green">Zonas verdes</option>
-                            <option value="traffic">Densidad de tráfico</option>
-                            <option value="projects">Proyectos activos</option>
-                        </select>
-                    </div>
-                    <div id="city-map" class="map-container"></div>
-                    <div class="map-legend">
-                        <div class="legend-item"><span class="color-box high"></span> Alto (80-100%)</div>
-                        <div class="legend-item"><span class="color-box medium"></span> Medio (50-79%)</div>
-                        <div class="legend-item"><span class="color-box low"></span> Bajo (0-49%)</div>
-                    </div>
-                </section>
-
-                <!-- Estadísticas -->
-                <section class="card stats-section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-chart-pie"></i> Estadísticas por Barrios</h2>
-                        <div class="section-actions">
-                            <button class="btn-action"><i class="fas fa-sync-alt"></i></button>
-                            <button class="btn-action"><i class="fas fa-download"></i></button>
-                        </div>
-                    </div>
-                    <div class="stats-filters">
-                        <select id="stats-period-select">
-                            <option value="month">Último mes</option>
-                            <option value="quarter">Último trimestre</option>
-                            <option value="year">Último año</option>
-                        </select>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="neighborhoodSatisfactionChart" data-chart-type="bar" data-chart-title="Satisfacción por Barrios"></canvas>
-                        <div class="chart-legend">
-                            <p class="chart-description">Muestra la satisfacción ciudadana (%) en los principales barrios de la ciudad</p>
-                        </div>
-                    </div>
-                    <div class="stats-summary">
-                        <div class="stats-item">
-                            <h4>Barrio con mayor satisfacción</h4>
-                            <p>Centro (92%)</p>
-                        </div>
-                        <div class="stats-item">
-                            <h4>Barrio con menor satisfacción</h4>
-                            <p>Industrial Norte (68%)</p>
-                        </div>
-                        <div class="stats-item">
-                            <h4>Mayor crecimiento</h4>
-                            <p>Rivera Este (+8.5%)</p>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Proyectos Activos y Satisfacción Ciudadana -->
-            <div class="content-row">
-                <!-- Proyectos Activos -->
-                <section class="card projects-section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-project-diagram"></i> Proyectos Activos</h2>
-                        <div class="section-actions">
-                            <a href="#projects" class="btn-link">Ver todos</a>
-                        </div>
-                    </div>
-                    <div class="projects-list">
-                        <div class="project-item">
-                            <div class="project-status on-track"></div>
-                            <div class="project-info">
-                                <h4>Renovación Parque Central</h4>
-                                <div class="project-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Finaliza: 30/09/2023</span>
-                                    <span><i class="fas fa-euro-sign"></i> 1.2M€</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 75%;">75%</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="project-item">
-                            <div class="project-status delayed"></div>
-                            <div class="project-info">
-                                <h4>Red de Carril Bici Norte</h4>
-                                <div class="project-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Finaliza: 15/11/2023</span>
-                                    <span><i class="fas fa-euro-sign"></i> 850K€</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 38%;">38%</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="project-item">
-                            <div class="project-status on-track"></div>
-                            <div class="project-info">
-                                <h4>Eficiencia Energética Alumbrado</h4>
-                                <div class="project-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> Finaliza: 22/08/2023</span>
-                                    <span><i class="fas fa-euro-sign"></i> 620K€</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 82%;">82%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Satisfacción Ciudadana -->
-                <section class="card satisfaction-section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-smile"></i> Satisfacción Ciudadana</h2>
-                        <div class="section-actions">
-                            <button class="btn-action"><i class="fas fa-filter"></i></button>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="satisfactionTrendsChart"></canvas>
-                    </div>
-                    <div class="satisfaction-categories">
-                        <div class="category-item">
-                            <h4>Transporte Público</h4>
-                            <div class="category-rating">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <span>4.1/5</span>
-                            </div>
-                        </div>
-                        <div class="category-item">
-                            <h4>Limpieza Urbana</h4>
-                            <div class="category-rating">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <span>3.6/5</span>
-                            </div>
-                        </div>
-                        <div class="category-item">
-                            <h4>Espacios Verdes</h4>
-                            <div class="category-rating">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <span>4.5/5</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Alertas y Notificaciones Recientes -->
-            <section class="card alerts-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-bell"></i> Alertas y Notificaciones Recientes</h2>
-                    <div class="section-actions">
-                        <a href="#alerts" class="btn-link">Ver todas</a>
-                    </div>
-                </div>
-                <div class="alerts-list">
-                    <div class="alert-item high">
-                        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                        <div class="alert-content">
-                            <h4>Congestión de tráfico elevada</h4>
-                            <p>Zona Avenida Principal - Barrio Oeste</p>
-                            <span class="alert-time">Hace 35 minutos</span>
-                        </div>
-                        <div class="alert-actions">
-                            <button class="btn-action"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                    <div class="alert-item medium">
-                        <div class="alert-icon"><i class="fas fa-info-circle"></i></div>
-                        <div class="alert-content">
-                            <h4>Mantenimiento programado</h4>
-                            <p>Red de agua - Barrio Norte - 20/05/2023</p>
-                            <span class="alert-time">Hace 2 horas</span>
-                        </div>
-                        <div class="alert-actions">
-                            <button class="btn-action"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                    <div class="alert-item low">
-                        <div class="alert-icon"><i class="fas fa-clipboard-check"></i></div>
-                        <div class="alert-content">
-                            <h4>Proyecto completado</h4>
-                            <p>Instalación de puntos de recarga eléctrica - Centro</p>
-                            <span class="alert-time">Hace 1 día</span>
-                        </div>
-                        <div class="alert-actions">
-                            <button class="btn-action"><i class="fas fa-eye"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+        <div class="sidebar-footer">
+            <span><i class="fas fa-user-circle"></i> Admin</span>
+        </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script src="script.js"></script>
 
-    <!-- Initialize Charts -->
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-city"></i> CityInsight</h1>
+            <p>Panel de Gestión Municipal Inteligente</p>
+        </header>
+
+        <!-- Indicadores Clave -->
+        <h2 class="section-title">Indicadores Clave de Rendimiento</h2>
+        <section class="kpi-section">
+            <div class="kpi-card">
+                <i class="fas fa-leaf card-icon"></i>
+                <div class="kpi-content">
+                    <h3>Índice de Calidad Urbana</h3>
+                    <p class="kpi-value">78.3/100</p>
+                    <div class="kpi-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>2.4% vs mes anterior</span>
+                    </div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <i class="fas fa-tree card-icon"></i>
+                <div class="kpi-content">
+                    <h3>Zonas Verdes</h3>
+                    <p class="kpi-value">16.5 m²/hab</p>
+                    <div class="kpi-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>0.8% vs mes anterior</span>
+                    </div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <i class="fas fa-car-side card-icon"></i>
+                <div class="kpi-content">
+                    <h3>Intensidad de Tráfico</h3>
+                    <p class="kpi-value">63.2%</p>
+                    <div class="kpi-trend negative">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>1.7% vs mes anterior</span>
+                    </div>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <i class="fas fa-smile card-icon"></i>
+                <div class="kpi-content">
+                    <h3>Satisfacción Ciudadana</h3>
+                    <p class="kpi-value">82%</p>
+                    <div class="kpi-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>3.5% vs mes anterior</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Análisis IA -->
+        <h2 class="section-title"><i class="fas fa-robot"></i> Análisis Inteligente</h2>
+
+        <div class="tabs"></div>
+        <button class="tab active" data-tab="chat">Chat con IA</button>
+        <button class="tab" data-tab="neighborhood">Análisis por Barrio</button>
+
+
+        <div id="chat-tab" class="tab-content active">
+            <div class="chat-container">
+                <div class="chat-messages">
+                    <div class="message ai-message">
+                        Hola, soy CityInsight. ¿En qué puedo ayudarte hoy con la gestión municipal? Puedo analizar datos
+                        urbanos, recomendar mejoras o responder preguntas sobre desarrollo urbano sostenible.
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
+                    <button id="send-button">Enviar</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="neighborhood-tab" class="tab-content">
+            <h3>Selecciona un barrio para ver el análisis</h3>
+            <div class="neighborhood-selector">
+                <div class="neighborhood-card" data-neighborhood="centro">
+                    <div class="neighborhood-icon">🏙️</div>
+                    <h4>Centro Histórico</h4>
+                </div>
+                <div class="neighborhood-card" data-neighborhood="norte">
+                    <div class="neighborhood-icon">🏡</div>
+                    <h4>Zona Norte</h4>
+                </div>
+                <div class="neighborhood-card" data-neighborhood="este">
+                    <div class="neighborhood-icon">🌆</div>
+                    <h4>Distrito Este</h4>
+                </div>
+                <div class="neighborhood-card" data-neighborhood="sur">
+                    <div class="neighborhood-icon">🏘️</div>
+                    <h4>Barrio Sur</h4>
+                </div>
+            </div>
+
+            <div id="analysis-centro" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h3>Análisis: Centro Histórico</h3>
+                        <p>Última actualización: 23 de mayo, 2023</p>
+                    </div>
+                    <span class="status-badge">3 problemas detectados</span>
+                </div>
+
+                <div class="issues-list">
+                    <h4>Problemas Detectados</h4>
+                    <div class="issue-item">
+                        <h5>Escasez de espacios verdes</h5>
+                        <p>Se ha detectado una proporción de espacios verdes por habitante inferior al 15% recomendado
+                            por
+                            la OMS.
+                            El Centro Histórico cuenta actualmente con solo un 7% de espacios verdes accesibles.</p>
+                    </div>
+                    <div class="issue-item">
+                        <h5>Alta congestión vehicular</h5>
+                        <p>Los datos de tráfico muestran una saturación en las principales vías durante el 65% de las
+                            horas
+                            laborables.</p>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>Recomendaciones de la IA</h4>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h5>Implementación de parques de bolsillo</h5>
+                            <p>Transformar pequeños espacios infrautilizados en mini parques. Se han identificado 12
+                                ubicaciones
+                                potenciales.</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">2</div>
+                        <div class="recommendation-text">
+                            <h5>Peatonalización selectiva</h5>
+                            <p>Convertir calles secundarias en zonas peatonales con vegetación para mejorar la calidad
+                                del
+                                aire.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analysis-norte" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h3>Análisis: Zona Norte</h3>
+                        <p>Última actualización: 25 de mayo, 2023</p>
+                    </div>
+                    <span class="status-badge">2 problemas detectados</span>
+                </div>
+
+                <div class="issues-list">
+                    <h4>Problemas Detectados</h4>
+                    <div class="issue-item">
+                        <h5>Falta de parques infantiles</h5>
+                        <p>A pesar de ser una zona con alta densidad de familias, la Zona Norte cuenta con solo 2
+                            parques
+                            infantiles
+                            para una población de más de 15,000 menores de 12 años.</p>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>Recomendaciones de la IA</h4>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h5>Plan de parques multifuncionales</h5>
+                            <p>Desarrollar tres nuevos parques que integren zonas infantiles y áreas deportivas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analysis-este" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h3>Análisis: Distrito Este</h3>
+                        <p>Última actualización: 20 de mayo, 2023</p>
+                    </div>
+                    <span class="status-badge">2 problemas detectados</span>
+                </div>
+
+                <div class="issues-list">
+                    <h4>Problemas Detectados</h4>
+                    <div class="issue-item">
+                        <h5>Parques mal distribuidos</h5>
+                        <p>Aunque el distrito cumple con la ratio de zona verde por habitante, el 80% de estos espacios
+                            están
+                            concentrados en el sector norte.</p>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>Recomendaciones de la IA</h4>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h5>Creación de microparques en el sur</h5>
+                            <p>Implementar una red de pequeños parques en plazoletas y solares disponibles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analysis-sur" class="analysis-container">
+                <div class="analysis-header">
+                    <div class="analysis-title">
+                        <h3>Análisis: Barrio Sur</h3>
+                        <p>Última actualización: 22 de mayo, 2023</p>
+                    </div>
+                    <span class="status-badge">4 problemas detectados</span>
+                </div>
+
+                <div class="issues-list">
+                    <h4>Problemas Detectados</h4>
+                    <div class="issue-item">
+                        <h5>Grave déficit de zonas verdes</h5>
+                        <p>Con solo un 3% de superficie verde, el Barrio Sur presenta el mayor déficit de la ciudad.</p>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <h4>Recomendaciones de la IA</h4>
+                    <div class="recommendation-item">
+                        <div class="recommendation-icon">1</div>
+                        <div class="recommendation-text">
+                            <h5>Creación de un parque central</h5>
+                            <p>Reconvertir la antigua zona industrial en un gran parque urbano de 5 hectáreas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if Chart.js is loaded and the canvas exists
-            if (typeof Chart !== 'undefined' && document.getElementById('satisfactionTrendsChart')) {
-                // Initialize the satisfaction trends chart
-                const ctx = document.getElementById('satisfactionTrendsChart').getContext('2d');
-                const satisfactionChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
-                        datasets: [{
-                            label: 'Satisfacción General',
-                            data: [75, 78, 76, 79, 82],
-                            borderColor: '#4CAF50',
-                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Tendencia de Satisfacción Ciudadana 2023'
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                min: 70,
-                                max: 100
-                            }
-                        }
-                    }
-                });
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+
+        // Chat functionality
+        const chatInput = document.getElementById('chat-input-field');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.querySelector('.chat-messages');
+
+        const aiResponses = [
+            "Basado en nuestro análisis, recomendamos aumentar las zonas verdes en el Centro Histórico implementando parques de bolsillo en espacios infrautilizados.",
+            "El análisis de la Zona Norte muestra una necesidad urgente de parques infantiles. Recomendamos crear al menos 3 nuevos espacios recreativos.",
+            "Las áreas residenciales con mayor densidad deberían priorizar la creación de espacios verdes multifuncionales que sirvan a diferentes grupos de edad.",
+            "Nuestros datos muestran que convertir el 10% de las calles secundarias en zonas verdes peatonales mejoraría la calidad ambiental en un 15%.",
+            "Una estrategia efectiva sería implementar un programa de incentivos para techos verdes en edificios públicos y privados.",
+            "El análisis sugiere que la creación de corredores verdes podría reducir el uso del vehículo privado en un 20% y mejorar la calidad del aire.",
+            "Según nuestras simulaciones, la implementación de un sistema de transporte público eléctrico reduciría las emisiones de CO2 en un 32% en la zona centro.",
+            "Los datos indican que la instalación de sistemas de recogida de agua pluvial en edificios públicos podría ahorrar hasta un 25% en el consumo de agua para riego."
+        ];
+
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing');
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            typingDiv.id = 'typing-indicator';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
             }
-            
-            // Initialize the neighborhood satisfaction chart
-            if (typeof Chart !== 'undefined' && document.getElementById('neighborhoodSatisfactionChart')) {
-                const neighborhoodCtx = document.getElementById('neighborhoodSatisfactionChart').getContext('2d');
-                const neighborhoodChart = new Chart(neighborhoodCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Centro', 'Norte', 'Sur', 'Este', 'Oeste', 'Industrial Norte', 'Rivera Este'],
-                        datasets: [{
-                            label: 'Satisfacción Ciudadana (%)',
-                            data: [92, 78, 83, 75, 81, 68, 85],
-                            backgroundColor: [
-                                'rgba(54, 162, 235, 0.7)',
-                                'rgba(75, 192, 192, 0.7)',
-                                'rgba(153, 102, 255, 0.7)',
-                                'rgba(255, 159, 64, 0.7)',
-                                'rgba(255, 99, 132, 0.7)',
-                                'rgba(255, 205, 86, 0.7)',
-                                'rgba(201, 203, 207, 0.7)'
-                            ],
-                            borderColor: [
-                                'rgb(54, 162, 235)',
-                                'rgb(75, 192, 192)',
-                                'rgb(153, 102, 255)',
-                                'rgb(255, 159, 64)',
-                                'rgb(255, 99, 132)',
-                                'rgb(255, 205, 86)',
-                                'rgb(201, 203, 207)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Satisfacción por Barrios'
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                min: 60,
-                                max: 100
-                            }
-                        }
-                    }
-                });
+        }
+
+        function getAIResponse() {
+            const randomIndex = Math.floor(Math.random() * aiResponses.length);
+            return aiResponses[randomIndex];
+        }
+
+        sendButton.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+
+                // Simulate AI thinking with typing indicator
+                const typingIndicator = addTypingIndicator();
+
+                // Simulate AI response time (between 1-3 seconds)
+                const responseTime = 1000 + Math.random() * 2000;
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage(getAIResponse(), false);
+                }, responseTime);
             }
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        // Neighborhood selection
+        document.querySelectorAll('.neighborhood-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.neighborhood-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+
+                // Hide all analysis containers
+                document.querySelectorAll('.analysis-container').forEach(container => {
+                    container.style.display = 'none';
+                });
+
+                // Show selected neighborhood analysis with animation
+                const analysisContainer = document.getElementById(`analysis-${card.dataset.neighborhood}`);
+                if (analysisContainer) {
+                    analysisContainer.style.display = 'block';
+                }
+            });
+        });
+
+        // Add animation to KPI cards on load
+        document.addEventListener('DOMContentLoaded', function () {
+            const kpiCards = document.querySelectorAll('.kpi-card');
+            kpiCards.forEach((card, index) => {
+                card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
+                card.style.opacity = '0';
+            });
         });
     </script>
 </body>
+
 </html>

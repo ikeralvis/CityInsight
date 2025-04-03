@@ -164,15 +164,19 @@ body.dark-mode {
   top: 20px;
   right: 20px;
   background-color: #34495e;
-  color: #fff;
+  color: #000000;
   padding: 10px;
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s;
 }
+.theme-icon :active{
+  background-color: #ffffff;
+}
+
 
 .theme-toggle:hover {
-  background-color: #1a252f;
+  background-color: #424242;
 }
 
 .theme-toggle i {
