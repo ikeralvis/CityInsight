@@ -114,21 +114,23 @@
                     <div class="card">
                         <h3 class="card-title">Más Zonas Verdes</h3>
                         <p>¿Qué opinas sobre la expansión de las zonas verdes en tu barrio?</p>
-                        <div class="card-actions">
-                            <button class="btn-outline"><i class="fas fa-thumbs-up"></i> Apoyar</button>
-                            <span class="support-count">127 apoyos</span>
-                        </div>
+                        <div class="card-actions"></div>
+                        <button class="btn-outline" onclick="toggleSupport(this)"><i class="fas fa-thumbs-up"></i>
+                            Apoyar</button>
+                        <span class="support-count" data-count="127">127 apoyos</span>
                     </div>
-                    <div class="card">
-                        <h3 class="card-title">Mejora del Transporte Público</h3>
-                        <p>¿Consideras que se deberían añadir más rutas de transporte público?</p>
-                        <div class="card-actions">
-                            <button class="btn-outline"><i class="fas fa-thumbs-up"></i> Apoyar</button>
-                            <span class="support-count">93 apoyos</span>
-                        </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Mejora del Transporte Público</h3>
+                    <p>¿Consideras que se deberían añadir más rutas de transporte público?</p>
+                    <div class="card-actions">
+                        <button class="btn-outline" onclick="toggleSupport(this)"><i class="fas fa-thumbs-up"></i>
+                            Apoyar</button>
+                        <span class="support-count" data-count="93">93 apoyos</span>
                     </div>
                 </div>
             </div>
+
         </section>
 
         <!-- Encuestas -->
@@ -156,5 +158,35 @@
             </div>
         </section>
     </div>
+
+    <script>
+        function toggleSupport(button) {
+            const countSpan = button.nextElementSibling;
+            let count = parseInt(countSpan.getAttribute('data-count'));
+
+            if (button.classList.contains('supported')) {
+                // Remove support
+                count--;
+                button.classList.remove('supported');
+                button.style.backgroundColor = "";
+                button.style.color = "";
+                button.style.borderColor = "";
+                button.innerHTML = '<i class="fas fa-thumbs-up"></i> Apoyar';
+            } else {
+                // Add support
+                count++;
+                button.classList.add('supported');
+                button.style.backgroundColor = "#4e73df";
+                button.style.color = "white";
+                button.style.borderColor = "#4e73df";
+                button.innerHTML = '<i class="fas fa-thumbs-up"></i> Apoyado';
+            }
+
+            countSpan.setAttribute('data-count', count);
+            countSpan.textContent = count + " apoyos";
+        }
+    </script>
+
 </body>
+
 </html>
