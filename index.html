@@ -21,13 +21,9 @@
             <ul>
                 <li class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
                 <li><i class="fas fa-leaf"></i> Medio Ambiente</li>
-                <li><i class="fas fa-road"></i> Infraestructura</li>
-                <li><i class="fas fa-users"></i> Servicios Sociales</li>
-                <li><i class="fas fa-dollar-sign"></i> Finanzas</li>
-                <li><i class="fas fa-shield-alt"></i> Seguridad</li>
-                <li><i class="fas fa-bus"></i> Transporte</li>
+                <li><i class="fas fa-bus"></i> Trafico</li>
                 <li><a href="ciudadano.html" style="text-decoration: none; color: inherit;"><i
-                            class="fas fa-user-friends"></i> <span>Ciudadanos</span></a></li>
+                            class="fas fa-user-friends"></i> <span>Panel Ciudadanos</span></a></li>
                 <li><i class="fas fa-cogs"></i> Configuración</li>
             </ul>
         </nav>
@@ -46,7 +42,7 @@
         <!-- Indicadores Clave -->
         <h2 class="section-title">Indicadores Clave de Rendimiento</h2>
         <section class="kpi-section">
-            <div class="kpi-card">
+            <div class="kpi-card" data-kpi="Índice de Calidad Urbana">
                 <i class="fas fa-leaf card-icon"></i>
                 <div class="kpi-content">
                     <h3>Índice de Calidad Urbana</h3>
@@ -55,9 +51,10 @@
                         <i class="fas fa-arrow-up"></i>
                         <span>2.4% vs mes anterior</span>
                     </div>
+                    <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
                 </div>
             </div>
-            <div class="kpi-card">
+            <div class="kpi-card" data-kpi="Zonas Verdes">
                 <i class="fas fa-tree card-icon"></i>
                 <div class="kpi-content">
                     <h3>Zonas Verdes</h3>
@@ -67,8 +64,9 @@
                         <span>0.8% vs mes anterior</span>
                     </div>
                 </div>
+                <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
             </div>
-            <div class="kpi-card">
+            <div class="kpi-card" data-kpi="Intensidad de Tráfico">
                 <i class="fas fa-car-side card-icon"></i>
                 <div class="kpi-content">
                     <h3>Intensidad de Tráfico</h3>
@@ -78,8 +76,9 @@
                         <span>1.7% vs mes anterior</span>
                     </div>
                 </div>
+                <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
             </div>
-            <div class="kpi-card">
+            <div class="kpi-card" data-kpi="Satisfacción Ciudadana">
                 <i class="fas fa-smile card-icon"></i>
                 <div class="kpi-content">
                     <h3>Satisfacción Ciudadana</h3>
@@ -89,6 +88,7 @@
                         <span>3.5% vs mes anterior</span>
                     </div>
                 </div>
+                <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
             </div>
         </section>
 
@@ -108,32 +108,49 @@
                         urbanos, recomendar mejoras o responder preguntas sobre desarrollo urbano sostenible.
                     </div>
                 </div>
+                <!-- Añadimos la sección de prompts guiados -->
                 <div class="suggested-prompts">
-                    <div id="analysis-buttons">
-                        <h4>Mensajes Rápidos</h4>
-                        <div class="preset-buttons">
-                            <button class="preset-btn"
-                                data-message="¿Cuál es el índice de calidad del aire actual?">Calidad
-                                del aire</button>
-                            <button class="preset-btn"
-                                data-message="¿Qué mejoras podemos implementar en el transporte público?">Mejoras
-                                transporte</button>
-                            <button class="preset-btn"
-                                data-message="Necesito un análisis de las zonas con mayor densidad de tráfico">Análisis
-                                tráfico</button>
-                            <button class="preset-btn"
-                                data-message="¿Qué barrios tienen mayor déficit de zonas verdes?">Déficit zonas
-                                verdes</button>
+                    <div class="prompt-category">
+                        <h4><i class="fas fa-leaf"></i> Calidad Urbana</h4>
+                        <div class="prompt-buttons">
+                            <button class="prompt-btn"
+                                data-message="¿Qué factores se consideran en el Índice de Calidad Urbana?">Factores del
+                                índice</button>
+                            <button class="prompt-btn"
+                                data-message="¿Cómo ha evolucionado el Índice de Calidad Urbana este año?">Evolución
+                                anual</button>
                         </div>
                     </div>
-                    <div id="neighborhood-buttons" style="display: none;">
-                        <h4>Selecciona un barrio:</h4>
-                        <div class="preset-buttons">
-                            <button class="neighborhood-btn" data-neighborhood="Centro Histórico">Centro
-                                Histórico</button>
-                            <button class="neighborhood-btn" data-neighborhood="Zona Norte">Zona Norte</button>
-                            <button class="neighborhood-btn" data-neighborhood="Distrito Este">Distrito Este</button>
-                            <button class="neighborhood-btn" data-neighborhood="Barrio Sur">Barrio Sur</button>
+
+                    <div class="prompt-category">
+                        <h4><i class="fas fa-tree"></i> Zonas Verdes</h4>
+                        <div class="prompt-buttons">
+                            <button class="prompt-btn"
+                                data-message="¿Qué barrios tienen déficit de zonas verdes?">Déficit por barrios</button>
+                            <button class="prompt-btn"
+                                data-message="¿Qué acciones se recomiendan para mejorar las zonas verdes?">Recomendaciones</button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-category">
+                        <h4><i class="fas fa-car-side"></i> Tráfico</h4>
+                        <div class="prompt-buttons">
+                            <button class="prompt-btn" data-message="¿Cuáles son los puntos de mayor congestión?">Puntos
+                                críticos</button>
+                            <button class="prompt-btn"
+                                data-message="¿Qué soluciones existen para reducir la intensidad del tráfico?">Soluciones</button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-category">
+                        <h4><i class="fas fa-smile"></i> Satisfacción</h4>
+                        <div class="prompt-buttons">
+                            <button class="prompt-btn"
+                                data-message="¿Qué servicios están mejor valorados por los ciudadanos?">Servicios mejor
+                                valorados</button>
+                            <button class="prompt-btn"
+                                data-message="¿Qué áreas necesitan mejora según la opinión ciudadana?">Áreas de
+                                mejora</button>
                         </div>
                     </div>
                 </div>
@@ -149,7 +166,7 @@
         <div id="neighborhood-tab" class="tab-content">
             <h3>Selecciona un barrio para ver el análisis</h3>
             <div class="neighborhood-selector">
-                <div class="neighborhood-card" data-neighborhood="centro">
+                <div class="neighborhood-card" data-neighborhood="centro" >
                     <div class="neighborhood-icon">🏙️</div>
                     <h4>Centro Histórico</h4>
                 </div>
@@ -311,154 +328,207 @@
     </div>
 
 
-        <script>
-            // Tab navigation
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    <script>
+        // Definimos las respuestas específicas para cada KPI
+        const kpiResponses = {
+            "Índice de Calidad Urbana": "El Índice de Calidad Urbana (78.3/100) evalúa factores como espacios verdes, movilidad, calidad del aire y servicios. Ha mejorado principalmente por la reducción de ruido urbano y nuevas zonas peatonales.",
+            "Zonas Verdes": "Con 16.5 m²/hab, superamos el estándar OMS de 9m²/hab. Sin embargo, estos espacios están mal distribuidos: el 65% de los barrios tiene menos de 12m²/hab. Recomendamos implementar 8 nuevos parques en zonas deficitarias.",
+            "Intensidad de Tráfico": "La intensidad de tráfico (63.2%) ha aumentado negativamente un 1.7%. Los puntos críticos son los accesos a la ciudad entre 7:30-9:00 y 17:30-19:00. Recomendamos implementar horarios escalonados de entrada a oficinas.",
+            "Satisfacción Ciudadana": "La satisfacción ciudadana del 82% representa un aumento significativo. Las áreas mejor valoradas son limpieza (87%) y zonas verdes (85%). Los aspectos peor valorados son aparcamiento (52%) y transporte público (65%)."
+        };
 
-                    tab.classList.add('active');
-                    document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
-                });
-            });
+        // Respuestas para las preguntas específicas guiadas
+        const promptResponses = {
+            "¿Qué factores se consideran en el Índice de Calidad Urbana?": "El Índice de Calidad Urbana considera 5 categorías principales: (1) Medioambiente (calidad del aire, ruido, agua), (2) Movilidad (transporte público, congestión), (3) Espacios públicos (zonas verdes, infraestructura), (4) Servicios (acceso a educación, salud) y (5) Gobernanza (participación ciudadana, transparencia).",
+            "¿Cómo ha evolucionado el Índice de Calidad Urbana este año?": "El Índice de Calidad Urbana ha mostrado una evolución positiva durante este año, pasando de 74.1 en enero a 78.3 actualmente (+5.7%). La mejora más notable se dio entre marzo y abril (+1.8%) cuando se implementaron las nuevas zonas peatonales en el centro histórico.",
+            "¿Qué barrios tienen déficit de zonas verdes?": "Los barrios con mayor déficit de zonas verdes son: Barrio Sur (3m²/hab), Centro Histórico (7m²/hab) y Distrito Industrial (5m²/hab). Todos están por debajo del mínimo recomendado por la OMS de 9m²/hab. El plan urbanístico contempla corregir esta situación en los próximos 3 años.",
+            "¿Qué acciones se recomiendan para mejorar las zonas verdes?": "Recomendamos: (1) Crear 8 nuevos parques en zonas deficitarias, (2) Implementar techos verdes en edificios públicos, (3) Transformar un 15% de plazas duras en jardines, (4) Crear corredores verdes que conecten parques existentes, y (5) Programa de adopción de árboles por ciudadanos y empresas.",
+            "¿Cuáles son los puntos de mayor congestión?": "Los puntos de mayor congestión son: (1) Acceso Norte (85% saturación en hora punta), (2) Rotonda Central (78%), (3) Avenida Principal con Calle Mayor (82%), (4) Puente Este (75%) y (5) Acceso al polígono industrial (72%). Todos superan el umbral crítico del 70% durante al menos 3 horas diarias.",
+            "¿Qué soluciones existen para reducir la intensidad del tráfico?": "Para reducir la intensidad del tráfico recomendamos: (1) Implementar horarios escalonados de entrada a oficinas y centros educativos, (2) Ampliar carriles exclusivos para transporte público y vehículos de alta ocupación, (3) Política de aparcamientos disuasorios en la periferia, (4) Mejorar frecuencia de transporte público en hora punta, y (5) Promover el teletrabajo.",
+            "¿Qué servicios están mejor valorados por los ciudadanos?": "Los servicios mejor valorados según la encuesta de satisfacción ciudadana son: (1) Limpieza urbana (87%), (2) Mantenimiento de zonas verdes (85%), (3) Servicios culturales (82%), (4) Atención ciudadana digital (81%) y (5) Instalaciones deportivas (80%). Todos han mejorado respecto al año anterior.",
+            "¿Qué áreas necesitan mejora según la opinión ciudadana?": "Las áreas que requieren mejora urgente según la opinión ciudadana son: (1) Disponibilidad de aparcamiento (52% de satisfacción), (2) Transporte público (65%), (3) Mantenimiento de calzadas (68%), (4) Atención sanitaria local (70%) y (5) Vivienda protegida (71%). Se están elaborando planes de mejora para cada una."
+        };
 
-            // Chat functionality
-            const chatInput = document.getElementById('chat-input-field');
-            const sendButton = document.getElementById('send-button');
-            const chatMessages = document.querySelector('.chat-messages');
+        const chatInput = document.getElementById('chat-input-field');
+        const sendButton = document.getElementById('send-button');
+        const chatMessages = document.querySelector('.chat-messages');
 
-            const aiResponses = [
-                "Basado en nuestro análisis, recomendamos aumentar las zonas verdes en el Centro Histórico implementando parques de bolsillo en espacios infrautilizados.",
-                "El análisis de la Zona Norte muestra una necesidad urgente de parques infantiles. Recomendamos crear al menos 3 nuevos espacios recreativos.",
-                "Las áreas residenciales con mayor densidad deberían priorizar la creación de espacios verdes multifuncionales que sirvan a diferentes grupos de edad.",
-                "Nuestros datos muestran que convertir el 10% de las calles secundarias en zonas verdes peatonales mejoraría la calidad ambiental en un 15%.",
-                "Una estrategia efectiva sería implementar un programa de incentivos para techos verdes en edificios públicos y privados.",
-                "El análisis sugiere que la creación de corredores verdes podría reducir el uso del vehículo privado en un 20% y mejorar la calidad del aire.",
-                "Según nuestras simulaciones, la implementación de un sistema de transporte público eléctrico reduciría las emisiones de CO2 en un 32% en la zona centro.",
-                "Los datos indican que la instalación de sistemas de recogida de agua pluvial en edificios públicos podría ahorrar hasta un 25% en el consumo de agua para riego."
-            ];
+        
 
-            function addMessage(text, isUser) {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message');
-                messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
-                messageDiv.textContent = text;
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
 
-            function addTypingIndicator() {
-                const typingDiv = document.createElement('div');
-                typingDiv.classList.add('typing');
-                typingDiv.innerHTML = `
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing');
+            typingDiv.innerHTML = `
                 <div class="typing-dots">
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
                 </div>
             `;
-                typingDiv.id = 'typing-indicator';
-                chatMessages.appendChild(typingDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                return typingDiv;
+            typingDiv.id = 'typing-indicator';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Modificación en la función que maneja las respuestas
+        function getResponse(message) {
+            // Primero verificar si es un prompt específico de los botones de sugerencia
+            if (promptResponses[message]) {
+                return promptResponses[message];
             }
 
-            function removeTypingIndicator() {
-                const typingIndicator = document.getElementById('typing-indicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
+            // Verificar si es un mensaje directo sobre un KPI
+            for (const [kpi, response] of Object.entries(kpiResponses)) {
+                if (message.includes(kpi)) {
+                    return response;
                 }
             }
 
-            function getAIResponse() {
-                const randomIndex = Math.floor(Math.random() * aiResponses.length);
-                return aiResponses[randomIndex];
-            }
-
-            sendButton.addEventListener('click', () => {
-                const message = chatInput.value.trim();
-                if (message) {
-                    addMessage(message, true);
-                    chatInput.value = '';
-
-                    // Simulate AI thinking with typing indicator
-                    const typingIndicator = addTypingIndicator();
-
-                    // Simulate AI response time (between 1-3 seconds)
-                    const responseTime = 1000 + Math.random() * 2000;
-                    setTimeout(() => {
-                        removeTypingIndicator();
-                        addMessage(getAIResponse(), false);
-                    }, responseTime);
-                }
-            });
-
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendButton.click();
-                }
-            });
-
-
-            // Añadir funcionalidad para los botones de mensajes preestablecidos
-            document.querySelectorAll('.preset-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const message = btn.getAttribute('data-message');
-                    document.getElementById('chat-input-field').value = message;
-
-                    // Mostrar los botones de barrios y ocultar los botones de análisis
-                    document.getElementById('analysis-buttons').style.display = 'none';
-                    document.getElementById('neighborhood-buttons').style.display = 'block';
-                });
-            });
-
-            // Añadir funcionalidad para los botones de barrios
-            document.querySelectorAll('.neighborhood-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const neighborhood = btn.getAttribute('data-neighborhood');
-                    const currentInput = document.getElementById('chat-input-field').value;
-                    document.getElementById('chat-input-field').value = currentInput + ` en ${neighborhood}`;
-
-                    // Enviar el mensaje automáticamente
-                    document.getElementById('send-button').click();
-
-                    // Restaurar los botones originales
-                    setTimeout(() => {
-                        document.getElementById('analysis-buttons').style.display = 'block';
-                        document.getElementById('neighborhood-buttons').style.display = 'none';
-                    }, 300);
-                });
-            });
-
-            // Neighborhood selection
-            document.querySelectorAll('.neighborhood-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.neighborhood-card').forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-
-                    // Hide all analysis containers
-                    document.querySelectorAll('.analysis-container').forEach(container => {
-                        container.style.display = 'none';
-                    });
-
-                    // Show selected neighborhood analysis with animation
-                    const analysisContainer = document.getElementById(`analysis-${card.dataset.neighborhood}`);
-                    if (analysisContainer) {
-                        analysisContainer.style.display = 'block';
+            // Si incluye la frase "más información sobre"
+            if (message.includes('más información sobre')) {
+                const kpiMatch = message.match(/más información sobre [el KPI ]?"([^"]+)"/);
+                if (kpiMatch && kpiMatch[1]) {
+                    const kpiName = kpiMatch[1];
+                    if (kpiResponses[kpiName]) {
+                        return kpiResponses[kpiName];
                     }
-                });
-            });
+                }
+            }
 
-            // Add animation to KPI cards on load
-            document.addEventListener('DOMContentLoaded', function () {
-                const kpiCards = document.querySelectorAll('.kpi-card');
-                kpiCards.forEach((card, index) => {
-                    card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
-                    card.style.opacity = '0';
-                });
+            // Respuesta por defecto si no hay coincidencia
+            return "Para obtener información detallada, selecciona uno de los KPIs en el panel superior o pregunta específicamente por Índice de Calidad Urbana, Zonas Verdes, Intensidad de Tráfico o Satisfacción Ciudadana.";
+        }
+
+        // Actualizar el event listener del botón de enviar
+        sendButton.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+
+                // Simular que la IA está pensando
+                const typingIndicator = addTypingIndicator();
+
+                // Simular tiempo de respuesta (1-2 segundos)
+                const responseTime = 1000 + Math.random() * 1000;
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage(getResponse(message), false);
+                }, responseTime);
+            }
+        });
+
+        // Evento Enter para enviar mensajes
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        // Event listener para los botones de prompts guiados
+        document.querySelectorAll('.prompt-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const message = btn.getAttribute('data-message');
+
+                // Colocar el mensaje en el input y simular el envío
+                chatInput.value = message;
+                sendButton.click();
             });
-        </script>
+        });
+
+        // Event listener para los botones de KPI
+        document.querySelectorAll('.kpi-info-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Obtener el nombre del KPI del atributo data-kpi del elemento padre
+                const kpiCard = btn.closest('.kpi-card');
+                const kpiName = kpiCard.getAttribute('data-kpi');
+                const message = `Quiero más información sobre el KPI "${kpiName}"`;
+
+                // Activar la pestaña de chat si no está activa
+                document.querySelector('.tab[data-tab="chat"]').click();
+
+                // Añadir el mensaje del usuario al chat
+                addMessage(message, true);
+
+                // Simular que la IA está pensando
+                const typingIndicator = addTypingIndicator();
+
+                // Simular tiempo de respuesta (1-2 segundos)
+                const responseTime = 1000 + Math.random() * 1000;
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    // Mostrar la respuesta específica para este KPI
+                    addMessage(kpiResponses[kpiName], false);
+                }, responseTime);
+            });
+        });
+
+        // La tarjeta completa ya no necesita ser clickeable
+        document.querySelectorAll('.kpi-card').forEach(card => {
+            card.style.cursor = 'default';
+        });
+
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+
+       
+
+        // Neighborhood selection
+        document.querySelectorAll('.neighborhood-card').forEach(card => {
+            card.addEventListener('click', () => {
+                
+                document.querySelectorAll('.neighborhood-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+
+                // Hide all analysis containers
+                document.querySelectorAll('.analysis-container').forEach(container => {
+                    container.style.display = 'none';
+                });
+
+                // Show selected neighborhood analysis with animation
+                const analysisContainer = document.getElementById(`analysis-${card.dataset.neighborhood}`);
+                if (analysisContainer) {
+                    analysisContainer.style.display = 'block';
+                    // Scroll to the analysis container with smooth animation
+                    analysisContainer.scrollIntoView({behavior: 'smooth'});
+                }
+            });
+        });
+
+        // Add animation to KPI cards on load
+        document.addEventListener('DOMContentLoaded', function () {
+            const kpiCards = document.querySelectorAll('.kpi-card');
+            kpiCards.forEach((card, index) => {
+                card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
+                card.style.opacity = '0';
+            });
+        });
+    </script>
 </body>
 
 </html>
