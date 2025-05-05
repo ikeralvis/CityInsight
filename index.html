@@ -156,7 +156,9 @@
                 </div>
                 <div class="chat-input">
                     <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
-                    <button id="send-button">Enviar</button>
+                    <button id="send-button">
+                        <i class="fas fa-paper-plane"></i> Enviar
+                    </button>
                 </div>
             </div>
         </div>
@@ -496,6 +498,15 @@
             });
         });
 
+
+        document.querySelector('.tab[data-tab="neighborhood"]').addEventListener('click', () => {
+            // Remove selection from all neighborhood cards
+            document.querySelectorAll('.neighborhood-card').forEach(card => card.classList.remove('selected'));
+            // Hide all analysis containers
+            document.querySelectorAll('.analysis-container').forEach(container => {
+                container.style.display = 'none';
+            });
+        });
        
 
         // Neighborhood selection
