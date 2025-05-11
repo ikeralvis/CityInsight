@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ciudadano - Gestión Urbana</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="styleCiudadano.css">
 </head>
@@ -18,11 +18,9 @@
                 <i class="fas fa-city"></i> CityInsight
             </div>
             <ul class="nav-links">
-                <li><a href="#estadisticas">Estadísticas</a></li>
-                <li><a href="#buzon">Sugerencias</a></li>
-                <li><a href="#propuestas">Propuestas</a></li>
-                <li><a href="#encuestas">Encuestas</a></li>
-                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#estadisticas"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
+                <li><a href="#participacion"><i class="fas fa-users"></i> Participación</a></li>
+                <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             </ul>
         </div>
     </nav>
@@ -39,154 +37,206 @@
             <div class="section-header">
                 <h2 class="section-title"><i class="fas fa-chart-bar"></i> Estadísticas de tu Barrio</h2>
             </div>
-            <div class="section-content">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3 class="stat-title">Calidad del Aire</h3>
-                        <div class="stat-value">Buena</div>
-                        <div class="stat-bar">
-                            <div class="stat-progress" style="width: 75%;"></div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <h3 class="stat-title">Uso de Transporte Público</h3>
-                        <div class="stat-value">65%</div>
-                        <div class="stat-bar">
-                            <div class="stat-progress" style="width: 65%;"></div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <h3 class="stat-title">Zonas Verdes</h3>
-                        <div class="stat-value">12 hectáreas</div>
-                        <div class="stat-bar">
-                            <div class="stat-progress" style="width: 45%;"></div>
-                        </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-wind"></i></div>
+                    <h3 class="stat-title">Calidad del Aire</h3>
+                    <div class="stat-value">Buena</div>
+                    <div class="stat-bar">
+                        <div class="stat-progress" style="width: 75%;"></div>
                     </div>
                 </div>
-                <a href="#" class="more-link">Ver todas las estadísticas <i class="fas fa-arrow-right"></i></a>
-            </div>
-        </section>
-
-        <!-- Buzón de Sugerencias -->
-        <section id="buzon" class="section">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-envelope"></i> Buzón de Sugerencias</h2>
-            </div>
-            <div class="section-content">
-                <p>Envía tus ideas para mejorar tu barrio. Todas las sugerencias serán valoradas por el ayuntamiento.
-                </p>
-                <form class="suggestion-form">
-                    <div class="form-group">
-                        <label for="categoria">Categoría:</label>
-                        <select id="categoria" name="categoria">
-                            <option value="infraestructura">Infraestructura</option>
-                            <option value="transporte">Transporte</option>
-                            <option value="medioambiente">Medio Ambiente</option>
-                            <option value="seguridad">Seguridad</option>
-                            <option value="otros">Otros</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="titulo">Título:</label>
-                        <input type="text" id="titulo" name="titulo" placeholder="Título breve de tu sugerencia">
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Descripción:</label>
-                        <textarea id="descripcion" name="descripcion" rows="4"
-                            placeholder="Describe detalladamente tu sugerencia"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="ubicacion">Ubicación (opcional):</label>
-                        <input type="text" id="ubicacion" name="ubicacion" placeholder="Dirección o lugar específico">
-                    </div>
-                    <button type="submit" class="btn-primary">Enviar Sugerencia</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- Propuestas -->
-        <section id="propuestas" class="section">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> Propuestas Actuales</h2>
-            </div>
-            <div class="section-content">
-                <div class="cards-grid">
-                    <div class="card">
-                        <h3 class="card-title">Más Zonas Verdes</h3>
-                        <p>¿Qué opinas sobre la expansión de las zonas verdes en tu barrio?</p>
-                        <div class="card-actions"></div>
-                        <button class="btn-outline" onclick="toggleSupport(this)"><i class="fas fa-thumbs-up"></i>
-                            Apoyar</button>
-                        <span class="support-count" data-count="127">127 apoyos</span>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-bus"></i></div>
+                    <h3 class="stat-title">Uso de Transporte</h3>
+                    <div class="stat-value">65%</div>
+                    <div class="stat-bar">
+                        <div class="stat-progress" style="width: 65%;"></div>
                     </div>
                 </div>
-                <div class="card">
-                    <h3 class="card-title">Mejora del Transporte Público</h3>
-                    <p>¿Consideras que se deberían añadir más rutas de transporte público?</p>
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="toggleSupport(this)"><i class="fas fa-thumbs-up"></i>
-                            Apoyar</button>
-                        <span class="support-count" data-count="93">93 apoyos</span>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-tree"></i></div>
+                    <h3 class="stat-title">Zonas Verdes</h3>
+                    <div class="stat-value">12 hectáreas</div>
+                    <div class="stat-bar">
+                        <div class="stat-progress" style="width: 45%;"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-recycle"></i></div>
+                    <h3 class="stat-title">Reciclaje</h3>
+                    <div class="stat-value">82%</div>
+                    <div class="stat-bar">
+                        <div class="stat-progress" style="width: 82%;"></div>
                     </div>
                 </div>
             </div>
-
         </section>
 
-        <!-- Encuestas -->
-        <section id="encuestas" class="section">
+        <!-- Sección de Participación Ciudadana -->
+        <section id="participacion" class="section">
             <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-poll"></i> Encuestas Activas</h2>
+                <h2 class="section-title"><i class="fas fa-users"></i> Participación Ciudadana</h2>
             </div>
-            <div class="section-content">
-                <div class="cards-grid">
-                    <div class="card">
-                        <h3 class="card-title">Ampliación de zonas verdes</h3>
-                        <p>¿Estás de acuerdo con la ampliación de las zonas verdes en el barrio?</p>
-                        <div class="poll-options">
-                            <label class="poll-option"><input type="radio" name="encuesta1"> Totalmente de
-                                acuerdo</label>
-                            <label class="poll-option"><input type="radio" name="encuesta1"> De acuerdo</label>
-                            <label class="poll-option"><input type="radio" name="encuesta1"> Neutral</label>
-                            <label class="poll-option"><input type="radio" name="encuesta1"> En desacuerdo</label>
-                            <label class="poll-option"><input type="radio" name="encuesta1"> Totalmente en
-                                desacuerdo</label>
+            
+            <!-- Contenedor de pestañas -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="sugerencias"><i class="fas fa-envelope"></i> Sugerencias</button>
+                    <button class="tab-btn" data-tab="propuestas"><i class="fas fa-thumbs-up"></i> Propuestas</button>
+                    <button class="tab-btn" data-tab="encuestas"><i class="fas fa-poll"></i> Encuestas</button>
+                </div>
+                
+                <!-- Contenido de las pestañas -->
+                <div class="tab-content">
+                    <!-- Buzón de Sugerencias -->
+                    <div id="sugerencias" class="tab-pane active">
+                        <p class="tab-intro">Envía tus ideas para mejorar tu barrio. Todas las sugerencias serán valoradas.</p>
+                        <form class="suggestion-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="categoria">Categoría:</label>
+                                    <select id="categoria" name="categoria">
+                                        <option value="infraestructura">Infraestructura</option>
+                                        <option value="transporte">Transporte</option>
+                                        <option value="medioambiente">Medio Ambiente</option>
+                                        <option value="seguridad">Seguridad</option>
+                                        <option value="otros">Otros</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="titulo">Título:</label>
+                                    <input type="text" id="titulo" name="titulo" placeholder="Título breve">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcion">Descripción:</label>
+                                <textarea id="descripcion" name="descripcion" rows="3" placeholder="Describe tu sugerencia"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="ubicacion">Ubicación (opcional):</label>
+                                <input type="text" id="ubicacion" name="ubicacion" placeholder="Dirección o lugar específico">
+                            </div>
+                            <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Propuestas -->
+                    <div id="propuestas" class="tab-pane">
+                        <p class="tab-intro">Apoya las propuestas ciudadanas que consideres beneficiosas para el barrio.</p>
+                        <div class="cards-grid">
+                            <div class="proposal-card">
+                                <div class="proposal-header">
+                                    <span class="proposal-category">Medio Ambiente</span>
+                                    <span class="proposal-supporters"><i class="fas fa-users"></i> 127</span>
+                                </div>
+                                <h3 class="proposal-title">Ampliación de Zonas Verdes</h3>
+                                <p class="proposal-desc">Creación de nuevos espacios verdes en la zona norte del barrio para mejorar la calidad ambiental.</p>
+                                <button class="btn-support" onclick="toggleSupport(this)" data-count="127">
+                                    <i class="fas fa-thumbs-up"></i> Apoyar
+                                </button>
+                            </div>
+                            
+                            <div class="proposal-card">
+                                <div class="proposal-header">
+                                    <span class="proposal-category">Transporte</span>
+                                    <span class="proposal-supporters"><i class="fas fa-users"></i> 93</span>
+                                </div>
+                                <h3 class="proposal-title">Mejora del Transporte Público</h3>
+                                <p class="proposal-desc">Añadir más frecuencia y nuevas rutas de autobús para mejorar la conectividad entre barrios.</p>
+                                <button class="btn-support" onclick="toggleSupport(this)" data-count="93">
+                                    <i class="fas fa-thumbs-up"></i> Apoyar
+                                </button>
+                            </div>
+                            
+                            <div class="proposal-card">
+                                <div class="proposal-header">
+                                    <span class="proposal-category">Infraestructura</span>
+                                    <span class="proposal-supporters"><i class="fas fa-users"></i> 76</span>
+                                </div>
+                                <h3 class="proposal-title">Renovación de Parques Infantiles</h3>
+                                <p class="proposal-desc">Modernización de los parques infantiles con nuevos juegos inclusivos y seguros.</p>
+                                <button class="btn-support" onclick="toggleSupport(this)" data-count="76">
+                                    <i class="fas fa-thumbs-up"></i> Apoyar
+                                </button>
+                            </div>
                         </div>
-                        <button class="btn-primary">Votar</button>
+                    </div>
+                    
+                    <!-- Encuestas -->
+                    <div id="encuestas" class="tab-pane">
+                        <p class="tab-intro">Participa en las encuestas activas y ayuda a tomar decisiones sobre el barrio.</p>
+                        <div class="poll-card">
+                            <h3 class="poll-title">Ampliación de zonas verdes</h3>
+                            <p class="poll-question">¿Estás de acuerdo con la ampliación de las zonas verdes en el barrio?</p>
+                            <div class="poll-options">
+                                <label class="poll-option">
+                                    <input type="radio" name="encuesta1"> Totalmente de acuerdo
+                                </label>
+                                <label class="poll-option">
+                                    <input type="radio" name="encuesta1"> De acuerdo
+                                </label>
+                                <label class="poll-option">
+                                    <input type="radio" name="encuesta1"> Neutral
+                                </label>
+                                <label class="poll-option">
+                                    <input type="radio" name="encuesta1"> En desacuerdo
+                                </label>
+                                <label class="poll-option">
+                                    <input type="radio" name="encuesta1"> Totalmente en desacuerdo
+                                </label>
+                            </div>
+                            <button class="btn-primary"><i class="fas fa-check-circle"></i> Votar</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <script>
-        function toggleSupport(button) {
-            const countSpan = button.nextElementSibling;
-            let count = parseInt(countSpan.getAttribute('data-count'));
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 CityInsight - Mejorando la participación ciudadana</p>
+        </div>
+    </footer>
 
+    <script>
+        // Función para cambiar entre pestañas
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Desactivar todos los botones y contenidos
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                
+                // Activar el botón y contenido seleccionado
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+        
+        // Función para togglear el apoyo a propuestas
+        function toggleSupport(button) {
+            let count = parseInt(button.getAttribute('data-count'));
+            
             if (button.classList.contains('supported')) {
-                // Remove support
+                // Quitar apoyo
                 count--;
                 button.classList.remove('supported');
-                button.style.backgroundColor = "";
-                button.style.color = "";
-                button.style.borderColor = "";
                 button.innerHTML = '<i class="fas fa-thumbs-up"></i> Apoyar';
             } else {
-                // Add support
+                // Añadir apoyo
                 count++;
                 button.classList.add('supported');
-                button.style.backgroundColor = "#4e73df";
-                button.style.color = "white";
-                button.style.borderColor = "#4e73df";
                 button.innerHTML = '<i class="fas fa-thumbs-up"></i> Apoyado';
             }
-
-            countSpan.setAttribute('data-count', count);
-            countSpan.textContent = count + " apoyos";
+            
+            button.setAttribute('data-count', count);
+            
+            // Actualizar el contador de apoyo en el encabezado
+            const supportersSpan = button.closest('.proposal-card').querySelector('.proposal-supporters');
+            supportersSpan.innerHTML = `<i class="fas fa-users"></i> ${count}`;
         }
     </script>
-
 </body>
 
 </html>
