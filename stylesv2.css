@@ -32,6 +32,8 @@ body {
   }
 }
 
+
+
 .suggested-prompts {
   margin: 1rem 0;
   padding: 1rem;
@@ -115,6 +117,30 @@ header h1 {
 header p {
   color: #fbeee1;
   font-size: 0.9rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: white;
+}
+
+.logo-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-text img {
+  height: 70px ;
+  width: auto;
+}
+
+.subtitle {
+  margin-left: 60px; /* Para que el subtítulo quede alineado visualmente */
+  font-size: 16px;
+  color: #ccc;
 }
 
 .container {
@@ -581,6 +607,13 @@ header p {
 
 .typing-dot:nth-child(3) {
   animation-delay: 0.3s;
+}
+
+.logo-container img {
+  width: 15%;
+  height: 1 5%;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 /* Responsive Design */

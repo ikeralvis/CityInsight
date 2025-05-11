@@ -34,10 +34,14 @@
 
 
     <div class="container">
-        <header>
-            <h1><i class="fas fa-city"></i> CityInsight</h1>
-            <p>Panel de Gestión Municipal Inteligente</p>
+        <header class="header">
+            <div class="logo-text">
+                <img src="Logo de CityInsight.png" alt="Logo de CityInsight">
+                <h1>CityInsight</h1>
+            </div>
+            <p class="subtitle">Panel de Gestión Municipal Inteligente</p>
         </header>
+
 
         <!-- Indicadores Clave -->
         <h2 class="section-title">Indicadores Clave de Rendimiento</h2>
@@ -51,7 +55,9 @@
                         <i class="fas fa-arrow-up"></i>
                         <span>2.4% vs mes anterior</span>
                     </div>
-                    <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
+                    <button class="kpi-info-btn"
+                        onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
+                        detalles</button>
                 </div>
             </div>
             <div class="kpi-card" data-kpi="Zonas Verdes">
@@ -64,7 +70,9 @@
                         <span>0.8% vs mes anterior</span>
                     </div>
                 </div>
-                <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
+                <button class="kpi-info-btn"
+                    onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
+                    detalles</button>
             </div>
             <div class="kpi-card" data-kpi="Intensidad de Tráfico">
                 <i class="fas fa-car-side card-icon"></i>
@@ -76,7 +84,9 @@
                         <span>1.7% vs mes anterior</span>
                     </div>
                 </div>
-                <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
+                <button class="kpi-info-btn"
+                    onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
+                    detalles</button>
             </div>
             <div class="kpi-card" data-kpi="Satisfacción Ciudadana">
                 <i class="fas fa-smile card-icon"></i>
@@ -88,7 +98,9 @@
                         <span>3.5% vs mes anterior</span>
                     </div>
                 </div>
-                <button class="kpi-info-btn" onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver detalles</button>
+                <button class="kpi-info-btn"
+                    onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
+                    detalles</button>
             </div>
         </section>
 
@@ -108,52 +120,6 @@
                         urbanos, recomendar mejoras o responder preguntas sobre desarrollo urbano sostenible.
                     </div>
                 </div>
-                <!-- Añadimos la sección de prompts guiados -->
-                <div class="suggested-prompts">
-                    <div class="prompt-category">
-                        <h4><i class="fas fa-leaf"></i> Calidad Urbana</h4>
-                        <div class="prompt-buttons">
-                            <button class="prompt-btn"
-                                data-message="¿Qué factores se consideran en el Índice de Calidad Urbana?">Factores del
-                                índice</button>
-                            <button class="prompt-btn"
-                                data-message="¿Cómo ha evolucionado el Índice de Calidad Urbana este año?">Evolución
-                                anual</button>
-                        </div>
-                    </div>
-
-                    <div class="prompt-category">
-                        <h4><i class="fas fa-tree"></i> Zonas Verdes</h4>
-                        <div class="prompt-buttons">
-                            <button class="prompt-btn"
-                                data-message="¿Qué barrios tienen déficit de zonas verdes?">Déficit por barrios</button>
-                            <button class="prompt-btn"
-                                data-message="¿Qué acciones se recomiendan para mejorar las zonas verdes?">Recomendaciones</button>
-                        </div>
-                    </div>
-
-                    <div class="prompt-category">
-                        <h4><i class="fas fa-car-side"></i> Tráfico</h4>
-                        <div class="prompt-buttons">
-                            <button class="prompt-btn" data-message="¿Cuáles son los puntos de mayor congestión?">Puntos
-                                críticos</button>
-                            <button class="prompt-btn"
-                                data-message="¿Qué soluciones existen para reducir la intensidad del tráfico?">Soluciones</button>
-                        </div>
-                    </div>
-
-                    <div class="prompt-category">
-                        <h4><i class="fas fa-smile"></i> Satisfacción</h4>
-                        <div class="prompt-buttons">
-                            <button class="prompt-btn"
-                                data-message="¿Qué servicios están mejor valorados por los ciudadanos?">Servicios mejor
-                                valorados</button>
-                            <button class="prompt-btn"
-                                data-message="¿Qué áreas necesitan mejora según la opinión ciudadana?">Áreas de
-                                mejora</button>
-                        </div>
-                    </div>
-                </div>
                 <div class="chat-input">
                     <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
                     <button id="send-button">
@@ -168,7 +134,7 @@
         <div id="neighborhood-tab" class="tab-content">
             <h3>Selecciona un barrio para ver el análisis</h3>
             <div class="neighborhood-selector">
-                <div class="neighborhood-card" data-neighborhood="centro" >
+                <div class="neighborhood-card" data-neighborhood="centro">
                     <div class="neighborhood-icon">🏙️</div>
                     <h4>Centro Histórico</h4>
                 </div>
@@ -355,7 +321,7 @@
         const sendButton = document.getElementById('send-button');
         const chatMessages = document.querySelector('.chat-messages');
 
-        
+
 
         function addMessage(text, isUser) {
             const messageDiv = document.createElement('div');
@@ -507,12 +473,12 @@
                 container.style.display = 'none';
             });
         });
-       
+
 
         // Neighborhood selection
         document.querySelectorAll('.neighborhood-card').forEach(card => {
             card.addEventListener('click', () => {
-                
+
                 document.querySelectorAll('.neighborhood-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
 
@@ -526,7 +492,7 @@
                 if (analysisContainer) {
                     analysisContainer.style.display = 'block';
                     // Scroll to the analysis container with smooth animation
-                    analysisContainer.scrollIntoView({behavior: 'smooth'});
+                    analysisContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
