@@ -7,23 +7,1008 @@
     <title>CityInsight - Panel de Gestión Municipal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="stylesv2.css">
+    <style>
+        /* Estilos Generales */
+        :root {
+            --primary-color: #5d9cec;
+            /* Azul más suave */
+            --secondary-color: #48cfad;
+            /* Verde más suave */
+            --accent-color: #a0d468;
+            /* Nuevo color de acento */
+            --background-light: #ecf0f1;
+            /* Gris claro */
+            --background-dark: #2c3e50;
+            /* Azul oscuro */
+            --text-light: #2c3e50;
+            /* Gris oscuro para texto (más oscuro para contraste) */
+            --text-dark: #ecf0f1;
+            /* Texto claro para modo oscuro */
+            --card-background-light-glass: rgba(255, 255, 255, 0.85); /* Blanco semi-transparente (más opaco) */
+            --card-background-dark-glass: rgba(59, 80, 98, 0.85); /* Oscuro semi-transparente (más opaco) */
+            --border-color-light-glass: rgba(255, 255, 255, 0.6); /* Borde blanco transparente (más visible) */
+            --border-color-dark-glass: rgba(74, 98, 115, 0.6); /* Borde oscuro transparente (más visible) */
+            --shadow-light: rgba(0, 0, 0, 0.2);
+            /* Sombra más pronunciada */
+            --shadow-dark: rgba(0, 0, 0, 0.7);
+            /* Sombra más oscura */
+            --blur-amount: 20px;
+            /* Mayor desenfoque para el glassmorfismo */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: background-color 0.5s ease, color 0.5s ease;
+            display: flex;
+            min-height: 100vh;
+            /* Gradiente de fondo para efecto glassmorfismo */
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--background-light) 100%);
+            overflow-x: hidden; /* Evitar scroll horizontal */
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--background-dark) 0%, #1e2b38 100%);
+        }
+
+        /* Estilos de la Barra Lateral (Sidebar) */
+        .sidebar {
+            width: 250px;
+            background-color: var(--background-dark);
+            /* Sólido para mejor legibilidad */
+            color: var(--text-dark);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 25px var(--shadow-dark);
+            /* Sombra más fuerte */
+            flex-shrink: 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.25);
+            /* Borde sutil */
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Sombra de texto */
+        }
+
+        .sidebar-header h2 {
+            font-size: 24px; /* Ajustado para que no sobresalga */
+        }
+
+        .sidebar-header i {
+            margin-right: 15px;
+            color: var(--secondary-color);
+            font-size: 24px; /* Ajustado para que no sobresalga */
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 14px; /* Más redondeado */
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .sidebar-nav li:hover,
+        .sidebar-nav li.active {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateX(10px);
+            /* Mayor movimiento al pasar el ratón */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4); /* Sombra en el hover */
+        }
+
+        .sidebar-nav li i {
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.25);
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .sidebar-footer i {
+            margin-right: 8px;
+            color: var(--accent-color);
+        }
+
+        /* Estilos del Contenido Principal */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .logo-text {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-text img {
+            height: 50px;
+            border-radius: 14px; /* Más redondeado */
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Eliminado: h1 y p.subtitle de la cabecera, ya que el nombre ya está en el menú */
+        .logo-text h1, .subtitle {
+            display: none;
+        }
+
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .theme-toggle-container button {
+            background-color: var(--card-background-light-glass);
+            border: 1px solid var(--border-color-light-glass);
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 18px var(--shadow-light);
+            color: var(--text-light);
+            backdrop-filter: blur(var(--blur-amount));
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .theme-toggle-container button {
+            background-color: var(--card-background-dark-glass);
+            border-color: var(--border-color-dark-glass);
+            box-shadow: 0 5px 18px var(--shadow-dark);
+            color: var(--text-dark);
+        }
+
+        .theme-toggle-container button:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px var(--shadow-light);
+        }
+
+        body.dark-mode .theme-toggle-container button:hover {
+            box-shadow: 0 10px 25px var(--shadow-dark);
+        }
+
+        .section-title {
+            font-size: 1.9em; /* Ligeramente más grande */
+            margin-bottom: 25px;
+            color: var(--text-light); /* Cambiado a text-light para mejor contraste */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .section-title {
+            color: var(--text-dark); /* Texto claro en modo oscuro */
+        }
+
+        .section-title i {
+            color: var(--primary-color); /* Icono con primary-color */
+            font-size: 1.25em;
+        }
+
+        /* Sección de KPIs */
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px; /* Espacio ligeramente mayor */
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background-color: var(--card-background-light-glass);
+            border-radius: 22px; /* Más redondeado */
+            padding: 28px; /* Más padding */
+            box-shadow: 0 12px 45px var(--shadow-light);
+            display: flex;
+            flex-direction: column; /* Cambiado a columna para alinear elementos */
+            align-items: flex-start; /* Alineación a la izquierda */
+            gap: 10px; /* Reducido para mejor compactación vertical */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(var(--blur-amount));
+        }
+
+        body.dark-mode .kpi-card {
+            background-color: var(--card-background-dark-glass);
+            box-shadow: 0 12px 45px var(--shadow-dark);
+            border: 1px solid var(--border-color-dark-glass);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px; /* Borde más ancho */
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            border-radius: 22px 0 0 22px;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-12px) rotateZ(1deg);
+            box-shadow: 0 18px 60px var(--shadow-light);
+        }
+
+        body.dark-mode .kpi-card:hover {
+            box-shadow: 0 18px 60px var(--shadow-dark);
+        }
+
+        .kpi-card .card-icon {
+            font-size: 3.5em; /* Ligeramente más grande */
+            color: var(--primary-color);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+            margin-bottom: 5px; /* Espacio para el texto */
+        }
+
+        .kpi-content {
+            flex-grow: 1;
+            width: 100%; /* Para que ocupe todo el ancho disponible */
+            display: flex; /* Usar flexbox para el contenido interno */
+            flex-direction: column; /* Apilar elementos dentro de kpi-content */
+            align-items: flex-start; /* Alinear a la izquierda */
+        }
+
+        .kpi-content h3 {
+            font-size: 1.5em; /* Ligeramente más grande */
+            margin-bottom: 5px; /* Espacio para el valor */
+            color: var(--text-light);
+        }
+
+        body.dark-mode .kpi-content h3 {
+            color: var(--text-dark);
+        }
+
+        .kpi-value {
+            font-size: 2.8em; /* Ligeramente más grande */
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px; /* Espacio para el trend y el botón */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            font-size: 1.1em; /* Ligeramente más grande */
+            font-weight: 600;
+            opacity: 0.95;
+            margin-bottom: 15px; /* Espacio para el botón */
+        }
+
+        .kpi-trend.positive {
+            color: var(--secondary-color);
+        }
+
+        .kpi-trend.negative {
+            color: #e74c3c;
+        }
+
+        .kpi-trend i {
+            margin-right: 10px; /* Más espacio */
+        }
+
+        .kpi-info-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 22px; /* Mayor padding */
+            border-radius: 12px; /* Más redondeado */
+            cursor: pointer;
+            font-size: 1.05em; /* Ligeramente más grande */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 100%; /* Para que el botón ocupe todo el ancho */
+            text-align: center; /* Centrar el texto del botón */
+        }
+
+        .kpi-info-btn:hover {
+            background-color: #4a8ddc;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Sección de Pestañas */
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+            /* Borde más suave */
+            gap: 15px;
+        }
+
+        body.dark-mode .tabs {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .tab {
+            background-color: transparent;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.15em; /* Ligeramente más grande */
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            position: relative;
+        }
+
+        body.dark-mode .tab {
+            color: var(--text-dark);
+        }
+
+        .tab::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 3px;
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            text-shadow: 0 0 8px rgba(93, 156, 236, 0.6); /* Resplandor al activar más fuerte */
+        }
+
+        .tab.active::after {
+            background-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            padding-top: 20px;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Estilos del Chatbot */
+        .chat-container {
+            background-color: var(--card-background-light-glass);
+            border-radius: 22px; /* Más redondeado */
+            box-shadow: 0 12px 45px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            width: 95%; /* Ajustado para que sea casi el ancho de la página */
+            max-width: 100%; /* Un poco más grande si hay espacio */
+            margin: 0 auto;
+            overflow: hidden;
+            border: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(var(--blur-amount));
+        }
+
+        body.dark-mode .chat-container {
+            background-color: var(--card-background-dark-glass);
+            box-shadow: 0 12px 45px var(--shadow-dark);
+            border: 1px solid var(--border-color-dark-glass);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        body.dark-mode .chat-messages {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .message {
+            max-width: 85%; /* Ligeramente más ancho */
+            padding: 14px 20px; /* Más padding */
+            border-radius: 22px;
+            line-height: 1.6; /* Mayor interlineado */
+            word-wrap: break-word;
+            font-size: 1em; /* Ligeramente más grande */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15); /* Sombra sutil para mensajes */
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 10px; /* Borde más suave */
+        }
+
+        .ai-message {
+            background-color: rgba(230, 230, 230, 0.8); /* Más claro, más transparente */
+            color: var(--text-light);
+            align-self: flex-start;
+            border-bottom-left-radius: 10px; /* Borde más suave */
+        }
+
+        body.dark-mode .ai-message {
+            background-color: rgba(70, 90, 110, 0.8); /* Más oscuro, más transparente */
+            color: var(--text-dark);
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 18px 22px; /* Mayor padding */
+            gap: 12px; /* Mayor espacio */
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 14px 22px; /* Mayor padding */
+            border: 1px solid rgba(0, 0, 0, 0.2); /* Borde más suave */
+            border-radius: 35px; /* Más redondeado */
+            font-size: 1.05em; /* Ligeramente más grande */
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.5); /* Input transparente */
+            color: var(--text-light);
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            backdrop-filter: blur(10px); /* Desenfoque sutil para input */
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.15);
+        }
+
+        body.dark-mode .chat-input input {
+            background-color: rgba(50, 70, 90, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2), 0 0 8px rgba(93, 156, 236, 0.4);
+        }
+
+        body.dark-mode .chat-input input:focus {
+            background-color: rgba(50, 70, 90, 0.9);
+        }
+
+        .chat-input button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 35px; /* Más redondeado */
+            padding: 14px 25px; /* Mayor padding */
+            cursor: pointer;
+            font-size: 1.15em; /* Ligeramente más grande */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-input button:hover {
+            background-color: #4a8ddc;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Análisis de Barrio */
+        .neighborhood-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px; /* Más espacio */
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .neighborhood-card {
+            background-color: var(--card-background-light-glass);
+            border-radius: 22px; /* Más redondeado */
+            padding: 22px; /* Más padding */
+            text-align: center;
+            box-shadow: 0 12px 45px var(--shadow-light);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease, background-color 0.3s ease;
+            border: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(var(--blur-amount));
+        }
+
+        body.dark-mode .neighborhood-card {
+            background-color: var(--card-background-dark-glass);
+            box-shadow: 0 12px 45px var(--shadow-dark);
+            border: 1px solid var(--border-color-dark-glass);
+        }
+
+        .neighborhood-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 18px 60px var(--shadow-light);
+        }
+
+        body.dark-mode .neighborhood-card:hover {
+            box-shadow: 0 18px 60px var(--shadow-dark);
+        }
+
+
+        .neighborhood-card.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 5px var(--primary-color), 0 18px 60px var(--shadow-light);
+            /* Borde de selección más grueso */
+            transform: scale(1.08);
+            /* Escala más pronunciada */
+        }
+
+        body.dark-mode .neighborhood-card.selected {
+            box-shadow: 0 0 0 5px var(--primary-color), 0 18px 60px var(--shadow-dark);
+        }
+
+        .neighborhood-icon {
+            font-size: 3.8em; /* Ligeramente más grande */
+            margin-bottom: 12px; /* Más espacio */
+            opacity: 0.9;
+        }
+
+        .neighborhood-card h4 {
+            font-size: 1.3em; /* Ligeramente más grande */
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        body.dark-mode .neighborhood-card h4 {
+            color: var(--text-dark);
+        }
+
+        .analysis-container {
+            background-color: var(--card-background-light-glass);
+            border-radius: 22px; /* Más redondeado */
+            box-shadow: 0 12px 45px var(--shadow-light);
+            padding: 35px; /* Más padding */
+            margin-bottom: 30px;
+            display: none;
+            animation: fadeIn 1.2s ease forwards;
+            /* Fade in más lento */
+            border: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(var(--blur-amount));
+        }
+
+        body.dark-mode .analysis-container {
+            background-color: var(--card-background-dark-glass);
+            box-shadow: 0 12px 45px var(--shadow-dark);
+            border: 1px solid var(--border-color-dark-glass);
+        }
+
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        body.dark-mode .analysis-header {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .analysis-title h3 {
+            font-size: 2.1em; /* Ligeramente más grande */
+            color: var(--text-light); /* Cambiado a text-light para mejor contraste */
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+        }
+        body.dark-mode .analysis-title h3 {
+            color: var(--text-dark);
+        }
+
+        .analysis-title p {
+            font-size: 1.05em;
+            color: var(--text-light);
+            opacity: 0.95;
+        }
+
+        body.dark-mode .analysis-title p {
+            color: var(--text-dark);
+        }
+
+        .status-badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 20px; /* Mayor padding */
+            border-radius: 30px; /* Más redondeado */
+            font-size: 1em; /* Ligeramente más grande */
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(231, 76, 60, 0.5);
+        }
+
+        .issues-list,
+        .recommendations {
+            margin-bottom: 35px; /* Mayor espacio */
+        }
+
+        .issues-list h4,
+        .recommendations h4 {
+            font-size: 1.6em; /* Ligeramente más grande */
+            color: var(--text-light); /* Cambiado a text-light para mejor contraste */
+            margin-bottom: 18px; /* Más espacio */
+            text-shadow: 0 0 2px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .issues-list h4,
+        body.dark-mode .recommendations h4 {
+            color: var(--text-dark);
+        }
+
+        .issue-item,
+        .recommendation-item {
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 18px; /* Más redondeado */
+            padding: 22px; /* Mayor padding */
+            margin-bottom: 18px; /* Más espacio */
+            border: 1px solid var(--border-color-light-glass);
+            display: flex;
+            gap: 18px; /* Más espacio */
+            align-items: flex-start;
+            backdrop-filter: blur(10px); /* Desenfoque sutil */
+            box-shadow: 0 6px 22px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .issue-item:hover, .recommendation-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+
+        body.dark-mode .issue-item,
+        body.dark-mode .recommendation-item {
+            background-color: rgba(74, 98, 115, 0.5);
+            border-color: var(--border-color-dark-glass);
+        }
+
+        .issue-item h5,
+        .recommendation-text h5 {
+            font-size: 1.25em;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .issue-item p,
+        .recommendation-text p {
+            font-size: 1.1em; /* Ligeramente más grande */
+            color: var(--text-light);
+            opacity: 0.95;
+        }
+
+        body.dark-mode .issue-item p,
+        body.dark-mode .recommendation-text p {
+            color: var(--text-dark);
+        }
+
+        .recommendation-icon {
+            background-color: var(--secondary-color);
+            color: white;
+            width: 45px; /* Más grande */
+            height: 45px; /* Más grande */
+            min-width: 45px;
+            min-height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.4em; /* Texto de icono más grande */
+            box-shadow: 0 3px 10px rgba(72, 207, 173, 0.5);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px); /* Mayor desplazamiento */
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes thinkingDots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .typing-indicator::after {
+            content: '...';
+            animation: thinkingDots 1.5s infinite steps(1);
+        }
+
+        /* Diseño Responsivo */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            /* Re-habilitar el logo y el subtítulo en la cabecera para tablet y móvil si se quiere */
+            .logo-text h1, .subtitle {
+                display: block;
+            }
+            .logo-text h1 {
+                font-size: 2em;
+            }
+            .subtitle {
+                font-size: 0.9em;
+            }
+
+            .theme-toggle-container {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .kpi-section {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .neighborhood-selector {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: center; /* Centrar elementos en móvil */
+                align-items: center;
+                box-shadow: 0 2px 15px var(--shadow-dark); /* Sombra más fuerte */
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                border-right: none;
+                padding: 15px 20px; /* Ajuste padding */
+                flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+            }
+
+            .sidebar-header {
+                margin-bottom: 0;
+                font-size: 20px; /* Ajuste para móvil */
+                width: 100%; /* Ocupa todo el ancho */
+                justify-content: center; /* Centrar el título */
+                margin-bottom: 10px; /* Espacio debajo */
+            }
+            .sidebar-header i {
+                font-size: 20px; /* Ajuste para móvil */
+            }
+
+            .sidebar-nav {
+                display: none;
+                /* Ocultar nav para pantallas pequeñas, se podría añadir un menú hamburguesa */
+            }
+
+            .sidebar-footer {
+                display: none;
+                /* Ocultar footer para pantallas pequeñas */
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .header {
+                align-items: center;
+                text-align: center;
+                margin-bottom: 20px; /* Menos margen */
+                flex-direction: column; /* Apilar elementos de la cabecera */
+            }
+
+            .logo-text {
+                flex-direction: column;
+                gap: 5px;
+                margin-bottom: 15px; /* Espacio debajo del logo */
+            }
+
+            .logo-text img {
+                height: 40px; /* Ajuste tamaño logo */
+            }
+            .logo-text h1, .subtitle {
+                display: none; /* Ocultar el nombre de la app principal en la cabecera en móvil */
+            }
+
+
+            .theme-toggle-container {
+                justify-content: center;
+                margin-top: 0; /* No se necesita margen superior si está en columna */
+                width: auto; /* Ajustar ancho automáticamente */
+            }
+
+            .section-title {
+                font-size: 1.6em; /* Ajuste para móvil */
+                text-align: center;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+
+            .kpi-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px; /* Ajuste de espacio */
+                padding: 22px; /* Ajuste de padding */
+                align-items: center; /* Centrar elementos en la tarjeta */
+            }
+
+            .kpi-card .card-icon {
+                font-size: 2.8em; /* Ajuste para móvil */
+            }
+
+            .kpi-content {
+                text-align: center;
+            }
+
+            .kpi-value {
+                font-size: 2.2em; /* Ajuste para móvil */
+            }
+
+            .tabs {
+                flex-direction: column;
+                gap: 10px;
+                border-bottom: none;
+            }
+
+            .tab {
+                width: 100%;
+                border-bottom: 2px solid var(--border-color-light-glass);
+                border-radius: 10px; /* Más redondeado para móviles */
+                background-color: var(--card-background-light-glass); /* Fondo para tab en móvil */
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra para tabs en móvil */
+                backdrop-filter: blur(10px);
+            }
+            body.dark-mode .tab {
+                background-color: var(--card-background-dark-glass);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            }
+
+            .tab.active::after {
+                display: none; /* No se necesita el borde inferior activo si la tarjeta ya lo tiene */
+            }
+
+            .chat-container {
+                height: 380px; /* Ajuste altura */
+                width: 100%; /* Ocupar todo el ancho en móvil */
+                padding: 15px; /* Reducir padding */
+            }
+
+            .chat-messages {
+                padding: 10px; /* Reducir padding */
+            }
+
+            .message {
+                max-width: 95%;
+                padding: 12px 16px;
+            }
+            .chat-input {
+                padding: 15px;
+                gap: 8px;
+            }
+            .chat-input input {
+                padding: 12px 18px;
+            }
+            .chat-input button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+
+            .neighborhood-selector {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .analysis-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .status-badge {
+                margin-top: 10px;
+            }
+            .issue-item, .recommendation-item {
+                padding: 18px;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+            .recommendation-icon {
+                width: 38px;
+                height: 38px;
+                min-width: 38px;
+                min-height: 38px;
+                font-size: 1.2em;
+            }
+            .issue-item h5, .recommendation-text h5 {
+                font-size: 1.1em;
+            }
+            .issue-item p, .recommendation-text p {
+                font-size: 0.95em;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
-            <i class="fas fa-city"></i>
+            <div class="logo-text">
+                <img src="logo.png" alt="Logo de CityInsight">
+                <!-- Se ha eliminado el h1 y p.subtitle de aquí -->
+            </div>
             <h2>CityInsight</h2>
         </div>
         <nav class="sidebar-nav">
             <ul>
                 <li class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
-                <li><i class="fas fa-leaf"></i> Medio Ambiente</li>
+                <li><a href="medioambiente.html" style="text-decoration: none; color: inherit;"><i class="fas fa-leaf"></i> Medio Ambiente</a></li>
                 <li><i class="fas fa-bus"></i> Trafico</li>
-                <li><a href="ciudadano.html" style="text-decoration: none; color: inherit;"><i
-                            class="fas fa-user-friends"></i> <span>Panel Ciudadanos</span></a></li>
+                <li><a href="ciudadano.html" style="text-decoration: none; color: inherit;"><i class="fas fa-user-friends"></i>
+                        <span>Panel Ciudadanos</span></a></li>
                 <li><i class="fas fa-cogs"></i> Configuración</li>
             </ul>
         </nav>
@@ -33,18 +1018,19 @@
     </div>
 
 
-    <div class="container">
+    <div class="main-content">
         <header class="header">
-            <div class="logo-text">
-                <img src="logo.png" alt="Logo de CityInsight">
-                <h1>CityInsight</h1>
+            
+            <div class="theme-toggle-container">
+                <button id="theme-toggle">
+                    <i id="theme-icon" class="fas fa-moon"></i> Cambiar Tema
+                </button>
             </div>
-            <p class="subtitle">Panel de Gestión Municipal Inteligente</p>
         </header>
 
 
         <!-- Indicadores Clave -->
-        <h2 class="section-title">Indicadores Clave de Rendimiento</h2>
+        <h2 class="section-title"><i class="fas fa-chart-line"></i> Indicadores Clave de Rendimiento</h2>
         <section class="kpi-section">
             <div class="kpi-card" data-kpi="Índice de Calidad Urbana">
                 <i class="fas fa-leaf card-icon"></i>
@@ -55,9 +1041,7 @@
                         <i class="fas fa-arrow-up"></i>
                         <span>2.4% vs mes anterior</span>
                     </div>
-                    <button class="kpi-info-btn"
-                        onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
-                        detalles</button>
+                    <button class="kpi-info-btn">Ver detalles</button>
                 </div>
             </div>
             <div class="kpi-card" data-kpi="Zonas Verdes">
@@ -70,9 +1054,7 @@
                         <span>0.8% vs mes anterior</span>
                     </div>
                 </div>
-                <button class="kpi-info-btn"
-                    onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
-                    detalles</button>
+                <button class="kpi-info-btn">Ver detalles</button>
             </div>
             <div class="kpi-card" data-kpi="Intensidad de Tráfico">
                 <i class="fas fa-car-side card-icon"></i>
@@ -80,13 +1062,11 @@
                     <h3>Intensidad de Tráfico</h3>
                     <p class="kpi-value">63.2%</p>
                     <div class="kpi-trend negative">
-                        <i class="fas fa-arrow-up"></i>
+                        <i class="fas fa-arrow-down"></i>
                         <span>1.7% vs mes anterior</span>
                     </div>
                 </div>
-                <button class="kpi-info-btn"
-                    onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
-                    detalles</button>
+                <button class="kpi-info-btn">Ver detalles</button>
             </div>
             <div class="kpi-card" data-kpi="Satisfacción Ciudadana">
                 <i class="fas fa-smile card-icon"></i>
@@ -98,18 +1078,17 @@
                         <span>3.5% vs mes anterior</span>
                     </div>
                 </div>
-                <button class="kpi-info-btn"
-                    onclick="document.querySelector('.tab[data-tab=\'chat\']').click(); document.querySelector('.chat-container').scrollIntoView({behavior: 'smooth'});">Ver
-                    detalles</button>
+                <button class="kpi-info-btn">Ver detalles</button>
             </div>
         </section>
 
         <!-- Sección de Análisis IA -->
         <h2 class="section-title"><i class="fas fa-robot"></i> Análisis Inteligente</h2>
 
-        <div class="tabs"></div>
-        <button class="tab active" data-tab="chat">Chat con IA</button>
-        <button class="tab" data-tab="neighborhood">Análisis por Barrio</button>
+        <div class="tabs">
+            <button class="tab active" data-tab="chat">Chat con IA</button>
+            <button class="tab" data-tab="neighborhood">Análisis por Barrio</button>
+        </div>
 
 
         <div id="chat-tab" class="tab-content active">
@@ -247,8 +1226,7 @@
                     <div class="issue-item">
                         <h5>Parques mal distribuidos</h5>
                         <p>Aunque el distrito cumple con la ratio de zona verde por habitante, el 80% de estos espacios
-                            están
-                            concentrados en el sector norte.</p>
+                            están concentrados en el sector norte.</p>
                     </div>
                 </div>
 
@@ -295,214 +1273,176 @@
         </div>
     </div>
 
-
     <script>
-        // Definimos las respuestas específicas para cada KPI
-        const kpiResponses = {
-            "Índice de Calidad Urbana": "El Índice de Calidad Urbana (78.3/100) evalúa factores como espacios verdes, movilidad, calidad del aire y servicios. Ha mejorado principalmente por la reducción de ruido urbano y nuevas zonas peatonales.",
-            "Zonas Verdes": "Con 16.5 m²/hab, superamos el estándar OMS de 9m²/hab. Sin embargo, estos espacios están mal distribuidos: el 65% de los barrios tiene menos de 12m²/hab. Recomendamos implementar 8 nuevos parques en zonas deficitarias.",
-            "Intensidad de Tráfico": "La intensidad de tráfico (63.2%) ha aumentado negativamente un 1.7%. Los puntos críticos son los accesos a la ciudad entre 7:30-9:00 y 17:30-19:00. Recomendamos implementar horarios escalonados de entrada a oficinas.",
-            "Satisfacción Ciudadana": "La satisfacción ciudadana del 82% representa un aumento significativo. Las áreas mejor valoradas son limpieza (87%) y zonas verdes (85%). Los aspectos peor valorados son aparcamiento (52%) y transporte público (65%)."
-        };
+        // Función para cambiar entre modo claro y oscuro
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
 
-        // Respuestas para las preguntas específicas guiadas
-        const promptResponses = {
-            "¿Qué factores se consideran en el Índice de Calidad Urbana?": "El Índice de Calidad Urbana considera 5 categorías principales: (1) Medioambiente (calidad del aire, ruido, agua), (2) Movilidad (transporte público, congestión), (3) Espacios públicos (zonas verdes, infraestructura), (4) Servicios (acceso a educación, salud) y (5) Gobernanza (participación ciudadana, transparencia).",
-            "¿Cómo ha evolucionado el Índice de Calidad Urbana este año?": "El Índice de Calidad Urbana ha mostrado una evolución positiva durante este año, pasando de 74.1 en enero a 78.3 actualmente (+5.7%). La mejora más notable se dio entre marzo y abril (+1.8%) cuando se implementaron las nuevas zonas peatonales en el centro histórico.",
-            "¿Qué barrios tienen déficit de zonas verdes?": "Los barrios con mayor déficit de zonas verdes son: Barrio Sur (3m²/hab), Centro Histórico (7m²/hab) y Distrito Industrial (5m²/hab). Todos están por debajo del mínimo recomendado por la OMS de 9m²/hab. El plan urbanístico contempla corregir esta situación en los próximos 3 años.",
-            "¿Qué acciones se recomiendan para mejorar las zonas verdes?": "Recomendamos: (1) Crear 8 nuevos parques en zonas deficitarias, (2) Implementar techos verdes en edificios públicos, (3) Transformar un 15% de plazas duras en jardines, (4) Crear corredores verdes que conecten parques existentes, y (5) Programa de adopción de árboles por ciudadanos y empresas.",
-            "¿Cuáles son los puntos de mayor congestión?": "Los puntos de mayor congestión son: (1) Acceso Norte (85% saturación en hora punta), (2) Rotonda Central (78%), (3) Avenida Principal con Calle Mayor (82%), (4) Puente Este (75%) y (5) Acceso al polígono industrial (72%). Todos superan el umbral crítico del 70% durante al menos 3 horas diarias.",
-            "¿Qué soluciones existen para reducir la intensidad del tráfico?": "Para reducir la intensidad del tráfico recomendamos: (1) Implementar horarios escalonados de entrada a oficinas y centros educativos, (2) Ampliar carriles exclusivos para transporte público y vehículos de alta ocupación, (3) Política de aparcamientos disuasorios en la periferia, (4) Mejorar frecuencia de transporte público en hora punta, y (5) Promover el teletrabajo.",
-            "¿Qué servicios están mejor valorados por los ciudadanos?": "Los servicios mejor valorados según la encuesta de satisfacción ciudadana son: (1) Limpieza urbana (87%), (2) Mantenimiento de zonas verdes (85%), (3) Servicios culturales (82%), (4) Atención ciudadana digital (81%) y (5) Instalaciones deportivas (80%). Todos han mejorado respecto al año anterior.",
-            "¿Qué áreas necesitan mejora según la opinión ciudadana?": "Las áreas que requieren mejora urgente según la opinión ciudadana son: (1) Disponibilidad de aparcamiento (52% de satisfacción), (2) Transporte público (65%), (3) Mantenimiento de calzadas (68%), (4) Atención sanitaria local (70%) y (5) Vivienda protegida (71%). Se están elaborando planes de mejora para cada una."
-        };
+        // Función de cambio de tema
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            themeIcon.classList.toggle('fa-sun', isDarkMode);
+            themeIcon.classList.toggle('fa-moon', !isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+        }
 
-        const chatInput = document.getElementById('chat-input-field');
+        // Verificar el estado del modo nocturno al cargar la página
+        window.addEventListener('load', () => {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.add('fa-sun');
+                themeIcon.classList.remove('fa-moon');
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.remove('fa-sun');
+            }
+        });
+
+        // Añadir evento de clic al botón de cambio de tema
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Lógica de pestañas
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Quitar la clase activa de todas las pestañas y ocultar todos los contenidos de las pestañas
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+
+                // Añadir la clase activa a la pestaña clicada y mostrar su contenido
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+
+                // Si se cambia a la pestaña de chat, restablecer el contenido del chat
+                if (tab.dataset.tab === 'chat') {
+                    const chatMessages = document.querySelector('.chat-messages');
+                    chatMessages.innerHTML = `<div class="message ai-message">
+                        Hola, soy CityInsight. ¿En qué puedo ayudarte hoy con la gestión municipal? Puedo analizar datos
+                        urbanos, recomendar mejoras o responder preguntas sobre desarrollo urbano sostenible.
+                    </div>`;
+                }
+            });
+        });
+
+        // Lógica de chatbot
+        const chatInputField = document.getElementById('chat-input-field');
         const sendButton = document.getElementById('send-button');
         const chatMessages = document.querySelector('.chat-messages');
 
+        // Definimos las respuestas específicas para cada KPI
+        const kpiResponses = {
+            "Índice de Calidad Urbana": "El Índice de Calidad Urbana (78.3/100) evalúa factores como espacios verdes, movilidad, calidad del aire y servicios. Ha mejorado principalmente por la reducción de ruido urbano y nuevas zonas peatonales.",
+            "Zonas Verdes": "Con 16.5 m²/hab, superamos el estándar OMS de 9m²/hab. Sin embargo, estos espacios están mal distribuidos: el 65% de los barrios tiene menos de 12m²/hab. Recomendamos implementar parques de bolsillo en áreas deficitarias.",
+            "Intensidad de Tráfico": "La Intensidad de Tráfico (63.2% de saturación) se ha incrementado ligeramente debido a la reactivación económica post-pandemia. Para mitigar esto, estamos impulsando el transporte público y carriles bici.",
+            "Satisfacción Ciudadana": "La Satisfacción Ciudadana (82%) es alta, reflejando una percepción positiva de los servicios públicos. Las áreas de mayor satisfacción son limpieza y seguridad, mientras que la movilidad sigue siendo un desafío."
+        };
 
+        async function sendMessage() {
+            const messageText = chatInputField.value.trim();
+            if (messageText === '') return;
 
-        function addMessage(text, isUser) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message');
-            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
-            messageDiv.textContent = text;
-            chatMessages.appendChild(messageDiv);
+            // Mostrar mensaje del usuario
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('message', 'user-message');
+            userMessageDiv.textContent = messageText;
+            chatMessages.appendChild(userMessageDiv);
+
+            chatInputField.value = ''; // Limpiar campo de entrada
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Desplazar hasta abajo
+
+            // Simular indicador de escritura de la IA
+            const typingIndicator = document.createElement('div');
+            typingIndicator.classList.add('message', 'ai-message', 'typing-indicator');
+            typingIndicator.textContent = 'CityInsight está pensando'; // Texto sin puntos, animado por CSS
+            chatMessages.appendChild(typingIndicator);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Obtener respuesta de la IA después de un retraso
+            let aiResponse = "Lo siento, no entiendo tu pregunta. ¿Puedes reformularla o preguntar sobre un KPI específico?";
+
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Simular retraso de pensamiento (1.5 segundos)
+
+            // Comprobar si el mensaje es una solicitud de detalle de KPI
+            const kpiKey = Object.keys(kpiResponses).find(kpi => messageText.includes(kpi));
+            if (kpiKey) {
+                aiResponse = kpiResponses[kpiKey];
+            } else {
+                aiResponse = "Actualmente, solo puedo proporcionar información detallada sobre los KPIs predefinidos. Por favor, intenta preguntar sobre uno de ellos (Ej: 'Háblame del Índice de Calidad Urbana').";
+            }
+
+            // Eliminar indicador de escritura
+            chatMessages.removeChild(typingIndicator);
+
+            // Mostrar respuesta de la IA
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.classList.add('message', 'ai-message');
+            aiMessageDiv.textContent = aiResponse;
+            chatMessages.appendChild(aiMessageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Desplazar hasta abajo
         }
 
-        function addTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.classList.add('typing');
-            typingDiv.innerHTML = `
-                <div class="typing-dots">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            `;
-            typingDiv.id = 'typing-indicator';
-            chatMessages.appendChild(typingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            return typingDiv;
-        }
-
-        function removeTypingIndicator() {
-            const typingIndicator = document.getElementById('typing-indicator');
-            if (typingIndicator) {
-                typingIndicator.remove();
-            }
-        }
-
-        // Modificación en la función que maneja las respuestas
-        function getResponse(message) {
-            // Primero verificar si es un prompt específico de los botones de sugerencia
-            if (promptResponses[message]) {
-                return promptResponses[message];
-            }
-
-            // Verificar si es un mensaje directo sobre un KPI
-            for (const [kpi, response] of Object.entries(kpiResponses)) {
-                if (message.includes(kpi)) {
-                    return response;
-                }
-            }
-
-            // Si incluye la frase "más información sobre"
-            if (message.includes('más información sobre')) {
-                const kpiMatch = message.match(/más información sobre [el KPI ]?"([^"]+)"/);
-                if (kpiMatch && kpiMatch[1]) {
-                    const kpiName = kpiMatch[1];
-                    if (kpiResponses[kpiName]) {
-                        return kpiResponses[kpiName];
-                    }
-                }
-            }
-
-            // Respuesta por defecto si no hay coincidencia
-            return "Para obtener información detallada, selecciona uno de los KPIs en el panel superior o pregunta específicamente por Índice de Calidad Urbana, Zonas Verdes, Intensidad de Tráfico o Satisfacción Ciudadana.";
-        }
-
-        // Actualizar el event listener del botón de enviar
-        sendButton.addEventListener('click', () => {
-            const message = chatInput.value.trim();
-            if (message) {
-                addMessage(message, true);
-                chatInput.value = '';
-
-                // Simular que la IA está pensando
-                const typingIndicator = addTypingIndicator();
-
-                // Simular tiempo de respuesta (1-2 segundos)
-                const responseTime = 1000 + Math.random() * 1000;
-                setTimeout(() => {
-                    removeTypingIndicator();
-                    addMessage(getResponse(message), false);
-                }, responseTime);
-            }
-        });
-
-        // Evento Enter para enviar mensajes
-        chatInput.addEventListener('keypress', (e) => {
+        sendButton.addEventListener('click', sendMessage);
+        chatInputField.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                sendButton.click();
+                sendMessage();
             }
         });
 
-        // Event listener para los botones de prompts guiados
-        document.querySelectorAll('.prompt-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const message = btn.getAttribute('data-message');
+        // Clic en el botón KPI para activar el chat y enviar una consulta específica
+        document.querySelectorAll('.kpi-info-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const kpiCard = event.target.closest('.kpi-card');
+                const kpiName = kpiCard.dataset.kpi;
 
-                // Colocar el mensaje en el input y simular el envío
-                chatInput.value = message;
-                sendButton.click();
-            });
-        });
-
-        // Event listener para los botones de KPI
-        document.querySelectorAll('.kpi-info-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Obtener el nombre del KPI del atributo data-kpi del elemento padre
-                const kpiCard = btn.closest('.kpi-card');
-                const kpiName = kpiCard.getAttribute('data-kpi');
-                const message = `Quiero más información sobre el KPI "${kpiName}"`;
-
-                // Activar la pestaña de chat si no está activa
-                document.querySelector('.tab[data-tab="chat"]').click();
-
-                // Añadir el mensaje del usuario al chat
-                addMessage(message, true);
-
-                // Simular que la IA está pensando
-                const typingIndicator = addTypingIndicator();
-
-                // Simular tiempo de respuesta (1-2 segundos)
-                const responseTime = 1000 + Math.random() * 1000;
-                setTimeout(() => {
-                    removeTypingIndicator();
-                    // Mostrar la respuesta específica para este KPI
-                    addMessage(kpiResponses[kpiName], false);
-                }, responseTime);
-            });
-        });
-
-        // La tarjeta completa ya no necesita ser clickeable
-        document.querySelectorAll('.kpi-card').forEach(card => {
-            card.style.cursor = 'default';
-        });
-
-        // Tab navigation
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
+                // Activar pestaña de chat
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                document.querySelector('.tab[data-tab="chat"]').classList.add('active');
+                document.getElementById('chat-tab').classList.add('active');
 
-                tab.classList.add('active');
-                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+                // Enviar un mensaje predefinido al chat
+                const queryMessage = `Quiero saber más sobre ${kpiName}`;
+                chatInputField.value = queryMessage;
+                sendMessage();
+
+                // Desplazarse al contenedor del chat
+                document.querySelector('.chat-container').scrollIntoView({ behavior: 'smooth' });
             });
         });
 
 
-        document.querySelector('.tab[data-tab="neighborhood"]').addEventListener('click', () => {
-            // Remove selection from all neighborhood cards
-            document.querySelectorAll('.neighborhood-card').forEach(card => card.classList.remove('selected'));
-            // Hide all analysis containers
-            document.querySelectorAll('.analysis-container').forEach(container => {
-                container.style.display = 'none';
-            });
-        });
-
-
-        // Neighborhood selection
+        // Selección de barrio
         document.querySelectorAll('.neighborhood-card').forEach(card => {
             card.addEventListener('click', () => {
-
+                // Quitar la clase seleccionada de todas las tarjetas de barrio
                 document.querySelectorAll('.neighborhood-card').forEach(c => c.classList.remove('selected'));
+                // Añadir la clase seleccionada a la tarjeta clicada
                 card.classList.add('selected');
 
-                // Hide all analysis containers
+                // Ocultar todos los contenedores de análisis
                 document.querySelectorAll('.analysis-container').forEach(container => {
                     container.style.display = 'none';
                 });
 
-                // Show selected neighborhood analysis with animation
+                // Mostrar el análisis del barrio seleccionado con animación
                 const analysisContainer = document.getElementById(`analysis-${card.dataset.neighborhood}`);
                 if (analysisContainer) {
                     analysisContainer.style.display = 'block';
-                    // Scroll to the analysis container with smooth animation
+                    // Desplazarse al contenedor de análisis con animación suave
                     analysisContainer.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
 
-        // Add animation to KPI cards on load
+        // Añadir animación a las tarjetas KPI al cargar
         document.addEventListener('DOMContentLoaded', function () {
             const kpiCards = document.querySelectorAll('.kpi-card');
             kpiCards.forEach((card, index) => {
-                card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
+                card.style.animation = `fadeIn 0.7s ease forwards ${index * 0.1}s`; /* Ligeramente más lento */
                 card.style.opacity = '0';
+                /* Asegurar que comiencen ocultas */
             });
         });
     </script>

@@ -4,10 +4,906 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciudadano - Gestión Urbana</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>CityInsight - Portal Ciudadano</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styleCiudadano.css">
+    <style>
+        /* Estilos Generales (Consistentes con Dashboard y Medio Ambiente) */
+        :root {
+            --primary-color: #5d9cec;
+            /* Azul más suave */
+            --secondary-color: #48cfad;
+            /* Verde más suave */
+            --accent-color: #a0d468;
+            /* Nuevo color de acento */
+            --background-light: #ecf0f1;
+            /* Gris claro */
+            --background-dark: #2c3e50;
+            /* Azul oscuro */
+            --text-light: #2c3e50;
+            /* Gris oscuro para texto (más oscuro para contraste) */
+            --text-dark: #ecf0f1;
+            /* Texto claro para modo oscuro */
+            --card-background-light-glass: rgba(255, 255, 255, 0.85); /* Blanco semi-transparente (más opaco) */
+            --card-background-dark-glass: rgba(59, 80, 98, 0.85); /* Oscuro semi-transparente (más opaco) */
+            --border-color-light-glass: rgba(255, 255, 255, 0.6); /* Borde blanco transparente (más visible) */
+            --border-color-dark-glass: rgba(74, 98, 115, 0.6); /* Borde oscuro transparente (más visible) */
+            --shadow-light: rgba(0, 0, 0, 0.2);
+            /* Sombra más pronunciada */
+            --shadow-dark: rgba(0, 0, 0, 0.7);
+            /* Sombra más oscura */
+            --blur-amount: 20px;
+            /* Mayor desenfoque para el glassmorfismo */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: background-color 0.5s ease, color 0.5s ease;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--background-light) 100%);
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--background-dark) 0%, #1e2b38 100%);
+        }
+
+        /* Navegación Superior */
+        .top-nav {
+            background-color: var(--card-background-light-glass);
+            box-shadow: 0 4px 15px var(--shadow-light);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(var(--blur-amount));
+            transition: all 0.4s ease-out; /* Added transition for smooth height change */
+        }
+
+        body.dark-mode .top-nav {
+            background-color: var(--card-background-dark-glass);
+            box-shadow: 0 4px 15px var(--shadow-dark);
+            border-bottom: 1px solid var(--border-color-dark-glass);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .logo i {
+            color: var(--secondary-color);
+            margin-right: 8px;
+            font-size: 1.5em;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap; /* Permitir que los enlaces se envuelvan */
+            justify-content: center; /* Centrar los enlaces en móvil */
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.98rem;
+            transition: all 0.3s ease, background-color 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        body.dark-mode .nav-links a {
+            color: var(--text-dark);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background-color: rgba(93, 156, 236, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle-container {
+            margin-left: 20px;
+            /* Asegurar espacio */
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle-container button {
+            background-color: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        body.dark-mode .theme-toggle-container button {
+            color: var(--text-dark);
+        }
+
+        .theme-toggle-container button:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        /* New style for the menu toggle button (hamburger) */
+        .menu-toggle {
+            display: none; /* Hidden by default on desktop */
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        body.dark-mode .menu-toggle {
+            color: var(--text-dark);
+        }
+
+        .menu-toggle:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+
+        /* Contenido principal */
+        .main-content {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text-light); /* Cambiado a text-light para mejor contraste */
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .page-title {
+            color: var(--text-dark);
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1.15rem;
+            opacity: 0.9;
+        }
+        body.dark-mode .subtitle {
+            color: var(--text-dark);
+        }
+
+        /* Secciones */
+        .section {
+            background-color: var(--card-background-light-glass);
+            border-radius: 22px;
+            margin-bottom: 30px;
+            box-shadow: 0 12px 45px var(--shadow-light);
+            overflow: hidden;
+            border: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(var(--blur-amount));
+            animation: fadeIn 1s ease forwards;
+        }
+
+        body.dark-mode .section {
+            background-color: var(--card-background-dark-glass);
+            box-shadow: 0 12px 45px var(--shadow-dark);
+            border: 1px solid var(--border-color-dark-glass);
+        }
+
+        .section-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: rgba(93, 156, 236, 0.1); /* Ligero fondo para encabezado de sección */
+        }
+        body.dark-mode .section-header {
+            border-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(59, 80, 98, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-light); /* Cambiado a text-light para mejor contraste */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .section-title {
+            color: var(--text-dark);
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.3em;
+        }
+
+        /* Estadísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .stat-card {
+            background-color: rgba(255, 255, 255, 0.7); /* Más opaco */
+            border-radius: 18px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        body.dark-mode .stat-card {
+            background-color: rgba(74, 98, 115, 0.7);
+            border-color: var(--border-color-dark-glass);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 18px 18px 0 0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-title {
+            font-size: 1.35em;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        body.dark-mode .stat-title {
+            color: var(--text-dark);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-bar {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stat-progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
+            border-radius: 4px;
+        }
+
+        /* Pestañas (Tabs) */
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+            gap: 15px;
+            padding-left: 20px; /* Alineación con el contenido */
+            padding-right: 20px;
+        }
+
+        body.dark-mode .tabs {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .tab-btn {
+            background-color: transparent;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+            position: relative;
+        }
+
+        body.dark-mode .tab-btn {
+            color: var(--text-dark);
+        }
+
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 3px;
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            text-shadow: 0 0 8px rgba(93, 156, 236, 0.6);
+        }
+
+        .tab-btn.active::after {
+            background-color: var(--primary-color);
+        }
+
+        .tab-pane {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Sección de Propuestas */
+        .proposals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .proposal-card {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color-light-glass);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Para empujar el footer hacia abajo */
+        }
+        body.dark-mode .proposal-card {
+            background-color: rgba(74, 98, 115, 0.7);
+            border-color: var(--border-color-dark-glass);
+        }
+        .proposal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .proposal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .proposal-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .proposal-supporters {
+            font-size: 0.95em;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        body.dark-mode .proposal-supporters {
+            color: var(--text-dark);
+        }
+        .proposal-supporters i {
+            color: var(--accent-color);
+        }
+
+        .proposal-category {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+
+        .proposal-description {
+            font-size: 0.95em;
+            color: var(--text-light);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex-grow: 1; /* Permite que la descripción empuje el footer */
+        }
+        body.dark-mode .proposal-description {
+            color: var(--text-dark);
+        }
+
+        .proposal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        body.dark-mode .proposal-footer {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .support-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .support-btn:hover {
+            background-color: #4a8ddc;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .support-btn.supported {
+            background-color: var(--accent-color);
+            color: var(--text-dark); /* Color oscuro para el texto del botón apoyado */
+            box-shadow: 0 4px 10px rgba(163, 217, 185, 0.5);
+        }
+
+        .support-btn.supported:hover {
+            background-color: var(--accent-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(124, 197, 155, 0.6);
+        }
+
+        .proposal-date {
+            font-size: 0.85em;
+            color: var(--text-light);
+            opacity: 0.8;
+        }
+        body.dark-mode .proposal-date {
+            color: var(--text-dark);
+        }
+
+        /* Formulario de Reporte */
+        .report-form {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.95em;
+        }
+        body.dark-mode .form-group label {
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            font-size: 1em;
+            background-color: rgba(255, 255, 255, 0.6);
+            color: var(--text-light);
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            backdrop-filter: blur(8px);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background-color: rgba(74, 98, 115, 0.6);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 5px rgba(93, 156, 236, 0.4);
+        }
+        body.dark-mode .form-group input:focus,
+        body.dark-mode .form-group select:focus,
+        body.dark-mode .form-group textarea:focus {
+            background-color: rgba(74, 98, 115, 0.9);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #4a8ddc;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+        }
+
+        .confirmation-message {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 20px;
+            display: none; /* Oculto por defecto */
+            animation: fadeIn 0.5s ease forwards;
+            box-shadow: 0 4px 15px rgba(72, 207, 173, 0.4);
+        }
+
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+            color: var(--text-light);
+            font-size: 0.9em;
+            opacity: 0.8;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        body.dark-mode .footer {
+            color: var(--text-dark);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Diseño Responsivo */
+        @media (max-width: 1024px) {
+            .nav-links li {
+                margin-left: 15px;
+            }
+            .nav-links a {
+                font-size: 0.9em;
+            }
+            .page-title {
+                font-size: 2.3rem;
+            }
+            .subtitle {
+                font-size: 1.05rem;
+            }
+            .section-title {
+                font-size: 1.6rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 20px;
+            }
+            .stat-card {
+                padding: 20px;
+            }
+            .stat-icon {
+                font-size: 2.5em;
+            }
+            .stat-title {
+                font-size: 1.2em;
+            }
+            .stat-value {
+                font-size: 2em;
+            }
+            .tabs {
+                flex-wrap: wrap; /* Permitir que las pestañas se envuelvan */
+                justify-content: center; /* Centrar pestañas */
+                padding: 0; /* Eliminar padding horizontal para móvil */
+            }
+            .tab-btn {
+                flex: 1 1 45%; /* Dos columnas en pantallas medianas */
+                margin: 5px; /* Pequeño margen entre pestañas */
+                border-radius: 12px; /* Más redondeado para móviles */
+                background-color: var(--card-background-light-glass); /* Fondo para tab en móvil */
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra para tabs en móvil */
+                backdrop-filter: blur(10px);
+            }
+            body.dark-mode .tab-btn {
+                background-color: var(--card-background-dark-glass);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            }
+            .tab-btn.active::after {
+                display: none; /* No se necesita el borde inferior activo si la tarjeta ya lo tiene */
+            }
+            .proposals-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            .proposal-card {
+                padding: 20px;
+            }
+            .report-form {
+                padding: 20px;
+            }
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 10px 12px;
+            }
+            .submit-btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start; /* Align logo to left */
+                padding: 10px 15px;
+                gap: 10px;
+                position: relative; /* Needed for absolute positioning of menu */
+            }
+
+            .logo {
+                width: 100%; /* Occupy full width for spacing */
+                display: flex;
+                justify-content: space-between; /* Push toggle button to right */
+                align-items: center;
+                margin-bottom: 0; /* No margin bottom here */
+            }
+
+            .menu-toggle {
+                display: block; /* Show hamburger on mobile */
+            }
+
+            .nav-links,
+            .theme-toggle-container {
+                display: none; /* Hidden by default on mobile */
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                margin-left: 0; /* Reset margin */
+                background-color: var(--card-background-light-glass); /* Background for expanded menu */
+                border-top: 1px solid var(--border-color-light-glass);
+                padding: 15px 0; /* Add padding for content */
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                border-radius: 0 0 15px 15px;
+                position: absolute; /* Position relative to .top-nav */
+                top: 100%; /* Below the logo/toggle bar */
+                left: 0;
+                max-height: 0; /* Collapse height */
+                overflow: hidden;
+                transition: max-height 0.4s ease-out, padding 0.4s ease-out, box-shadow 0.4s ease;
+            }
+
+            body.dark-mode .nav-links,
+            body.dark-mode .theme-toggle-container {
+                background-color: var(--card-background-dark-glass);
+                border-color: var(--border-color-dark-glass);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            }
+
+
+            /* Styles when menu is open */
+            .top-nav.menu-open .nav-links,
+            .top-nav.menu-open .theme-toggle-container {
+                display: flex; /* Show elements when open */
+                max-height: 500px; /* Max height to allow transition */
+                padding: 15px 0;
+            }
+
+            .nav-links li {
+                width: 90%; /* Links take more width */
+                margin-left: 0;
+                text-align: center;
+                margin-bottom: 5px; /* Spacing between links */
+            }
+
+            .nav-links a {
+                padding: 10px 15px;
+                width: 100%;
+                justify-content: center;
+                font-size: 1em;
+                border-radius: 10px; /* Slightly less rounded for list items */
+                margin-bottom: 5px;
+            }
+            .nav-links a:hover {
+                background-color: rgba(93, 156, 236, 0.2); /* More visible hover */
+            }
+
+            .theme-toggle-container {
+                margin-top: 10px; /* Space between links and theme toggle */
+                border-top: 1px solid rgba(0,0,0,0.1); /* Separator */
+                padding-top: 10px;
+                width: 90%; /* Match width of links */
+                justify-content: center; /* Center toggle button */
+            }
+            body.dark-mode .theme-toggle-container {
+                border-color: rgba(255,255,255,0.1);
+            }
+
+            .main-content {
+                padding: 0 15px;
+                margin-top: 20px;
+            }
+            .page-title {
+                font-size: 2rem;
+            }
+            .subtitle {
+                font-size: 1em;
+            }
+            .section-header {
+                padding: 20px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+                justify-content: center;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 15px;
+            }
+            .stat-card {
+                padding: 18px;
+            }
+            .stat-icon {
+                font-size: 2.2em;
+            }
+            .stat-title {
+                font-size: 1.1em;
+            }
+            .stat-value {
+                font-size: 1.8em;
+            }
+            .tabs {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .tab-btn {
+                flex: 1 1 100%; /* Una columna en pantallas pequeñas */
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+            .proposals-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .proposal-card {
+                padding: 18px;
+            }
+            .support-btn {
+                font-size: 0.85em;
+                padding: 8px 15px;
+            }
+            .report-form {
+                padding: 15px;
+            }
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 8px 10px;
+            }
+            .submit-btn {
+                padding: 10px 18px;
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -17,11 +913,22 @@
             <div class="logo">
                 <i class="fas fa-city"></i> CityInsight
             </div>
-            <ul class="nav-links">
-                <li><a href="#estadisticas"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
-                <li><a href="#participacion"><i class="fas fa-users"></i> Participación</a></li>
+            <!-- New hamburger menu button -->
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="medioambiente.html"><i class="fas fa-leaf"></i> Medio Ambiente</a></li>
+                <li><a href="trafico.html"><i class="fas fa-bus"></i> Trafico</a></li>
+                <li><a href="#participacion" class="active"><i class="fas fa-users"></i> Participación</a></li>
+                <li><a href="#reporte"><i class="fas fa-file-alt"></i> Enviar Reporte</a></li>
             </ul>
+            <div class="theme-toggle-container" id="theme-toggle-container">
+                <button id="theme-toggle">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -32,192 +939,253 @@
             <p class="subtitle">Participa activamente en la mejora de tu barrio y mantente informado.</p>
         </div>
 
-        <!-- Estadísticas del Barrio -->
-        <section id="estadisticas" class="section">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-chart-bar"></i> Estadísticas de tu Barrio</h2>
+        <!-- Pestañas principales -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="estadisticas">
+                    <i class="fas fa-chart-bar"></i> Estadísticas
+                </button>
+                <button class="tab-btn" data-tab="participacion">
+                    <i class="fas fa-users"></i> Participación
+                </button>
+                <button class="tab-btn" data-tab="reporte">
+                    <i class="fas fa-file-alt"></i> Enviar Reporte
+                </button>
             </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-wind"></i></div>
-                    <h3 class="stat-title">Calidad del Aire</h3>
-                    <div class="stat-value">Buena</div>
-                    <div class="stat-bar">
-                        <div class="stat-progress" style="width: 75%;"></div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-bus"></i></div>
-                    <h3 class="stat-title">Uso de Transporte</h3>
-                    <div class="stat-value">65%</div>
-                    <div class="stat-bar">
-                        <div class="stat-progress" style="width: 65%;"></div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-tree"></i></div>
-                    <h3 class="stat-title">Zonas Verdes</h3>
-                    <div class="stat-value">12 hectáreas</div>
-                    <div class="stat-bar">
-                        <div class="stat-progress" style="width: 45%;"></div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-recycle"></i></div>
-                    <h3 class="stat-title">Reciclaje</h3>
-                    <div class="stat-value">82%</div>
-                    <div class="stat-bar">
-                        <div class="stat-progress" style="width: 82%;"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Sección de Participación Ciudadana -->
-        <section id="participacion" class="section">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-users"></i> Participación Ciudadana</h2>
-            </div>
-            
-            <!-- Contenedor de pestañas -->
-            <div class="tabs-container">
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="sugerencias"><i class="fas fa-envelope"></i> Sugerencias</button>
-                    <button class="tab-btn" data-tab="propuestas"><i class="fas fa-thumbs-up"></i> Propuestas</button>
-                    <button class="tab-btn" data-tab="encuestas"><i class="fas fa-poll"></i> Encuestas</button>
-                </div>
-                
-                <!-- Contenido de las pestañas -->
-                <div class="tab-content">
-                    <!-- Buzón de Sugerencias -->
-                    <div id="sugerencias" class="tab-pane active">
-                        <p class="tab-intro">Envía tus ideas para mejorar tu barrio. Todas las sugerencias serán valoradas.</p>
-                        <form class="suggestion-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="categoria">Categoría:</label>
-                                    <select id="categoria" name="categoria">
-                                        <option value="infraestructura">Infraestructura</option>
-                                        <option value="transporte">Transporte</option>
-                                        <option value="medioambiente">Medio Ambiente</option>
-                                        <option value="seguridad">Seguridad</option>
-                                        <option value="otros">Otros</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="titulo">Título:</label>
-                                    <input type="text" id="titulo" name="titulo" placeholder="Título breve">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="descripcion">Descripción:</label>
-                                <textarea id="descripcion" name="descripcion" rows="3" placeholder="Describe tu sugerencia"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="ubicacion">Ubicación (opcional):</label>
-                                <input type="text" id="ubicacion" name="ubicacion" placeholder="Dirección o lugar específico">
-                            </div>
-                            <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
-                        </form>
+            <!-- Contenido de las pestañas -->
+            <div id="estadisticas-pane" class="tab-pane active">
+                <section class="section">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-chart-bar"></i> Estadísticas de tu Barrio</h2>
                     </div>
-                    
-                    <!-- Propuestas -->
-                    <div id="propuestas" class="tab-pane">
-                        <p class="tab-intro">Apoya las propuestas ciudadanas que consideres beneficiosas para el barrio.</p>
-                        <div class="cards-grid">
-                            <div class="proposal-card">
-                                <div class="proposal-header">
-                                    <span class="proposal-category">Medio Ambiente</span>
-                                    <span class="proposal-supporters"><i class="fas fa-users"></i> 127</span>
-                                </div>
-                                <h3 class="proposal-title">Ampliación de Zonas Verdes</h3>
-                                <p class="proposal-desc">Creación de nuevos espacios verdes en la zona norte del barrio para mejorar la calidad ambiental.</p>
-                                <button class="btn-support" onclick="toggleSupport(this)" data-count="127">
-                                    <i class="fas fa-thumbs-up"></i> Apoyar
-                                </button>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-wind"></i></div>
+                            <h3 class="stat-title">Calidad del Aire</h3>
+                            <div class="stat-value">Buena</div>
+                            <div class="stat-bar">
+                                <div class="stat-progress" style="width: 75%;"></div>
                             </div>
-                            
-                            <div class="proposal-card">
-                                <div class="proposal-header">
-                                    <span class="proposal-category">Transporte</span>
-                                    <span class="proposal-supporters"><i class="fas fa-users"></i> 93</span>
-                                </div>
-                                <h3 class="proposal-title">Mejora del Transporte Público</h3>
-                                <p class="proposal-desc">Añadir más frecuencia y nuevas rutas de autobús para mejorar la conectividad entre barrios.</p>
-                                <button class="btn-support" onclick="toggleSupport(this)" data-count="93">
-                                    <i class="fas fa-thumbs-up"></i> Apoyar
-                                </button>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-bus"></i></div>
+                            <h3 class="stat-title">Uso de Transporte</h3>
+                            <div class="stat-value">65%</div>
+                            <div class="stat-bar">
+                                <div class="stat-progress" style="width: 65%;"></div>
                             </div>
-                            
-                            <div class="proposal-card">
-                                <div class="proposal-header">
-                                    <span class="proposal-category">Infraestructura</span>
-                                    <span class="proposal-supporters"><i class="fas fa-users"></i> 76</span>
-                                </div>
-                                <h3 class="proposal-title">Renovación de Parques Infantiles</h3>
-                                <p class="proposal-desc">Modernización de los parques infantiles con nuevos juegos inclusivos y seguros.</p>
-                                <button class="btn-support" onclick="toggleSupport(this)" data-count="76">
-                                    <i class="fas fa-thumbs-up"></i> Apoyar
-                                </button>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-tree"></i></div>
+                            <h3 class="stat-title">Zonas Verdes</h3>
+                            <div class="stat-value">12 hectáreas</div>
+                            <div class="stat-bar">
+                                <div class="stat-progress" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-recycle"></i></div>
+                            <h3 class="stat-title">Reciclaje</h3>
+                            <div class="stat-value">82%</div>
+                            <div class="stat-bar">
+                                <div class="stat-progress" style="width: 82%;"></div>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Encuestas -->
-                    <div id="encuestas" class="tab-pane">
-                        <p class="tab-intro">Participa en las encuestas activas y ayuda a tomar decisiones sobre el barrio.</p>
-                        <div class="poll-card">
-                            <h3 class="poll-title">Ampliación de zonas verdes</h3>
-                            <p class="poll-question">¿Estás de acuerdo con la ampliación de las zonas verdes en el barrio?</p>
-                            <div class="poll-options">
-                                <label class="poll-option">
-                                    <input type="radio" name="encuesta1"> Totalmente de acuerdo
-                                </label>
-                                <label class="poll-option">
-                                    <input type="radio" name="encuesta1"> De acuerdo
-                                </label>
-                                <label class="poll-option">
-                                    <input type="radio" name="encuesta1"> Neutral
-                                </label>
-                                <label class="poll-option">
-                                    <input type="radio" name="encuesta1"> En desacuerdo
-                                </label>
-                                <label class="poll-option">
-                                    <input type="radio" name="encuesta1"> Totalmente en desacuerdo
-                                </label>
+                </section>
+            </div>
+
+            <div id="participacion-pane" class="tab-pane">
+                <section class="section">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-users"></i> Propuestas Ciudadanas</h2>
+                    </div>
+                    <div class="proposals-grid">
+                        <div class="proposal-card">
+                            <div class="proposal-header">
+                                <h3 class="proposal-title">Más árboles en la Av. Central</h3>
+                                <span class="proposal-supporters" data-count="120"><i class="fas fa-users"></i> 120</span>
                             </div>
-                            <button class="btn-primary"><i class="fas fa-check-circle"></i> Votar</button>
+                            <span class="proposal-category">Medio Ambiente</span>
+                            <p class="proposal-description">Propongo la plantación de más árboles en la Avenida Central
+                                para mejorar la calidad del aire y la sombra.</p>
+                            <div class="proposal-footer">
+                                <button class="support-btn" onclick="toggleSupport(this)" data-count="120">
+                                    <i class="fas fa-thumbs-up"></i> Apoyar
+                                </button>
+                                <span class="proposal-date">Publicado: 10/05/2024</span>
+                            </div>
+                        </div>
+
+                        <div class="proposal-card">
+                            <div class="proposal-header">
+                                <h3 class="proposal-title">Mejora de la iluminación en el Parque del Sur</h3>
+                                <span class="proposal-supporters" data-count="85"><i class="fas fa-users"></i> 85</span>
+                            </div>
+                            <span class="proposal-category">Seguridad</span>
+                            <p class="proposal-description">Es necesario mejorar la iluminación en el Parque del Sur
+                                para aumentar la seguridad durante la noche.</p>
+                            <div class="proposal-footer">
+                                <button class="support-btn" onclick="toggleSupport(this)" data-count="85">
+                                    <i class="fas fa-thumbs-up"></i> Apoyar
+                                </button>
+                                <span class="proposal-date">Publicado: 05/05/2024</span>
+                            </div>
+                        </div>
+
+                        <div class="proposal-card">
+                            <div class="proposal-header">
+                                <h3 class="proposal-title">Carril bici en la C/Mayor</h3>
+                                <span class="proposal-supporters" data-count="210"><i class="fas fa-users"></i> 210</span>
+                            </div>
+                            <span class="proposal-category">Movilidad</span>
+                            <p class="proposal-description">Sugiero la creación de un carril bici segregado en la Calle
+                                Mayor para fomentar el uso de la bicicleta.</p>
+                            <div class="proposal-footer">
+                                <button class="support-btn" onclick="toggleSupport(this)" data-count="210">
+                                    <i class="fas fa-thumbs-up"></i> Apoyar
+                                </button>
+                                <span class="proposal-date">Publicado: 28/04/2024</span>
+                            </div>
+                        </div>
+
+                        <div class="proposal-card">
+                            <div class="proposal-header">
+                                <h3 class="proposal-title">Puntos de recarga para vehículos eléctricos</h3>
+                                <span class="proposal-supporters" data-count="95"><i class="fas fa-users"></i> 95</span>
+                            </div>
+                            <span class="proposal-category">Innovación</span>
+                            <p class="proposal-description">Proponemos la instalación de más puntos de recarga públicos
+                                para vehículos eléctricos en la ciudad.</p>
+                            <div class="proposal-footer">
+                                <button class="support-btn" onclick="toggleSupport(this)" data-count="95">
+                                    <i class="fas fa-thumbs-up"></i> Apoyar
+                                </button>
+                                <span class="proposal-date">Publicado: 20/04/2024</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
-        </section>
+
+            <div id="reporte-pane" class="tab-pane">
+                <section class="section">
+                    <div class="section-header">
+                        <h2 class="section-title"><i class="fas fa-file-alt"></i> Enviar Reporte</h2>
+                    </div>
+                    <form class="report-form" id="citizen-report-form">
+                        <div class="form-group">
+                            <label for="report-type">Tipo de Reporte:</label>
+                            <select id="report-type" name="reportType" required>
+                                <option value="">Selecciona el tipo</option>
+                                <option value="sugerencia">Sugerencia</option>
+                                <option value="queja">Queja</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location-name">Lugar / Nombre del Sitio:</label>
+                            <input type="text" id="location-name" name="locationName"
+                                placeholder="Ej: Parque de la Amistad, Edificio Municipal" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="thematic-area">Área Temática:</label>
+                            <select id="thematic-area" name="thematicArea" required>
+                                <option value="">Selecciona un área</option>
+                                <option value="Medio Ambiente">Medio Ambiente</option>
+                                <option value="Trafico">Tráfico</option>
+                                <option value="Seguridad">Seguridad</option>
+                                <option value="Infraestructura">Infraestructura</option>
+                                <option value="Servicios Publicos">Servicios Públicos</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="street-address">Calle y Número:</label>
+                            <input type="text" id="street-address" name="streetAddress"
+                                placeholder="Ej: Calle Mayor 12, S/N" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Descripción Detallada:</label>
+                            <textarea id="description" name="description" rows="5"
+                                placeholder="Describe con detalle el problema o tu sugerencia..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Enviar Reporte</button>
+                        <div id="confirmation-message" class="confirmation-message">
+                            ¡Gracias! Tu reporte ha sido enviado con éxito.
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
     </div>
 
+    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2025 CityInsight - Mejorando la participación ciudadana</p>
-        </div>
+        <p>&copy; 2024 CityInsight. Todos los derechos reservados.</p>
     </footer>
 
     <script>
-        // Función para cambiar entre pestañas
+        // Función para cambiar entre modo claro y oscuro
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            themeIcon.classList.toggle('fa-sun', isDarkMode);
+            themeIcon.classList.toggle('fa-moon', !isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+        }
+
+        window.addEventListener('load', () => {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.add('fa-sun');
+                themeIcon.classList.remove('fa-moon');
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeIcon.classList.add('fa-moon');
+                themeIcon.classList.remove('fa-sun');
+            }
+
+            // Activar la primera pestaña por defecto en móvil si no hay hash en la URL
+            if (window.innerWidth <= 768 && !window.location.hash) {
+                document.querySelector('.tab-btn').click();
+            }
+        });
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Lógica de pestañas
         document.querySelectorAll('.tab-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                // Desactivar todos los botones y contenidos
+            button.addEventListener('click', () => {
+                // Desactivar todas las pestañas y paneles
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-                
+
                 // Activar el botón y contenido seleccionado
-                this.classList.add('active');
-                document.getElementById(this.dataset.tab).classList.add('active');
+                button.classList.add('active');
+                document.getElementById(`${button.dataset.tab}-pane`).classList.add('active');
+
+                // Desplazarse al inicio del contenido de la pestaña
+                const targetElement = document.getElementById(`${button.dataset.tab}-pane`);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
-        
+
         // Función para togglear el apoyo a propuestas
         function toggleSupport(button) {
             let count = parseInt(button.getAttribute('data-count'));
-            
+
             if (button.classList.contains('supported')) {
                 // Quitar apoyo
                 count--;
@@ -229,13 +1197,83 @@
                 button.classList.add('supported');
                 button.innerHTML = '<i class="fas fa-thumbs-up"></i> Apoyado';
             }
-            
+
             button.setAttribute('data-count', count);
-            
+
             // Actualizar el contador de apoyo en el encabezado
             const supportersSpan = button.closest('.proposal-card').querySelector('.proposal-supporters');
             supportersSpan.innerHTML = `<i class="fas fa-users"></i> ${count}`;
         }
+
+        // Lógica de envío del formulario de reporte
+        const citizenReportForm = document.getElementById('citizen-report-form');
+        const confirmationMessage = document.getElementById('confirmation-message');
+
+        citizenReportForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el envío real del formulario
+
+            // Simular el envío del formulario
+            // Aquí podrías recopilar los datos del formulario si necesitaras mostrarlos
+            const formData = new FormData(citizenReportForm);
+            const reportData = {};
+            for (let [key, value] of formData.entries()) {
+                reportData[key] = value;
+            }
+            console.log("Reporte enviado:", reportData); // Para depuración
+
+            // Mostrar mensaje de confirmación
+            confirmationMessage.style.display = 'block';
+
+            // Opcional: Limpiar el formulario después de un tiempo o si quieres que se vea el mensaje
+            setTimeout(() => {
+                citizenReportForm.reset(); // Limpia los campos del formulario
+                confirmationMessage.style.display = 'none'; // Oculta el mensaje
+            }, 3000); // El mensaje se muestra por 3 segundos
+        });
+
+        // New JS for mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const topNav = document.querySelector('.top-nav'); // Target the top-nav for class toggle
+        const navLinks = document.getElementById('nav-links'); // Get nav-links by ID
+        const themeToggleContainer = document.getElementById('theme-toggle-container'); // Get theme-toggle-container by ID
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                topNav.classList.toggle('menu-open');
+            });
+        }
+
+        // Close mobile menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (topNav.classList.contains('menu-open')) {
+                    topNav.classList.remove('menu-open');
+                }
+            });
+        });
+
+        // Scroll suave para los enlaces de navegación (existing, modified slightly for mobile menu interaction)
+        document.querySelectorAll('.nav-links a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(`${targetId}-pane`); // Añadir '-pane'
+
+                if (targetElement) {
+                    // Activar la pestaña correspondiente
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                    document.querySelector(`.tab-btn[data-tab="${targetId}"]`).classList.add('active');
+                    targetElement.classList.add('active');
+
+                    // Desplazarse al elemento
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 
