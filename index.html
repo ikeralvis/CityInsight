@@ -262,22 +262,19 @@
         .kpi-card {
             background-color: var(--card-background-light-glass);
             border-radius: 22px;
-            /* Más redondeado */
-            padding: 28px;
-            /* Más padding */
+            padding: 20px; /* Reduced padding for smaller height */
             box-shadow: 0 12px 45px var(--shadow-light);
             display: flex;
             flex-direction: column;
-            /* Cambiado a columna para alinear elementos */
             align-items: flex-start;
-            /* Alineación a la izquierda */
-            gap: 10px;
-            /* Reducido para mejor compactación vertical */
+            gap: 8px; /* Reduced gap for smaller height */
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
             position: relative;
             overflow: hidden;
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
+            min-height: 180px; /* Adjusted min-height for smaller size */
+            justify-content: space-between; /* Distribute content within the card */
         }
 
         body.dark-mode .kpi-card {
@@ -308,31 +305,23 @@
         }
 
         .kpi-card .card-icon {
-            font-size: 3.5em;
-            /* Ligeramente más grande */
+            font-size: 3em; /* Slightly smaller icon */
             color: var(--primary-color);
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
-            margin-bottom: 5px;
-            /* Espacio para el texto */
+            margin-bottom: 0; /* Reduced margin */
         }
 
         .kpi-content {
             flex-grow: 1;
             width: 100%;
-            /* Para que ocupe todo el ancho disponible */
             display: flex;
-            /* Usar flexbox para el contenido interno */
             flex-direction: column;
-            /* Apilar elementos dentro de kpi-content */
             align-items: flex-start;
-            /* Alinear a la izquierda */
         }
 
         .kpi-content h3 {
-            font-size: 1.5em;
-            /* Ligeramente más grande */
-            margin-bottom: 5px;
-            /* Espacio para el valor */
+            font-size: 1.3em; /* Slightly smaller heading */
+            margin-bottom: 3px; /* Reduced margin */
             color: var(--text-light);
         }
 
@@ -341,24 +330,20 @@
         }
 
         .kpi-value {
-            font-size: 2.8em;
-            /* Ligeramente más grande */
+            font-size: 2.4em; /* Slightly smaller value */
             font-weight: 700;
             color: var(--primary-color);
-            margin-bottom: 10px;
-            /* Espacio para el trend y el botón */
+            margin-bottom: 8px; /* Reduced margin */
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
         }
 
         .kpi-trend {
             display: flex;
             align-items: center;
-            font-size: 1.1em;
-            /* Ligeramente más grande */
+            font-size: 1em; /* Slightly smaller trend text */
             font-weight: 600;
             opacity: 0.95;
-            margin-bottom: 15px;
-            /* Espacio para el botón */
+            margin-bottom: 12px; /* Reduced margin */
         }
 
         .kpi-trend.positive {
@@ -370,27 +355,21 @@
         }
 
         .kpi-trend i {
-            margin-right: 10px;
-            /* Más espacio */
+            margin-right: 8px; /* Reduced space */
         }
 
         .kpi-info-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 12px 22px;
-            /* Mayor padding */
+            padding: 10px 20px; /* Reduced padding */
             border-radius: 12px;
-            /* Más redondeado */
             cursor: pointer;
-            font-size: 1.05em;
-            /* Ligeramente más grande */
+            font-size: 1em; /* Slightly smaller font */
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             width: 100%;
-            /* Para que el botón ocupe todo el ancho */
             text-align: center;
-            /* Centrar el texto del botón */
         }
 
         .kpi-info-btn:hover {
@@ -468,12 +447,10 @@
             box-shadow: 0 12px 45px var(--shadow-light);
             display: flex;
             flex-direction: column;
-            height: 500px;
-            width: 100%;
-            /* Ahora ocupa todo el ancho del bloque */
-            /* Mantener un max-width razonable para desktop */
-            margin: 0 auto;
-            /* Centrar si hay max-width */
+            height: 800px; /* Increased height */
+            width: 85%; /* Changed to 80% */
+            max-width: 900px; /* Max-width adjusted */
+            margin: 0 auto; /* Centered */
             overflow: hidden;
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
@@ -544,7 +521,51 @@
             gap: 12px;
             /* Mayor espacio */
             align-items: center;
+            position: relative; /* Needed for tooltip positioning */
         }
+
+        .chat-input .ai-avatar {
+            width: 40px; /* Size of the AI avatar */
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer; /* Indicate it's interactive */
+            transition: transform 0.3s ease-out; /* Smooth transition for rotation */
+        }
+
+        .chat-input .ai-avatar.spinning {
+            animation: spin-pause-spin-ai-avatar 2.4s linear infinite; /* New animation */
+        }
+
+        @keyframes spin-pause-spin-ai-avatar {
+            0% { transform: rotate(0deg); }
+            40% { transform: rotate(360deg); } /* Complete first spin */
+            60% { transform: rotate(360deg); } /* Pause */
+            100% { transform: rotate(720deg); } /* Complete second spin */
+        }
+
+        .ai-avatar-tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px); /* Position above the avatar */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 10; /* Ensure it's above other elements */
+        }
+
+        .chat-input:hover .ai-avatar-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
 
         .chat-input input {
             flex-grow: 1;
@@ -604,21 +625,6 @@
             background-color: #4a8ddc;
             transform: translateY(-4px);
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Animación del icono de envío */
-        @keyframes rotate-send-icon {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .chat-input button.sending i {
-            animation: rotate-send-icon 0.8s linear infinite;
         }
 
 
@@ -872,7 +878,6 @@
         }
 
         @keyframes thinkingDots {
-
             0%,
             20% {
                 content: '.';
@@ -898,7 +903,7 @@
             background-color: var(--card-background-light-glass);
             color: var(--text-light);
             padding: 15px 25px;
-            margin: 10px auto 30px auto;
+            margin: 10px 30px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             display: flex;
@@ -908,14 +913,11 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
-            max-width: 90%;
-            /* Ajustar ancho */
+            max-width: 450px; /* Ajustar ancho */
             text-align: left;
-            /* Asegurar que el texto no se centre en pantallas grandes */
-            opacity: 0;
-            /* Hidden by default for fade in */
-            animation: fadeIn 1s ease 0.5s forwards;
-            /* Delayed fade in */
+            opacity: 0; /* Hidden by default for fade in */
+            animation: fadeIn 1s ease 0.5s forwards; /* Delayed fade in */
+            justify-content: center; /* Centrar contenido dentro de la alerta */
         }
 
         body.dark-mode #event-alert {
@@ -934,14 +936,44 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
         }
 
-        #event-alert i {
-            font-size: 1.8em;
-            color: var(--secondary-color);
+        .event-icon-container {
+            position: relative;
+            width: 40px; /* Fixed width for the image */
+            height: 40px; /* Fixed height for the image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .event-icon-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensure image fits without distortion */
+            filter: grayscale(0%) saturate(200%) hue-rotate(-20deg); /* Make it reddish */
+        }
+
+        .event-date-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -30%); /* Adjust vertical position slightly */
+            font-size: 0.8em; /* Slightly larger number */
+            font-weight: 700;
+            color: white; /* Color of the number */
+            text-shadow: 0 0 3px rgba(0,0,0,0.5); /* Slight shadow for visibility */
+        }
+
+        #event-alert p {
+            flex-grow: 1; /* Allow paragraph to take available space */
+            text-align: center; /* Center the text within the paragraph */
+            margin: 0; /* Remove default margin */
+            font-weight: 600;
         }
 
         #event-alert p strong {
-            color: var(--primary-color);
+            color: var(--primary-color); /* Keep strong text color as primary */
         }
+
 
         /* Proceso de Pensamiento de la IA */
         .thinking-process {
@@ -978,6 +1010,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-width: 80px; /* Ensure space for text and icon */
         }
 
         .thinking-process .icon-item i {
@@ -990,6 +1023,7 @@
 
         .thinking-process .icon-item.colored i {
             filter: grayscale(0%);
+            color: var(--secondary-color); /* Color when active */
         }
 
         .thinking-process .icon-item p {
@@ -1042,14 +1076,11 @@
         /* Respuestas estructuradas de la IA */
         /* Note: This class is now used for styling content *within* a message, not a standalone div */
         .ai-structured-content {
-            background-color: var(--card-background-light-glass);
-            /* Using glass effect for sub-content */
+            background-color: var(--card-background-light-glass); /* Using glass effect for sub-content */
             border-radius: 18px;
             padding: 20px;
-            margin-top: 15px;
-            /* Space from previous message */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            /* Lighter shadow for sub-content */
+            margin-top: 15px; /* Space from previous message */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Lighter shadow for sub-content */
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
             animation: fadeIn 0.5s ease forwards;
@@ -1099,8 +1130,7 @@
             background-color: rgba(59, 80, 98, 0.4);
         }
 
-        .ai-structured-content ul li a {
-            /* Keep link styling for potential future use or if user changes mind */
+        .ai-structured-content ul li a { /* Keep link styling for potential future use or if user changes mind */
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
@@ -1379,54 +1409,42 @@
             .recommendation-text p {
                 font-size: 0.95em;
             }
-
             #event-alert {
                 font-size: 0.9em;
                 padding: 12px 20px;
                 margin-left: 15px;
                 margin-right: 15px;
-                max-width: calc(100% - 30px);
-                /* Adjust for padding */
-                text-align: center;
-                /* Center text on small screens */
+                max-width: calc(100% - 30px); /* Adjust for padding */
+                text-align: center; /* Center text on small screens */
             }
-
             #event-alert i {
                 font-size: 1.5em;
             }
-
             .thinking-process {
                 padding: 15px;
                 gap: 10px;
             }
-
             .thinking-process .icons-row {
                 gap: 10px;
             }
-
             .thinking-process .icon-item i {
                 font-size: 2em;
             }
-
             .thinking-process .icon-item p {
                 font-size: 0.8em;
             }
-
             .thinking-message {
                 font-size: 0.95em;
                 padding: 12px 20px;
                 width: 90%;
             }
-
             /* AI Structured Response is now dynamically added to chat messages */
             .ai-structured-content {
                 padding: 15px;
             }
-
             .ai-structured-content h4 {
                 font-size: 1.2em;
             }
-
             .ai-structured-content ul li {
                 font-size: 0.85em;
                 padding: 8px 12px;
@@ -1465,7 +1483,7 @@
 
     <div class="main-content">
         <header class="header">
-
+            
             <div class="theme-toggle-container">
                 <button id="theme-toggle">
                     <i id="theme-icon" class="fas fa-moon"></i> Cambiar Tema
@@ -1475,8 +1493,10 @@
 
         <!-- Nueva Alerta de Evento -->
         <div id="event-alert">
-            <i class="fas fa-calendar-alt"></i>
-            <p><strong>Evento Próximo:</strong> Gran Limpieza Urbana el 20 de Julio. ¡Haz clic para saber más!</p>
+            <div class="event-icon-container">
+                <img src="calendario.png" alt="Calendario"> <!-- Placeholder for calendario.png -->
+            </div>
+            <p>Gran Limpieza Urbana el 20 de Julio</p>
         </div>
 
 
@@ -1552,23 +1572,19 @@
                 </div>
                 <div class="thinking-process" style="display: none;">
                     <div class="icons-row">
-                        <div class="icon-item" data-source="web"><i class="fas fa-globe"></i>
-                            <p>Web</p>
-                        </div>
-                        <div class="icon-item" data-source="data"><i class="fas fa-database"></i>
-                            <p>Datos</p>
-                        </div>
-                        <div class="icon-item" data-source="reports"><i class="fas fa-chart-pie"></i>
-                            <p>Informes</p>
-                        </div>
+                        <div class="icon-item" data-source="ayuntamiento"><i class="fas fa-building"></i><p>Datos del Ayuntamiento</p></div>
+                        <div class="icon-item" data-source="redes-sociales"><i class="fas fa-share-alt"></i><p>Redes Sociales</p></div>
+                        <div class="icon-item" data-source="ciudadanos"><i class="fas fa-users"></i><p>Datos Ciudadanos</p></div>
                     </div>
                     <div class="thinking-message"></div>
                 </div>
                 <div class="chat-input">
+                    <img src="Diseño sin título (1).png" alt="AI Avatar" class="ai-avatar" id="ai-avatar-image">
                     <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
                     <button id="send-button">
-                        <i class="fas fa-paper-plane"></i>
+                        <i class="fas fa-paper-plane"></i> Enviar
                     </button>
+                     <div class="ai-avatar-tooltip">Soy tu IA, estoy aquí para ayudarte</div>
                 </div>
             </div>
         </div>
@@ -1809,8 +1825,9 @@
         const thinkingProcess = document.querySelector('.thinking-process');
         const thinkingMessage = document.querySelector('.thinking-message');
         const eventAlert = document.getElementById('event-alert');
+        const aiAvatarImage = document.getElementById('ai-avatar-image'); // Get AI avatar image element
 
-        // Función para simular el efecto de escritura
+        // Función para simular el efecto de escritura (no se usará para el mensaje final)
         async function typeMessage(element, text, delay = 20) {
             // Create a temporary span to hold the typing text
             const typingSpan = document.createElement('span');
@@ -1831,7 +1848,7 @@
             "Intensidad de Tráfico": "La Intensidad de Tráfico se sitúa actualmente en un 63.2% de saturación, lo que representa un ligero incremento del 1.7% en comparación con el mes anterior. Este aumento se atribuye a la reactivación económica y el retorno gradual a la presencialidad post-pandemia. Para mitigar esta situación y evitar futuras congestiones, el ayuntamiento está impulsando activamente el uso del transporte público mediante mejoras en la frecuencia y cobertura de rutas, así como la expansión de la red de carriles bici. También se están evaluando medidas de gestión del flujo vehicular mediante sistemas de semáforos inteligentes para optimizar el tráfico en horas punta.",
             "Satisfacción Ciudadana": "El nivel de Satisfacción Ciudadana alcanza un sólido 82%, lo que indica una percepción generalmente positiva de los servicios municipales. Este porcentaje ha experimentado un aumento del 3.5% respecto al mes anterior, reflejando el impacto de iniciativas recientes en diversas áreas. Las encuestas revelan que los servicios de limpieza y seguridad pública son las áreas de mayor satisfacción, donde los ciudadanos aprecian los esfuerzos constantes del ayuntamiento. Sin embargo, la movilidad urbana sigue siendo un desafío, y se están planificando nuevas estrategias para mejorar la fluidez del tráfico y la accesibilidad del transporte en toda la ciudad.",
             "evento de limpieza urbana": {
-                problem: " Se ha identificado que, a pesar de los esfuerzos continuos del departamento de limpieza, persisten problemas de acumulación de residuos en ciertas áreas de la ciudad. Esto es particularmente notorio después de eventos públicos masivos o en zonas de alta afluencia peatonal, donde la capacidad de gestión de residuos se ve superada. Esta situación no solo degrada la imagen urbana, sino que también genera preocupación entre los ciudadanos sobre la higiene y la calidad de vida en sus barrios. La causa raíz parece ser una combinación de falta de concienciación ciudadana y una optimización mejorable en la infraestructura de recogida de residuos en puntos específicos.",
+                problem: "Se ha identificado que, a pesar de los esfuerzos continuos del departamento de limpieza, persisten problemas de acumulación de residuos en ciertas áreas de la ciudad. Esto es particularmente notorio después de eventos públicos masivos o en zonas de alta afluencia peatonal, donde la capacidad de gestión de residuos se ve superada. Esta situación no solo degrada la imagen urbana, sino que también genera preocupación entre los ciudadanos sobre la higiene y la calidad de vida en sus barrios. La causa raíz parece ser una combinación de falta de concienciación ciudadana y una optimización mejorable en la infraestructura de recogida de residuos en puntos específicos.",
                 solutions: [
                     "Optimización de Rutas y Frecuencia de Recogida: Rediseñar las rutas de los camiones de basura y aumentar la frecuencia de recogida en zonas problemáticas, especialmente durante fines de semana o eventos. Esto podría incluir la instalación de puntos de recogida adicionales o la adaptación de horarios.",
                     "Campaña de Concienciación Ciudadana: Lanzar una campaña educativa y de sensibilización a gran escala sobre la importancia del reciclaje y la correcta disposición de residuos. Se podrían usar infografías, talleres comunitarios y mensajes en redes sociales para fomentar la participación.",
@@ -1854,43 +1871,44 @@
             chatInputField.value = ''; // Limpiar campo de entrada
             chatMessages.scrollTop = chatMessages.scrollHeight; // Desplazar hasta abajo
 
-            sendButton.classList.add('sending'); // Add sending animation
-
+            // Start AI avatar spin animation
+            aiAvatarImage.classList.add('spinning');
+            
             // Hide thinking process if it was visible
             thinkingProcess.style.display = 'none';
 
             // Show thinking process
             thinkingProcess.style.display = 'flex';
-            thinkingMessage.textContent = 'CityInsight está recopilando información de fuentes...';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            const thinkingIcons = document.querySelectorAll('.thinking-process .icon-item');
+            thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset colors
 
-            const icons = document.querySelectorAll('.thinking-process .icon-item');
-            const thinkingMessagesArray = [
-                "Accediendo a la base de datos municipal para datos de limpieza...",
-                "Consultando informes recientes de gestión de residuos...",
-                "Analizando estadísticas de participación ciudadana en eventos previos...",
-                "Sintetizando la información relevante para el evento de limpieza urbana...",
-                "Generando un análisis detallado y posibles soluciones..."
+            const thinkingMessagesData = [
+                { icon: thinkingIcons[0], text: 'Analizando datos del ayuntamiento' },
+                { icon: thinkingIcons[1], text: 'Analizando redes sociales' },
+                { icon: thinkingIcons[2], text: 'Analizando datos ciudadanos' }
             ];
 
-            // Simulate icon coloring and dynamic messages
-            for (let i = 0; i < icons.length; i++) {
-                icons[i].classList.add('colored');
-                thinkingMessage.textContent = thinkingMessagesArray[i] || 'Procesando...';
+            // Animate thinking messages and color icons
+            for (let i = 0; i < thinkingMessagesData.length; i++) {
+                thinkingMessage.textContent = thinkingMessagesData[i].text;
+                thinkingMessagesData[i].icon.classList.add('colored');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-                await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second per icon + message
+                await new Promise(resolve => setTimeout(resolve, 2000)); // 2 seconds per message/icon
             }
 
             // Final thinking message before response appears
-            thinkingMessage.textContent = "Preparando la respuesta...";
+            thinkingMessage.textContent = "Generando respuesta...";
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            await new Promise(resolve => setTimeout(resolve, 2000)); // Additional delay for "generating response"
+            await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second for "generating response"
+
 
             // Hide thinking process
             thinkingProcess.style.display = 'none';
-            icons.forEach(icon => icon.classList.remove('colored')); // Reset icons for next time
+            thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset icons for next time
 
-            sendButton.classList.remove('sending'); // Remove sending animation
+            // Stop AI avatar spin animation
+            aiAvatarImage.classList.remove('spinning');
+
 
             // Get AI response
             let aiResponseContent = "";
@@ -1909,7 +1927,7 @@
                 }
             }
 
-            // Display AI message with typing animation
+            // Display AI message instantly
             const aiMessageDiv = document.createElement('div');
             aiMessageDiv.classList.add('message', 'ai-message');
             chatMessages.appendChild(aiMessageDiv); // Append empty div first
@@ -1917,22 +1935,11 @@
             if (structuredResponseData) {
                 const problemHtml = `<h4>Problema Encontrado</h4><ul><li>${structuredResponseData.problem}</li></ul>`;
                 const solutionsHtml = `<h4>Posibles Soluciones</h4><ul>${structuredResponseData.solutions.map(sol => `<li>${sol}</li>`).join('')}</ul>`;
-
-                // Temporarily create a div to get the full text content including HTML tags (but not rendering them visually)
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = `<div class="ai-structured-content">${problemHtml}${solutionsHtml}</div>`;
-
-                // Extract the text content to be typed out character by character
-                const fullTextToType = tempDiv.textContent;
-
-                // Type out the text content
-                await typeMessage(aiMessageDiv, fullTextToType, 10); // Faster typing for structured content
-
-                // After typing, replace the text content with the styled HTML
-                aiMessageDiv.innerHTML = `<div class="ai-structured-content">${problemHtml}${solutionsHtml}</div>`;
-
+                
+                const fullContentHtml = `<div class="ai-structured-content">${problemHtml}${solutionsHtml}</div>`;
+                aiMessageDiv.innerHTML = fullContentHtml; // Set content directly
             } else {
-                await typeMessage(aiMessageDiv, aiResponseContent, 20);
+                aiMessageDiv.textContent = aiResponseContent; // Set content directly
             }
 
             chatMessages.scrollTop = chatMessages.scrollHeight; // Final scroll to bottom
@@ -1960,7 +1967,8 @@
                 // Enviar un mensaje predefinido al chat
                 const queryMessage = `Quiero saber más sobre ${kpiName}`;
                 chatInputField.value = queryMessage;
-                sendMessage(); // Automatically send the message
+                // No automatically send, user clicks send button
+                // sendMessage(); 
 
                 // Desplazarse al contenedor del chat
                 document.querySelector('.chat-container').scrollIntoView({
@@ -1977,15 +1985,12 @@
             document.querySelector('.tab[data-tab="chat"]').classList.add('active');
             document.getElementById('chat-tab').classList.add('active');
 
-            // Pre-fill chat input with event query
+            // Pre-fill chat input with event query, but don't send automatically
             chatInputField.value = "Información sobre el evento de limpieza urbana";
             // Scroll to chat container
             document.querySelector('.chat-container').scrollIntoView({ behavior: 'smooth' });
 
-            // Automatically send the message after a short delay to allow scroll to complete
-            setTimeout(() => {
-                sendMessage();
-            }, 100); // Small delay
+            // No automatic send
         });
 
 
