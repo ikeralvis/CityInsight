@@ -22,7 +22,7 @@
             /* Azul oscuro */
             --text-light: #2c3e50;
             /* Gris oscuro para texto (más oscuro para contraste) */
-            --text-dark: #ecf0f1;
+            --text-dark: #ecf0f1 ;
             /* Texto claro para modo oscuro */
             --card-background-light-glass: rgba(255, 255, 255, 0.85);
             /* Blanco semi-transparente (más opaco) */
@@ -245,8 +245,14 @@
         }
 
         .section-title i {
-            color: var(--primary-color);
+            color: var(--text-light);
             /* Icono con primary-color */
+            font-size: 1.25em;
+        }
+
+        body.dark-mode .section-title i {
+            color: var(--text-dark);
+            /* Texto claro en modo oscuro */
             font-size: 1.25em;
         }
 
@@ -271,7 +277,6 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
             min-height: 180px; /* Adjusted min-height for smaller size */
             justify-content: space-between; /* Distribute content within the card */
@@ -447,7 +452,7 @@
             box-shadow: 0 12px 45px var(--shadow-light);
             display: flex;
             flex-direction: column;
-            height: 800px; /* Increased height */
+            height: 700px; /* Increased height */
             width: 85%; /* Changed to 80% */
             max-width: 900px; /* Max-width adjusted */
             margin: 0 auto; /* Centered */
@@ -604,8 +609,8 @@
         }
 
         .chat-input button {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--background-light);
+            color: var(--text-light);
             border: none;
             border-radius: 35px;
             /* Más redondeado */
@@ -622,9 +627,15 @@
         }
 
         .chat-input button:hover {
-            background-color: #4a8ddc;
+            background-color: var(--background-dark);
             transform: translateY(-4px);
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+        }
+
+        .chat-input button img {
+            width: 24px; /* Icon size */
+            height: 24px;
+
         }
 
 
@@ -903,7 +914,6 @@
             background-color: var(--card-background-light-glass);
             color: var(--text-light);
             padding: 15px 25px;
-            margin: 10px 30px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             display: flex;
@@ -911,9 +921,9 @@
             gap: 15px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--border-color-light-glass);
+
             backdrop-filter: blur(var(--blur-amount));
-            max-width: 450px; /* Ajustar ancho */
+            max-width: 200px; /* Ajustar ancho */
             text-align: left;
             opacity: 0; /* Hidden by default for fade in */
             animation: fadeIn 1s ease 0.5s forwards; /* Delayed fade in */
@@ -925,6 +935,19 @@
             color: var(--text-dark);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
             border: 1px solid var(--border-color-dark-glass);
+        }
+
+        #event-alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            /* Borde más ancho */
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(to bottom, #e74c3c, #c0392b);
+            border-radius: 22px 0 0 22px;
         }
 
         #event-alert:hover {
@@ -959,8 +982,8 @@
             transform: translate(-50%, -30%); /* Adjust vertical position slightly */
             font-size: 0.8em; /* Slightly larger number */
             font-weight: 700;
-            color: white; /* Color of the number */
-            text-shadow: 0 0 3px rgba(0,0,0,0.5); /* Slight shadow for visibility */
+            color: black; /* Color of the number */
+            /*text-shadow: 0 0 3px rgba(0,0,0,0.5); /* Slight shadow for visibility */
         }
 
         #event-alert p {
@@ -1495,8 +1518,9 @@
         <div id="event-alert">
             <div class="event-icon-container">
                 <img src="calendario.png" alt="Calendario"> <!-- Placeholder for calendario.png -->
+                <span class="event-date-overlay">20</span>
             </div>
-            <p>Gran Limpieza Urbana el 20 de Julio</p>
+            <p>Europa League</p>
         </div>
 
 
@@ -1573,7 +1597,7 @@
                 <div class="thinking-process" style="display: none;">
                     <div class="icons-row">
                         <div class="icon-item" data-source="ayuntamiento"><i class="fas fa-building"></i><p>Datos del Ayuntamiento</p></div>
-                        <div class="icon-item" data-source="redes-sociales"><i class="fas fa-share-alt"></i><p>Redes Sociales</p></div>
+                        <div class="icon-item" data-source="redes-sociales"><i class="fa-brands fa-instagram"></i>"></i><p>Redes Sociales</p></div>
                         <div class="icon-item" data-source="ciudadanos"><i class="fas fa-users"></i><p>Datos Ciudadanos</p></div>
                     </div>
                     <div class="thinking-message"></div>
@@ -1582,7 +1606,7 @@
                     <img src="Diseño sin título (1).png" alt="AI Avatar" class="ai-avatar" id="ai-avatar-image">
                     <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
                     <button id="send-button">
-                        <i class="fas fa-paper-plane"></i> Enviar
+                        <img src="enviar-mensaje.png" alt="Enviar" class="send-icon">
                     </button>
                      <div class="ai-avatar-tooltip">Soy tu IA, estoy aquí para ayudarte</div>
                 </div>
