@@ -7,6 +7,8 @@
     <title>CityInsight - Panel de Gestión Municipal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Font Awesome 6.x for newer social media icons if available -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlalDLuJp8Z5K4A5Qj8n8L+z51n7tM0iR8Q028JpL8p+4O1F+7+p5m5b+5O2+w5f5t5" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Estilos Generales */
         :root {
@@ -1506,7 +1508,7 @@
 
     <div class="main-content">
         <header class="header">
-            
+
             <div class="theme-toggle-container">
                 <button id="theme-toggle">
                     <i id="theme-icon" class="fas fa-moon"></i> Cambiar Tema
@@ -1517,10 +1519,10 @@
         <!-- Nueva Alerta de Evento -->
         <div id="event-alert">
             <div class="event-icon-container">
-                <img src="calendario.png" alt="Calendario"> <!-- Placeholder for calendario.png -->
+                <img src="https://placehold.co/40x40/e74c3c/ffffff?text=⚽" alt="Pelota de fútbol"> <!-- Placeholder para un icono de fútbol -->
                 <span class="event-date-overlay">20</span>
             </div>
-            <p>Europa League</p>
+            <p>Partido Final Europa League</p>
         </div>
 
 
@@ -1597,7 +1599,7 @@
                 <div class="thinking-process" style="display: none;">
                     <div class="icons-row">
                         <div class="icon-item" data-source="ayuntamiento"><i class="fas fa-building"></i><p>Datos del Ayuntamiento</p></div>
-                        <div class="icon-item" data-source="redes-sociales"><i class="fa-brands fa-instagram"></i>"></i><p>Redes Sociales</p></div>
+                        <div class="icon-item" data-source="redes-sociales" id="social-media-icon"><i class="fab fa-instagram"></i><p>Redes Sociales</p></div>
                         <div class="icon-item" data-source="ciudadanos"><i class="fas fa-users"></i><p>Datos Ciudadanos</p></div>
                     </div>
                     <div class="thinking-message"></div>
@@ -1850,6 +1852,9 @@
         const thinkingMessage = document.querySelector('.thinking-message');
         const eventAlert = document.getElementById('event-alert');
         const aiAvatarImage = document.getElementById('ai-avatar-image'); // Get AI avatar image element
+        const socialMediaIconElement = document.getElementById('social-media-icon').querySelector('i'); // Get the <i> element for social media icon
+
+        let socialMediaIconInterval; // Variable to hold the interval for social media icons
 
         // Función para simular el efecto de escritura (no se usará para el mensaje final)
         async function typeMessage(element, text, delay = 20) {
@@ -1865,22 +1870,45 @@
             }
         }
 
-        // Definimos las respuestas específicas para cada KPI
+        // Definimos las respuestas específicas para cada KPI y el nuevo evento
         const kpiResponses = {
             "Índice de Calidad Urbana": "El Índice de Calidad Urbana de 78.3 sobre 100 refleja una tendencia positiva del 2.4% con respecto al mes anterior. Este índice es una métrica integral que evalúa la calidad de vida en la ciudad basándose en factores clave como la disponibilidad de espacios verdes, la eficiencia del transporte público, la calidad del aire y la accesibilidad a servicios esenciales. La mejora actual se atribuye principalmente a recientes iniciativas de reducción de ruido urbano y la creación de nuevas zonas peatonales, que han contribuido a un entorno más agradable para los ciudadanos. Se prevé que esta tendencia continúe con los proyectos de infraestructura sostenible en curso.",
             "Zonas Verdes": "La ciudad cuenta con un promedio de 16.5 metros cuadrados de zonas verdes por habitante, superando holgadamente el estándar de 9 metros cuadrados por habitante recomendado por la Organización Mundial de la Salud. No obstante, un análisis más profundo revela que el 65% de los barrios aún presenta una distribución desequilibrada, con menos de 12 metros cuadrados por habitante en algunas áreas. Para abordar esta disparidad, CityInsight recomienda enfáticamente la implementación de 'parques de bolsillo' en zonas deficitarias, utilizando pequeños terrenos infrautilizados para crear micro-oasis urbanos que mejoren el acceso a la naturaleza en proximidad a los hogares.",
             "Intensidad de Tráfico": "La Intensidad de Tráfico se sitúa actualmente en un 63.2% de saturación, lo que representa un ligero incremento del 1.7% en comparación con el mes anterior. Este aumento se atribuye a la reactivación económica y el retorno gradual a la presencialidad post-pandemia. Para mitigar esta situación y evitar futuras congestiones, el ayuntamiento está impulsando activamente el uso del transporte público mediante mejoras en la frecuencia y cobertura de rutas, así como la expansión de la red de carriles bici. También se están evaluando medidas de gestión del flujo vehicular mediante sistemas de semáforos inteligentes para optimizar el tráfico en horas punta.",
             "Satisfacción Ciudadana": "El nivel de Satisfacción Ciudadana alcanza un sólido 82%, lo que indica una percepción generalmente positiva de los servicios municipales. Este porcentaje ha experimentado un aumento del 3.5% respecto al mes anterior, reflejando el impacto de iniciativas recientes en diversas áreas. Las encuestas revelan que los servicios de limpieza y seguridad pública son las áreas de mayor satisfacción, donde los ciudadanos aprecian los esfuerzos constantes del ayuntamiento. Sin embargo, la movilidad urbana sigue siendo un desafío, y se están planificando nuevas estrategias para mejorar la fluidez del tráfico y la accesibilidad del transporte en toda la ciudad.",
-            "evento de limpieza urbana": {
-                problem: "Se ha identificado que, a pesar de los esfuerzos continuos del departamento de limpieza, persisten problemas de acumulación de residuos en ciertas áreas de la ciudad. Esto es particularmente notorio después de eventos públicos masivos o en zonas de alta afluencia peatonal, donde la capacidad de gestión de residuos se ve superada. Esta situación no solo degrada la imagen urbana, sino que también genera preocupación entre los ciudadanos sobre la higiene y la calidad de vida en sus barrios. La causa raíz parece ser una combinación de falta de concienciación ciudadana y una optimización mejorable en la infraestructura de recogida de residuos en puntos específicos.",
+            "partido final europa league": {
+                problem: [
+                    "La afluencia masiva de personas puede provocar aglomeraciones inusuales y problemas de movilidad urbana, afectando la convivencia ciudadana.",
+                    "Existe un alto riesgo de reuniones ilegales o altercados, y la capacidad de servicios públicos como seguridad y limpieza podría verse superada."
+                ],
                 solutions: [
-                    "Optimización de Rutas y Frecuencia de Recogida: Rediseñar las rutas de los camiones de basura y aumentar la frecuencia de recogida en zonas problemáticas, especialmente durante fines de semana o eventos. Esto podría incluir la instalación de puntos de recogida adicionales o la adaptación de horarios.",
-                    "Campaña de Concienciación Ciudadana: Lanzar una campaña educativa y de sensibilización a gran escala sobre la importancia del reciclaje y la correcta disposición de residuos. Se podrían usar infografías, talleres comunitarios y mensajes en redes sociales para fomentar la participación.",
-                    "Implementación de Contenedores Inteligentes: Instalar contenedores con sensores que alerten a los servicios de limpieza cuando estén cerca de su capacidad máxima. Esto permitiría una recogida más eficiente y evitaría el desbordamiento de basura en las calles.",
-                    "Refuerzo de Equipos de Limpieza en Puntos Críticos: Desplegar equipos de limpieza adicionales y de respuesta rápida en áreas identificadas con alta acumulación de basura, como mercados, parques y zonas de ocio, para mantener la limpieza constante y visible."
+                    "Implementar un plan de movilidad y transporte reforzado con refuerzo de líneas, desvíos de tráfico y promoción de transporte sostenible.",
+                    "Aumentar la presencia policial y de seguridad privada en zonas clave (estadio, fan zones) para gestionar multitudes y prevenir incidentes."
                 ]
             }
         };
+
+        const socialMediaIcons = [
+            'fab fa-instagram',
+            'fab fa-twitter',
+            'fab fa-facebook-f'
+        ];
+        let currentIconIndex = 0;
+
+        function startSocialMediaIconCycling() {
+            socialMediaIconInterval = setInterval(() => {
+                socialMediaIconElement.className = ''; // Clear existing classes
+                socialMediaIconElement.classList.add(...socialMediaIcons[currentIconIndex].split(' '));
+                currentIconIndex = (currentIconIndex + 1) % socialMediaIcons.length;
+            }, 2000); // Change every 2 seconds
+        }
+
+        function stopSocialMediaIconCycling() {
+            clearInterval(socialMediaIconInterval);
+            socialMediaIconElement.className = ''; // Clear existing classes
+            socialMediaIconElement.classList.add('fab', 'fa-instagram'); // Reset to default Instagram icon or the original one
+        }
+
 
         async function sendMessage() {
             const messageText = chatInputField.value.trim();
@@ -1897,7 +1925,7 @@
 
             // Start AI avatar spin animation
             aiAvatarImage.classList.add('spinning');
-            
+
             // Hide thinking process if it was visible
             thinkingProcess.style.display = 'none';
 
@@ -1908,9 +1936,12 @@
 
             const thinkingMessagesData = [
                 { icon: thinkingIcons[0], text: 'Analizando datos del ayuntamiento' },
-                { icon: thinkingIcons[1], text: 'Analizando redes sociales' },
+                { icon: thinkingIcons[1], text: 'Analizando redes sociales' }, // This will be the social media icon
                 { icon: thinkingIcons[2], text: 'Analizando datos ciudadanos' }
             ];
+
+            // Start social media icon cycling
+            startSocialMediaIconCycling();
 
             // Animate thinking messages and color icons
             for (let i = 0; i < thinkingMessagesData.length; i++) {
@@ -1930,8 +1961,9 @@
             thinkingProcess.style.display = 'none';
             thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset icons for next time
 
-            // Stop AI avatar spin animation
+            // Stop AI avatar spin animation and social media icon cycling
             aiAvatarImage.classList.remove('spinning');
+            stopSocialMediaIconCycling();
 
 
             // Get AI response
@@ -1940,14 +1972,14 @@
 
             const lowerCaseMessage = messageText.toLowerCase();
 
-            if (lowerCaseMessage.includes("evento") && lowerCaseMessage.includes("limpieza urbana")) {
-                structuredResponseData = kpiResponses["evento de limpieza urbana"];
+            if (lowerCaseMessage.includes("partido final europa league") || lowerCaseMessage.includes("europa league") || lowerCaseMessage.includes("final de la liga europa") || lowerCaseMessage.includes("final europa league")) {
+                structuredResponseData = kpiResponses["partido final europa league"];
             } else {
                 const kpiKey = Object.keys(kpiResponses).find(kpi => lowerCaseMessage.includes(kpi.toLowerCase()));
                 if (kpiKey) {
                     aiResponseContent = kpiResponses[kpiKey];
                 } else {
-                    aiResponseContent = "Actualmente, solo puedo proporcionar información detallada sobre los KPIs predefinidos o el evento de limpieza urbana. Por favor, intenta preguntar sobre uno de ellos (Ej: 'Háblame del Índice de Calidad Urbana' o 'Información sobre el evento de limpieza urbana').";
+                    aiResponseContent = "Actualmente, solo puedo proporcionar información detallada sobre los KPIs predefinidos o el evento de la final de la Europa League. Por favor, intenta preguntar sobre uno de ellos (Ej: 'Háblame del Índice de Calidad Urbana' o 'Información sobre el partido final de la Europa League').";
                 }
             }
 
@@ -1957,9 +1989,9 @@
             chatMessages.appendChild(aiMessageDiv); // Append empty div first
 
             if (structuredResponseData) {
-                const problemHtml = `<h4>Problema Encontrado</h4><ul><li>${structuredResponseData.problem}</li></ul>`;
+                const problemHtml = `<h4>Problemas Encontrados</h4><ul>${structuredResponseData.problem.map(p => `<li>${p}</li>`).join('')}</ul>`;
                 const solutionsHtml = `<h4>Posibles Soluciones</h4><ul>${structuredResponseData.solutions.map(sol => `<li>${sol}</li>`).join('')}</ul>`;
-                
+
                 const fullContentHtml = `<div class="ai-structured-content">${problemHtml}${solutionsHtml}</div>`;
                 aiMessageDiv.innerHTML = fullContentHtml; // Set content directly
             } else {
@@ -1992,7 +2024,7 @@
                 const queryMessage = `Quiero saber más sobre ${kpiName}`;
                 chatInputField.value = queryMessage;
                 // No automatically send, user clicks send button
-                // sendMessage(); 
+                // sendMessage();
 
                 // Desplazarse al contenedor del chat
                 document.querySelector('.chat-container').scrollIntoView({
@@ -2010,7 +2042,7 @@
             document.getElementById('chat-tab').classList.add('active');
 
             // Pre-fill chat input with event query, but don't send automatically
-            chatInputField.value = "Información sobre el evento de limpieza urbana";
+            chatInputField.value = "Información sobre el partido final de la Europa League";
             // Scroll to chat container
             document.querySelector('.chat-container').scrollIntoView({ behavior: 'smooth' });
 
