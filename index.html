@@ -974,7 +974,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain; /* Ensure image fits without distortion */
-            filter: grayscale(0%) saturate(200%) hue-rotate(-20deg); /* Make it reddish */
+            /* filter: grayscale(0%) saturate(200%) hue-rotate(-20deg); /* Make it reddish */
         }
 
         .event-date-overlay {
@@ -1038,18 +1038,46 @@
             min-width: 80px; /* Ensure space for text and icon */
         }
 
+        .thinking-process .icon-item .social-icon-wrapper {
+            position: relative;
+            width: 2.5em; /* Match font-size of 2.5em */
+            height: 2.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: inherit; /* Inherit font size for i tag */
+        }
+
+        .thinking-process .icon-item .social-icon-wrapper i,
+        .thinking-process .icon-item .social-icon-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.5s ease, color 0.5s ease, filter 0.5s ease;
+        }
+
+
         .thinking-process .icon-item i {
             font-size: 2.5em;
             color: #ccc;
             /* Blanco y negro inicial */
             filter: grayscale(100%);
-            transition: color 0.5s ease, filter 0.5s ease;
         }
-
+        
         .thinking-process .icon-item.colored i {
             filter: grayscale(0%);
-            color: var(--secondary-color); /* Color when active */
+            color: var(--secondary-color); /* General colored state */
         }
+
+        /* Colores originales para iconos de redes sociales (FA) */
+        .fab.fa-facebook-f.colored {
+            color: #1877F2; /* Facebook color - overrides general .colored rule */
+            filter: none;
+        }
+
 
         .thinking-process .icon-item p {
             font-size: 0.9em;
@@ -1482,7 +1510,7 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo-text">
-                <img src="logo.png" alt="Logo de CityInsight">
+                <img src="https://placehold.co/50x50/5d9cec/ffffff?text=CI" alt="Logo de CityInsight">
                 <!-- Se ha eliminado el h1 y p.subtitle de aquí -->
             </div>
             <h2>CityInsight</h2>
@@ -1519,7 +1547,7 @@
         <!-- Nueva Alerta de Evento -->
         <div id="event-alert">
             <div class="event-icon-container">
-                <img src="https://placehold.co/40x40/e74c3c/ffffff?text=⚽" alt="Pelota de fútbol"> <!-- Placeholder para un icono de fútbol -->
+                <img src="calendario.png" alt="Calendario" onerror="this.onerror=null; this.src='https://placehold.co/40x40/e74c3c/ffffff?text=🗓️';" /> <!-- Icono de calendario -->
                 <span class="event-date-overlay">20</span>
             </div>
             <p>Partido Final Europa League</p>
@@ -1599,16 +1627,22 @@
                 <div class="thinking-process" style="display: none;">
                     <div class="icons-row">
                         <div class="icon-item" data-source="ayuntamiento"><i class="fas fa-building"></i><p>Datos del Ayuntamiento</p></div>
-                        <div class="icon-item" data-source="redes-sociales" id="social-media-icon"><i class="fab fa-instagram"></i><p>Redes Sociales</p></div>
+                        <div class="icon-item" data-source="redes-sociales">
+                            <div class="social-icon-wrapper">
+                                <i id="social-media-icon-fa" class="fab fa-instagram" style="display:none;"></i>
+                                <img id="social-media-icon-img" src="" alt="Social Media Icon" style="display:none;">
+                            </div>
+                            <p>Redes Sociales</p>
+                        </div>
                         <div class="icon-item" data-source="ciudadanos"><i class="fas fa-users"></i><p>Datos Ciudadanos</p></div>
                     </div>
                     <div class="thinking-message"></div>
                 </div>
                 <div class="chat-input">
-                    <img src="Diseño sin título (1).png" alt="AI Avatar" class="ai-avatar" id="ai-avatar-image">
+                    <img src="https://placehold.co/40x40/5d9cec/ffffff?text=AI" alt="AI Avatar" class="ai-avatar" id="ai-avatar-image">
                     <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
                     <button id="send-button">
-                        <img src="enviar-mensaje.png" alt="Enviar" class="send-icon">
+                        <img src="https://placehold.co/24x24/48cfad/ffffff?text=>" alt="Enviar" class="send-icon">
                     </button>
                      <div class="ai-avatar-tooltip">Soy tu IA, estoy aquí para ayudarte</div>
                 </div>
@@ -1852,7 +1886,12 @@
         const thinkingMessage = document.querySelector('.thinking-message');
         const eventAlert = document.getElementById('event-alert');
         const aiAvatarImage = document.getElementById('ai-avatar-image'); // Get AI avatar image element
-        const socialMediaIconElement = document.getElementById('social-media-icon').querySelector('i'); // Get the <i> element for social media icon
+
+        // Get the specific elements for social media icon handling
+        const socialMediaContainer = document.querySelector('.icon-item[data-source="redes-sociales"] .social-icon-wrapper');
+        const socialMediaIconFA = document.getElementById('social-media-icon-fa');
+        const socialMediaIconImg = document.getElementById('social-media-icon-img');
+
 
         let socialMediaIconInterval; // Variable to hold the interval for social media icons
 
@@ -1889,24 +1928,46 @@
         };
 
         const socialMediaIcons = [
-            'fab fa-instagram',
-            'fab fa-twitter',
-            'fab fa-facebook-f'
+            { type: 'img', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/x/x-original.svg', alt: 'X (Twitter)' },
+            { type: 'img', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/instagram/instagram-original.svg', alt: 'Instagram' },
+            { type: 'fa', class: 'fab fa-facebook-f', color: '#1877F2' }
         ];
         let currentIconIndex = 0;
 
         function startSocialMediaIconCycling() {
             socialMediaIconInterval = setInterval(() => {
-                socialMediaIconElement.className = ''; // Clear existing classes
-                socialMediaIconElement.classList.add(...socialMediaIcons[currentIconIndex].split(' '));
+                const iconData = socialMediaIcons[currentIconIndex];
+
+                if (iconData.type === 'fa') {
+                    socialMediaIconFA.style.display = 'block';
+                    socialMediaIconImg.style.display = 'none';
+                    socialMediaIconFA.className = ''; // Clear existing classes
+                    socialMediaIconFA.classList.add(...iconData.class.split(' '));
+                    socialMediaIconFA.style.color = iconData.color;
+                } else {
+                    socialMediaIconFA.style.display = 'none';
+                    socialMediaIconImg.style.display = 'block';
+                    socialMediaIconImg.src = iconData.src;
+                    socialMediaIconImg.alt = iconData.alt;
+                    socialMediaIconImg.style.filter = 'none'; // Ensure no grayscale filter for images
+                }
+
                 currentIconIndex = (currentIconIndex + 1) % socialMediaIcons.length;
             }, 2000); // Change every 2 seconds
         }
 
         function stopSocialMediaIconCycling() {
             clearInterval(socialMediaIconInterval);
-            socialMediaIconElement.className = ''; // Clear existing classes
-            socialMediaIconElement.classList.add('fab', 'fa-instagram'); // Reset to default Instagram icon or the original one
+            // Reset to default initial state (blank/greyed out)
+            socialMediaIconFA.style.display = 'none'; // Hide FA icon
+            socialMediaIconImg.style.display = 'none'; // Hide image icon
+            socialMediaIconFA.className = ''; // Remove all FA classes
+            socialMediaIconFA.style.color = '#ccc'; // Reset FA color
+            socialMediaIconImg.src = ''; // Clear image src
+            socialMediaIconImg.alt = ''; // Clear image alt
+            // Make sure the entire social media icon container is reset to default non-colored state
+            document.querySelector('.icon-item[data-source="redes-sociales"]').classList.remove('colored');
+            socialMediaIconFA.style.filter = 'grayscale(100%)';
         }
 
 
@@ -1934,36 +1995,42 @@
             const thinkingIcons = document.querySelectorAll('.thinking-process .icon-item');
             thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset colors
 
-            const thinkingMessagesData = [
-                { icon: thinkingIcons[0], text: 'Analizando datos del ayuntamiento' },
-                { icon: thinkingIcons[1], text: 'Analizando redes sociales' }, // This will be the social media icon
-                { icon: thinkingIcons[2], text: 'Analizando datos ciudadanos' }
-            ];
+            // 1. Datos del Ayuntamiento
+            thinkingMessage.textContent = 'Analizando datos del ayuntamiento';
+            thinkingIcons[0].classList.add('colored'); // Color instantly when text appears
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
 
-            // Start social media icon cycling
-            startSocialMediaIconCycling();
+            // 2. Redes Sociales
+            thinkingIcons[0].classList.remove('colored'); // Remove color from previous icon
+            thinkingMessage.textContent = 'Analizando redes sociales';
+            thinkingIcons[1].classList.add('colored'); // Color social media icon parent (for the overall glow)
+            startSocialMediaIconCycling(); // Start the 2-second cycling (3 icons = 6 seconds total)
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            await new Promise(resolve => setTimeout(resolve, socialMediaIcons.length * 2000)); // Wait for all social media icons to cycle
+            stopSocialMediaIconCycling(); // Stop cycling and reset the icon appearance to neutral
 
-            // Animate thinking messages and color icons
-            for (let i = 0; i < thinkingMessagesData.length; i++) {
-                thinkingMessage.textContent = thinkingMessagesData[i].text;
-                thinkingMessagesData[i].icon.classList.add('colored');
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                await new Promise(resolve => setTimeout(resolve, 2000)); // 2 seconds per message/icon
-            }
+            // 3. Datos Ciudadanos
+            thinkingMessage.textContent = 'Analizando datos ciudadanos';
+            thinkingIcons[2].classList.add('colored'); // Color citizen data icon instantly
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
+
+            // Remove color from the last icon
+            thinkingIcons[2].classList.remove('colored');
 
             // Final thinking message before response appears
             thinkingMessage.textContent = "Generando respuesta...";
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second for "generating response"
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
 
             // Hide thinking process
             thinkingProcess.style.display = 'none';
             thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset icons for next time
 
-            // Stop AI avatar spin animation and social media icon cycling
+            // Stop AI avatar spin animation
             aiAvatarImage.classList.remove('spinning');
-            stopSocialMediaIconCycling();
 
 
             // Get AI response
