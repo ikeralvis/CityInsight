@@ -161,7 +161,7 @@
         /* Estilos del Contenido Principal */
         .main-content {
             flex-grow: 1;
-            padding: 30px;
+            padding: 50px;
             overflow-y: auto;
         }
 
@@ -274,9 +274,9 @@
 
         /* Sección de KPIs */
         .kpi-section {
-            display: grid;
+            display: flex;  
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 28px;
+            gap: 10px;
             /* Espacio ligeramente mayor */
             margin-bottom: 40px;
         }
@@ -290,13 +290,14 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 8px;
+            gap: 5px;
+            width: 60%;
             /* Reduced gap for smaller height */
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(var(--blur-amount));
-            min-height: 180px;
+            min-height: 100px;
             /* Adjusted min-height for smaller size */
             justify-content: space-between;
             /* Distribute content within the card */
@@ -340,14 +341,14 @@
 
         .kpi-content {
             flex-grow: 1;
-            width: 100%;
+            
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
 
         .kpi-content h3 {
-            font-size: 1.3em;
+            font-size: 1em;
             /* Slightly smaller heading */
             margin-bottom: 3px;
             /* Reduced margin */
@@ -359,7 +360,7 @@
         }
 
         .kpi-value {
-            font-size: 2.4em;
+            font-size: 2em;
             /* Slightly smaller value */
             font-weight: 700;
             color: var(--primary-color);
@@ -404,7 +405,7 @@
             /* Slightly smaller font */
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            width: 100%;
+            width: 70%;
             text-align: center;
         }
 
@@ -483,13 +484,14 @@
             box-shadow: 0 12px 45px var(--shadow-light);
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 700px;
             /* Increased height */
             width: 80%;
             /* Changed to 80% */
             max-width: 800px;
             /* Max-width adjusted */
             margin: 0 auto;
+            padding-left: 20px;
             /* Centered */
             overflow: hidden;
             border: 1px solid var(--border-color-light-glass);
@@ -974,7 +976,7 @@
             background-color: var(--card-background-light-glass);
             color: var(--text-light);
             padding: 15px 25px;
-            margin: 10px 30px;
+            
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             display: flex;
@@ -983,7 +985,7 @@
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             backdrop-filter: blur(var(--blur-amount));
-            max-width: 450px;
+            max-width: 250px;
             /* Ajustar ancho */
             text-align: left;
             opacity: 0;
@@ -994,6 +996,18 @@
             /* Centrar contenido dentro de la alerta */
             position: relative;
             /* Needed for ::before pseudo-element */
+            animation: popIn 0.8s ease forwards;
+        }
+
+        @keyframes popIn {
+            from {
+            transform: translateX(-50px) scale(0.8);
+            opacity: 0;
+            }
+            to {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            }
         }
 
         body.dark-mode #event-alert {
@@ -1085,6 +1099,7 @@
             padding: 20px;
             margin-top: 20px;
             text-align: center;
+            max-width: 30%;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
@@ -1103,10 +1118,10 @@
         }
 
         .thinking-process .icons-row {
-            display: flex;
+            display: block;
             gap: 20px;
             margin-bottom: 15px;
-            justify-content: center;
+            justify-content: baseline;
         }
 
         .thinking-process .icon-item {
@@ -1148,9 +1163,9 @@
             color: white;
             padding: 15px 25px;
             border-radius: 15px;
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 600;
-            width: 80%;
+            width: 50%;
             text-align: center;
             animation: siri-wave-animation 3s infinite alternate;
         }
@@ -1618,7 +1633,7 @@
                 <img src="calendario.png" alt="Calendario">
                 <span class="event-date-overlay">20</span>
             </div>
-            <p>Final Europa 2025 el <strong>20 de Mayo</strong></p>
+            <p>Final Eurocopa 2025</p>
         </div>
 
 
@@ -1966,16 +1981,14 @@
             "final europa 2025": {
                 problem: {
                     title: "Problemas Identificados",
-                    description: "La Final de Europa 2025 presenta un reto significativo en términos de seguridad ciudadana y gestión de aglomeraciones. La afluencia masiva de aficionados, tanto locales como internacionales, puede generar puntos de congestión críticos, aumentar el riesgo de incidentes menores (robos, desórdenes) y dificultar la respuesta de los servicios de emergencia. La dispersión de eventos relacionados (fan zones, transporte público) añade complejidad a la coordinación y al mantenimiento del orden, requiriendo una estrategia integral que garantice la seguridad y el disfrute de todos los asistentes."
+                    description: "La Final de Europa 2025(1) es un reto en términos de seguridad ciudadana y gestión de aglomeraciones. La afluencia masiva de aficionados locales como de internacionales, puede generar congestión, aumentar el riesgo de incidentes menores (robos, desórdenes) y dificultar la respuesta de los servicios de emergencia."
                 },
                 solutions: {
                     title: "Soluciones Recomendadas",
                     list: [
-                        "Refuerzo de la Presencia Policial y de Seguridad: Aumentar significativamente el número de efectivos policiales, seguridad privada y personal de control de multitudes en todas las zonas de alta concentración (estadio, fan zones, estaciones de transporte, puntos turísticos clave) para prevenir incidentes y asegurar una respuesta rápida.",
-                        "Implementación de Zonas de Acceso Controlado y Rutas de Evacuación Claras: Establecer perímetros de seguridad y puntos de acceso únicos para el estadio y las fan zones, con controles exhaustivos. Diseñar y señalizar rutas de evacuación claras y accesibles en caso de emergencia, con personal capacitado para dirigir a la multitud.",
-                        "Monitorización Inteligente de Aglomeraciones y Análisis Predictivo: Utilizar tecnología de videovigilancia avanzada con análisis de IA para detectar patrones de aglomeración en tiempo real. Implementar sistemas predictivos para anticipar posibles cuellos de botella o puntos de saturación, permitiendo una intervención proactiva para dispersar a la multitud.",
-                        "Campaña de Información Pública Multilingüe y Canales de Comunicación Directos: Lanzar una campaña de información antes y durante el evento con detalles sobre seguridad, rutas de acceso y salida, transporte público, y números de emergencia, disponible en múltiples idiomas. Establecer canales de comunicación directa (apps, redes sociales) para alertar sobre incidentes o cambios en tiempo real."
-                    ]
+                        "Refuerzo de la Presencia Policial y de Seguridad: Aumentar el número de efectivos policiales, seguridad privada y personal de control de multitudes en todas las zonas de alta concentración para prevenir incidentes y asegurar una respuesta rápida.",
+                        "Implementación de Zonas de Acceso Controlado y Rutas de Evacuación Claras: Establecer perímetros de seguridad y puntos de acceso únicos para el estadio y las fan zones, con controles exhaustivos"
+                        ]
                 }
             }
         };
