@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CityInsight - Panel de Gestión Municipal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons, including social media icons -->
+    <!-- Font Awesome for icons, including social media icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Font Awesome 6.x for newer social media icons if available -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlalDLuJp8Z5K4A5Qj8n8L+z51n7tM0iR8Q028JpL8p+4O1F+7+p5m5b+5O2+w5f5t5" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Estilos Generales */
         :root {
@@ -24,7 +27,7 @@
             /* Azul oscuro */
             --text-light: #2c3e50;
             /* Gris oscuro para texto (más oscuro para contraste) */
-            --text-dark: #ecf0f1 ;
+            --text-dark: #ecf0f1;
             /* Texto claro para modo oscuro */
             --card-background-light-glass: rgba(255, 255, 255, 0.85);
             /* Blanco semi-transparente (más opaco) */
@@ -183,11 +186,28 @@
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* Eliminado: h1 y p.subtitle de la cabecera, ya que el nombre ya está en el menú */
-        .logo-text h1,
-        .subtitle {
-            display: none;
+        /* Visible by default for web */
+        .logo-text h1 {
+            font-size: 2.5em;
+            color: var(--text-light);
+            margin: 0;
         }
+
+        body.dark-mode .logo-text h1 {
+            color: var(--text-dark);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: var(--text-light);
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        body.dark-mode .subtitle {
+            color: var(--text-dark);
+        }
+
 
         .theme-toggle-container {
             display: flex;
@@ -247,14 +267,8 @@
         }
 
         .section-title i {
-            color: var(--text-light);
+            color: var(--primary-color);
             /* Icono con primary-color */
-            font-size: 1.25em;
-        }
-
-        body.dark-mode .section-title i {
-            color: var(--text-dark);
-            /* Texto claro en modo oscuro */
             font-size: 1.25em;
         }
 
@@ -270,18 +284,22 @@
         .kpi-card {
             background-color: var(--card-background-light-glass);
             border-radius: 22px;
-            padding: 20px; /* Reduced padding for smaller height */
+            padding: 20px;
+            /* Reduced padding for smaller height */
             box-shadow: 0 12px 45px var(--shadow-light);
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 8px; /* Reduced gap for smaller height */
+            gap: 8px;
+            /* Reduced gap for smaller height */
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(var(--blur-amount));
-            min-height: 180px; /* Adjusted min-height for smaller size */
-            justify-content: space-between; /* Distribute content within the card */
+            min-height: 180px;
+            /* Adjusted min-height for smaller size */
+            justify-content: space-between;
+            /* Distribute content within the card */
         }
 
         body.dark-mode .kpi-card {
@@ -312,10 +330,12 @@
         }
 
         .kpi-card .card-icon {
-            font-size: 3em; /* Slightly smaller icon */
+            font-size: 3em;
+            /* Slightly smaller icon */
             color: var(--primary-color);
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
-            margin-bottom: 0; /* Reduced margin */
+            margin-bottom: 0;
+            /* Reduced margin */
         }
 
         .kpi-content {
@@ -327,8 +347,10 @@
         }
 
         .kpi-content h3 {
-            font-size: 1.3em; /* Slightly smaller heading */
-            margin-bottom: 3px; /* Reduced margin */
+            font-size: 1.3em;
+            /* Slightly smaller heading */
+            margin-bottom: 3px;
+            /* Reduced margin */
             color: var(--text-light);
         }
 
@@ -337,20 +359,24 @@
         }
 
         .kpi-value {
-            font-size: 2.4em; /* Slightly smaller value */
+            font-size: 2.4em;
+            /* Slightly smaller value */
             font-weight: 700;
             color: var(--primary-color);
-            margin-bottom: 8px; /* Reduced margin */
+            margin-bottom: 8px;
+            /* Reduced margin */
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
         }
 
         .kpi-trend {
             display: flex;
             align-items: center;
-            font-size: 1em; /* Slightly smaller trend text */
+            font-size: 1em;
+            /* Slightly smaller trend text */
             font-weight: 600;
             opacity: 0.95;
-            margin-bottom: 12px; /* Reduced margin */
+            margin-bottom: 12px;
+            /* Reduced margin */
         }
 
         .kpi-trend.positive {
@@ -362,17 +388,20 @@
         }
 
         .kpi-trend i {
-            margin-right: 8px; /* Reduced space */
+            margin-right: 8px;
+            /* Reduced space */
         }
 
         .kpi-info-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px; /* Reduced padding */
+            padding: 10px 20px;
+            /* Reduced padding */
             border-radius: 12px;
             cursor: pointer;
-            font-size: 1em; /* Slightly smaller font */
+            font-size: 1em;
+            /* Slightly smaller font */
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             width: 100%;
@@ -454,10 +483,14 @@
             box-shadow: 0 12px 45px var(--shadow-light);
             display: flex;
             flex-direction: column;
-            height: 700px; /* Increased height */
-            width: 85%; /* Changed to 80% */
-            max-width: 900px; /* Max-width adjusted */
-            margin: 0 auto; /* Centered */
+            height: 600px;
+            /* Increased height */
+            width: 80%;
+            /* Changed to 80% */
+            max-width: 800px;
+            /* Max-width adjusted */
+            margin: 0 auto;
+            /* Centered */
             overflow: hidden;
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
@@ -528,32 +561,53 @@
             gap: 12px;
             /* Mayor espacio */
             align-items: center;
-            position: relative; /* Needed for tooltip positioning */
+            position: relative;
+            /* Needed for tooltip positioning */
         }
 
         .chat-input .ai-avatar {
-            width: 40px; /* Size of the AI avatar */
+            width: 40px;
+            /* Size of the AI avatar */
             height: 40px;
             border-radius: 50%;
             margin-right: 10px;
-            cursor: pointer; /* Indicate it's interactive */
-            transition: transform 0.3s ease-out; /* Smooth transition for rotation */
+            cursor: pointer;
+            /* Indicate it's interactive */
+            transition: transform 0.3s ease-out;
+            /* Smooth transition for rotation */
         }
 
         .chat-input .ai-avatar.spinning {
-            animation: spin-pause-spin-ai-avatar 2.4s linear infinite; /* New animation */
+            animation: spin-pause-spin-ai-avatar 2.4s linear infinite;
+            /* New animation */
         }
 
         @keyframes spin-pause-spin-ai-avatar {
-            0% { transform: rotate(0deg); }
-            40% { transform: rotate(360deg); } /* Complete first spin */
-            60% { transform: rotate(360deg); } /* Pause */
-            100% { transform: rotate(720deg); } /* Complete second spin */
+            0% {
+                transform: rotate(0deg);
+            }
+
+            40% {
+                transform: rotate(360deg);
+            }
+
+            /* Complete first spin */
+            60% {
+                transform: rotate(360deg);
+            }
+
+            /* Pause */
+            100% {
+                transform: rotate(720deg);
+            }
+
+            /* Complete second spin */
         }
 
         .ai-avatar-tooltip {
             position: absolute;
-            bottom: calc(100% + 10px); /* Position above the avatar */
+            bottom: calc(100% + 10px);
+            /* Position above the avatar */
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(0, 0, 0, 0.7);
@@ -565,7 +619,8 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
-            z-index: 10; /* Ensure it's above other elements */
+            z-index: 10;
+            /* Ensure it's above other elements */
         }
 
         .chat-input:hover .ai-avatar-tooltip {
@@ -611,8 +666,8 @@
         }
 
         .chat-input button {
-            background-color: var(--background-light);
-            color: var(--text-light);
+            background-color: var(--primary-color);
+            color: white;
             border: none;
             border-radius: 35px;
             /* Más redondeado */
@@ -628,16 +683,18 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .chat-input button:hover {
-            background-color: var(--background-dark);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+        .chat-input button img {
+            width: 20px;
+            height: 20px;
+            /* Tamaño del icono de enviar */
+            margin-right: 8px;
+            /* Espacio entre el icono y el texto */
         }
 
-        .chat-input button img {
-            width: 24px; /* Icon size */
-            height: 24px;
-
+        .chat-input button:hover {
+            background-color: #4a8ddc;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
         }
 
 
@@ -891,6 +948,7 @@
         }
 
         @keyframes thinkingDots {
+
             0%,
             20% {
                 content: '.';
@@ -916,6 +974,7 @@
             background-color: var(--card-background-light-glass);
             color: var(--text-light);
             padding: 15px 25px;
+            margin: 10px 30px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             display: flex;
@@ -923,13 +982,18 @@
             gap: 15px;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-
             backdrop-filter: blur(var(--blur-amount));
-            max-width: 200px; /* Ajustar ancho */
+            max-width: 450px;
+            /* Ajustar ancho */
             text-align: left;
-            opacity: 0; /* Hidden by default for fade in */
-            animation: fadeIn 1s ease 0.5s forwards; /* Delayed fade in */
-            justify-content: center; /* Centrar contenido dentro de la alerta */
+            opacity: 0;
+            /* Hidden by default for fade in */
+            animation: fadeIn 1s ease 0.5s forwards;
+            /* Delayed fade in */
+            justify-content: center;
+            /* Centrar contenido dentro de la alerta */
+            position: relative;
+            /* Needed for ::before pseudo-element */
         }
 
         body.dark-mode #event-alert {
@@ -937,19 +1001,6 @@
             color: var(--text-dark);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
             border: 1px solid var(--border-color-dark-glass);
-        }
-
-        #event-alert::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 12px;
-            /* Borde más ancho */
-            height: 100%;
-            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-            background: linear-gradient(to bottom, #e74c3c, #c0392b);
-            border-radius: 22px 0 0 22px;
         }
 
         #event-alert:hover {
@@ -961,10 +1012,26 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
         }
 
+        #event-alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            /* Red strip width */
+            height: 100%;
+            background-color: red;
+            /* Red color for the strip */
+            border-radius: 15px 0 0 15px;
+            /* Rounded left corners */
+        }
+
         .event-icon-container {
             position: relative;
-            width: 40px; /* Fixed width for the image */
-            height: 40px; /* Fixed height for the image */
+            width: 40px;
+            /* Fixed width for the image */
+            height: 40px;
+            /* Fixed height for the image */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -973,30 +1040,41 @@
         .event-icon-container img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Ensure image fits without distortion */
-            /* filter: grayscale(0%) saturate(200%) hue-rotate(-20deg); /* Make it reddish */
+            object-fit: contain;
+            /* Ensure image fits without distortion */
+            /* filter: grayscale(0%) saturate(200%) hue-rotate(-20deg); Reddish tint */
         }
 
         .event-date-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -30%); /* Adjust vertical position slightly */
-            font-size: 0.8em; /* Slightly larger number */
+            transform: translate(-50%, -30%);
+            /* Adjust vertical position slightly */
+            font-size: 0.8em;
+            /* Slightly larger number */
             font-weight: 700;
-            color: black; /* Color of the number */
-            /*text-shadow: 0 0 3px rgba(0,0,0,0.5); /* Slight shadow for visibility */
+            color: black;
+            /* Color of the number for visibility on calendar */
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+            /* Slight shadow for visibility */
         }
 
         #event-alert p {
-            flex-grow: 1; /* Allow paragraph to take available space */
-            text-align: center; /* Center the text within the paragraph */
-            margin: 0; /* Remove default margin */
+            flex-grow: 1;
+            /* Allow paragraph to take available space */
+            text-align: center;
+            /* Center the text within the paragraph */
+            margin: 0;
+            /* Remove default margin */
             font-weight: 600;
+            padding-left: 10px;
+            /* Add padding for the red strip */
         }
 
         #event-alert p strong {
-            color: var(--primary-color); /* Keep strong text color as primary */
+            color: var(--primary-color);
+            /* Keep strong text color as primary */
         }
 
 
@@ -1035,49 +1113,23 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 80px; /* Ensure space for text and icon */
+            min-width: 80px;
+            /* Ensure space for text and icon */
         }
-
-        .thinking-process .icon-item .social-icon-wrapper {
-            position: relative;
-            width: 2.5em; /* Match font-size of 2.5em */
-            height: 2.5em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: inherit; /* Inherit font size for i tag */
-        }
-
-        .thinking-process .icon-item .social-icon-wrapper i,
-        .thinking-process .icon-item .social-icon-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: opacity 0.5s ease, color 0.5s ease, filter 0.5s ease;
-        }
-
 
         .thinking-process .icon-item i {
             font-size: 2.5em;
             color: #ccc;
             /* Blanco y negro inicial */
             filter: grayscale(100%);
+            transition: color 0.5s ease, filter 0.5s ease;
         }
-        
+
         .thinking-process .icon-item.colored i {
             filter: grayscale(0%);
-            color: var(--secondary-color); /* General colored state */
+            color: var(--secondary-color);
+            /* Color when active */
         }
-
-        /* Colores originales para iconos de redes sociales (FA) */
-        .fab.fa-facebook-f.colored {
-            color: #1877F2; /* Facebook color - overrides general .colored rule */
-            filter: none;
-        }
-
 
         .thinking-process .icon-item p {
             font-size: 0.9em;
@@ -1129,11 +1181,14 @@
         /* Respuestas estructuradas de la IA */
         /* Note: This class is now used for styling content *within* a message, not a standalone div */
         .ai-structured-content {
-            background-color: var(--card-background-light-glass); /* Using glass effect for sub-content */
+            background-color: var(--card-background-light-glass);
+            /* Using glass effect for sub-content */
             border-radius: 18px;
             padding: 20px;
-            margin-top: 15px; /* Space from previous message */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Lighter shadow for sub-content */
+            margin-top: 15px;
+            /* Space from previous message */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            /* Lighter shadow for sub-content */
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
             animation: fadeIn 0.5s ease forwards;
@@ -1183,7 +1238,8 @@
             background-color: rgba(59, 80, 98, 0.4);
         }
 
-        .ai-structured-content ul li a { /* Keep link styling for potential future use or if user changes mind */
+        .ai-structured-content ul li a {
+            /* Keep link styling for potential future use or if user changes mind */
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
@@ -1316,7 +1372,7 @@
             .logo-text h1,
             .subtitle {
                 display: none;
-                /* Ocultar el nombre de la app principal en la cabecera en móvil */
+                /* Hide for mobile */
             }
 
 
@@ -1462,42 +1518,54 @@
             .recommendation-text p {
                 font-size: 0.95em;
             }
+
             #event-alert {
                 font-size: 0.9em;
                 padding: 12px 20px;
                 margin-left: 15px;
                 margin-right: 15px;
-                max-width: calc(100% - 30px); /* Adjust for padding */
-                text-align: center; /* Center text on small screens */
+                max-width: calc(100% - 30px);
+                /* Adjust for padding */
+                text-align: center;
+                /* Center text on small screens */
             }
+
             #event-alert i {
                 font-size: 1.5em;
             }
+
             .thinking-process {
                 padding: 15px;
                 gap: 10px;
             }
-            .thinking-process .icons-row {
+
+            .thinking-process .icon-row {
                 gap: 10px;
             }
+
             .thinking-process .icon-item i {
                 font-size: 2em;
             }
+
             .thinking-process .icon-item p {
                 font-size: 0.8em;
             }
+
             .thinking-message {
                 font-size: 0.95em;
                 padding: 12px 20px;
                 width: 90%;
             }
+
             /* AI Structured Response is now dynamically added to chat messages */
             .ai-structured-content {
                 padding: 15px;
             }
+
             .ai-structured-content h4 {
                 font-size: 1.2em;
             }
+
             .ai-structured-content ul li {
                 font-size: 0.85em;
                 padding: 8px 12px;
@@ -1510,10 +1578,10 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo-text">
-                <img src="https://placehold.co/50x50/5d9cec/ffffff?text=CI" alt="Logo de CityInsight">
-                <!-- Se ha eliminado el h1 y p.subtitle de aquí -->
+                <img src="logo.png" alt="Logo de CityInsight">
+
             </div>
-            <h2>CityInsight</h2>
+            <h1>CityInsight</h1>
         </div>
         <nav class="sidebar-nav">
             <ul>
@@ -1547,10 +1615,10 @@
         <!-- Nueva Alerta de Evento -->
         <div id="event-alert">
             <div class="event-icon-container">
-                <img src="calendario.png" alt="Calendario" onerror="this.onerror=null; this.src='https://placehold.co/40x40/e74c3c/ffffff?text=🗓️';" /> <!-- Icono de calendario -->
+                <img src="calendario.png" alt="Calendario">
                 <span class="event-date-overlay">20</span>
             </div>
-            <p>Partido Final Europa League</p>
+            <p>Final Europa 2025 el <strong>20 de Mayo</strong></p>
         </div>
 
 
@@ -1626,25 +1694,27 @@
                 </div>
                 <div class="thinking-process" style="display: none;">
                     <div class="icons-row">
-                        <div class="icon-item" data-source="ayuntamiento"><i class="fas fa-building"></i><p>Datos del Ayuntamiento</p></div>
+                        <div class="icon-item" data-source="ayuntamiento"><i class="fas fa-building"></i>
+                            <p>Datos del Ayuntamiento</p>
+                        </div>
                         <div class="icon-item" data-source="redes-sociales">
-                            <div class="social-icon-wrapper">
-                                <i id="social-media-icon-fa" class="fab fa-instagram" style="display:none;"></i>
-                                <img id="social-media-icon-img" src="" alt="Social Media Icon" style="display:none;">
-                            </div>
+                            <!-- Este <i> se actualizará dinámicamente con los iconos de redes sociales -->
+                            <i class="fa-brands fa-square-facebook"></i>
                             <p>Redes Sociales</p>
                         </div>
-                        <div class="icon-item" data-source="ciudadanos"><i class="fas fa-users"></i><p>Datos Ciudadanos</p></div>
+                        <div class="icon-item" data-source="ciudadanos"><i class="fas fa-users"></i>
+                            <p>Datos Ciudadanos</p>
+                        </div>
                     </div>
                     <div class="thinking-message"></div>
                 </div>
                 <div class="chat-input">
-                    <img src="https://placehold.co/40x40/5d9cec/ffffff?text=AI" alt="AI Avatar" class="ai-avatar" id="ai-avatar-image">
+                    <img src="Diseño sin título (1).png" alt="AI Avatar" class="ai-avatar" id="ai-avatar-image">
                     <input type="text" placeholder="Escribe tu mensaje aquí..." id="chat-input-field">
                     <button id="send-button">
-                        <img src="https://placehold.co/24x24/48cfad/ffffff?text=>" alt="Enviar" class="send-icon">
+                        <img src="enviar-mensaje.png" alt="Enviar" class="send-icon">
                     </button>
-                     <div class="ai-avatar-tooltip">Soy tu IA, estoy aquí para ayudarte</div>
+                    <div class="ai-avatar-tooltip">Soy tu IA, estoy aquí para ayudarte</div>
                 </div>
             </div>
         </div>
@@ -1883,93 +1953,32 @@
         const sendButton = document.getElementById('send-button');
         const chatMessages = document.querySelector('.chat-messages');
         const thinkingProcess = document.querySelector('.thinking-process');
-        const thinkingMessage = document.querySelector('.thinking-message');
+        const thinkingMessage = document.querySelector('.thinking-message'); // Get the thinking message element
         const eventAlert = document.getElementById('event-alert');
         const aiAvatarImage = document.getElementById('ai-avatar-image'); // Get AI avatar image element
 
-        // Get the specific elements for social media icon handling
-        const socialMediaContainer = document.querySelector('.icon-item[data-source="redes-sociales"] .social-icon-wrapper');
-        const socialMediaIconFA = document.getElementById('social-media-icon-fa');
-        const socialMediaIconImg = document.getElementById('social-media-icon-img');
-
-
-        let socialMediaIconInterval; // Variable to hold the interval for social media icons
-
-        // Función para simular el efecto de escritura (no se usará para el mensaje final)
-        async function typeMessage(element, text, delay = 20) {
-            // Create a temporary span to hold the typing text
-            const typingSpan = document.createElement('span');
-            element.appendChild(typingSpan);
-            element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-            for (let i = 0; i < text.length; i++) {
-                typingSpan.textContent += text.charAt(i);
-                chatMessages.scrollTop = chatMessages.scrollHeight; // Keep scrolling down
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-
-        // Definimos las respuestas específicas para cada KPI y el nuevo evento
+        // Definimos las respuestas específicas para cada KPI
         const kpiResponses = {
             "Índice de Calidad Urbana": "El Índice de Calidad Urbana de 78.3 sobre 100 refleja una tendencia positiva del 2.4% con respecto al mes anterior. Este índice es una métrica integral que evalúa la calidad de vida en la ciudad basándose en factores clave como la disponibilidad de espacios verdes, la eficiencia del transporte público, la calidad del aire y la accesibilidad a servicios esenciales. La mejora actual se atribuye principalmente a recientes iniciativas de reducción de ruido urbano y la creación de nuevas zonas peatonales, que han contribuido a un entorno más agradable para los ciudadanos. Se prevé que esta tendencia continúe con los proyectos de infraestructura sostenible en curso.",
             "Zonas Verdes": "La ciudad cuenta con un promedio de 16.5 metros cuadrados de zonas verdes por habitante, superando holgadamente el estándar de 9 metros cuadrados por habitante recomendado por la Organización Mundial de la Salud. No obstante, un análisis más profundo revela que el 65% de los barrios aún presenta una distribución desequilibrada, con menos de 12 metros cuadrados por habitante en algunas áreas. Para abordar esta disparidad, CityInsight recomienda enfáticamente la implementación de 'parques de bolsillo' en zonas deficitarias, utilizando pequeños terrenos infrautilizados para crear micro-oasis urbanos que mejoren el acceso a la naturaleza en proximidad a los hogares.",
             "Intensidad de Tráfico": "La Intensidad de Tráfico se sitúa actualmente en un 63.2% de saturación, lo que representa un ligero incremento del 1.7% en comparación con el mes anterior. Este aumento se atribuye a la reactivación económica y el retorno gradual a la presencialidad post-pandemia. Para mitigar esta situación y evitar futuras congestiones, el ayuntamiento está impulsando activamente el uso del transporte público mediante mejoras en la frecuencia y cobertura de rutas, así como la expansión de la red de carriles bici. También se están evaluando medidas de gestión del flujo vehicular mediante sistemas de semáforos inteligentes para optimizar el tráfico en horas punta.",
             "Satisfacción Ciudadana": "El nivel de Satisfacción Ciudadana alcanza un sólido 82%, lo que indica una percepción generalmente positiva de los servicios municipales. Este porcentaje ha experimentado un aumento del 3.5% respecto al mes anterior, reflejando el impacto de iniciativas recientes en diversas áreas. Las encuestas revelan que los servicios de limpieza y seguridad pública son las áreas de mayor satisfacción, donde los ciudadanos aprecian los esfuerzos constantes del ayuntamiento. Sin embargo, la movilidad urbana sigue siendo un desafío, y se están planificando nuevas estrategias para mejorar la fluidez del tráfico y la accesibilidad del transporte en toda la ciudad.",
-            "partido final europa league": {
-                problem: [
-                    "La afluencia masiva de personas puede provocar aglomeraciones inusuales y problemas de movilidad urbana, afectando la convivencia ciudadana.",
-                    "Existe un alto riesgo de reuniones ilegales o altercados, y la capacidad de servicios públicos como seguridad y limpieza podría verse superada."
-                ],
-                solutions: [
-                    "Implementar un plan de movilidad y transporte reforzado con refuerzo de líneas, desvíos de tráfico y promoción de transporte sostenible.",
-                    "Aumentar la presencia policial y de seguridad privada en zonas clave (estadio, fan zones) para gestionar multitudes y prevenir incidentes."
-                ]
+            "final europa 2025": {
+                problem: {
+                    title: "Problemas Identificados",
+                    description: "La Final de Europa 2025 presenta un reto significativo en términos de seguridad ciudadana y gestión de aglomeraciones. La afluencia masiva de aficionados, tanto locales como internacionales, puede generar puntos de congestión críticos, aumentar el riesgo de incidentes menores (robos, desórdenes) y dificultar la respuesta de los servicios de emergencia. La dispersión de eventos relacionados (fan zones, transporte público) añade complejidad a la coordinación y al mantenimiento del orden, requiriendo una estrategia integral que garantice la seguridad y el disfrute de todos los asistentes."
+                },
+                solutions: {
+                    title: "Soluciones Recomendadas",
+                    list: [
+                        "Refuerzo de la Presencia Policial y de Seguridad: Aumentar significativamente el número de efectivos policiales, seguridad privada y personal de control de multitudes en todas las zonas de alta concentración (estadio, fan zones, estaciones de transporte, puntos turísticos clave) para prevenir incidentes y asegurar una respuesta rápida.",
+                        "Implementación de Zonas de Acceso Controlado y Rutas de Evacuación Claras: Establecer perímetros de seguridad y puntos de acceso únicos para el estadio y las fan zones, con controles exhaustivos. Diseñar y señalizar rutas de evacuación claras y accesibles en caso de emergencia, con personal capacitado para dirigir a la multitud.",
+                        "Monitorización Inteligente de Aglomeraciones y Análisis Predictivo: Utilizar tecnología de videovigilancia avanzada con análisis de IA para detectar patrones de aglomeración en tiempo real. Implementar sistemas predictivos para anticipar posibles cuellos de botella o puntos de saturación, permitiendo una intervención proactiva para dispersar a la multitud.",
+                        "Campaña de Información Pública Multilingüe y Canales de Comunicación Directos: Lanzar una campaña de información antes y durante el evento con detalles sobre seguridad, rutas de acceso y salida, transporte público, y números de emergencia, disponible en múltiples idiomas. Establecer canales de comunicación directa (apps, redes sociales) para alertar sobre incidentes o cambios en tiempo real."
+                    ]
+                }
             }
         };
-
-        const socialMediaIcons = [
-            { type: 'img', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/x/x-original.svg', alt: 'X (Twitter)' },
-            { type: 'img', src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/instagram/instagram-original.svg', alt: 'Instagram' },
-            { type: 'fa', class: 'fab fa-facebook-f', color: '#1877F2' }
-        ];
-        let currentIconIndex = 0;
-
-        function startSocialMediaIconCycling() {
-            socialMediaIconInterval = setInterval(() => {
-                const iconData = socialMediaIcons[currentIconIndex];
-
-                if (iconData.type === 'fa') {
-                    socialMediaIconFA.style.display = 'block';
-                    socialMediaIconImg.style.display = 'none';
-                    socialMediaIconFA.className = ''; // Clear existing classes
-                    socialMediaIconFA.classList.add(...iconData.class.split(' '));
-                    socialMediaIconFA.style.color = iconData.color;
-                } else {
-                    socialMediaIconFA.style.display = 'none';
-                    socialMediaIconImg.style.display = 'block';
-                    socialMediaIconImg.src = iconData.src;
-                    socialMediaIconImg.alt = iconData.alt;
-                    socialMediaIconImg.style.filter = 'none'; // Ensure no grayscale filter for images
-                }
-
-                currentIconIndex = (currentIconIndex + 1) % socialMediaIcons.length;
-            }, 2000); // Change every 2 seconds
-        }
-
-        function stopSocialMediaIconCycling() {
-            clearInterval(socialMediaIconInterval);
-            // Reset to default initial state (blank/greyed out)
-            socialMediaIconFA.style.display = 'none'; // Hide FA icon
-            socialMediaIconImg.style.display = 'none'; // Hide image icon
-            socialMediaIconFA.className = ''; // Remove all FA classes
-            socialMediaIconFA.style.color = '#ccc'; // Reset FA color
-            socialMediaIconImg.src = ''; // Clear image src
-            socialMediaIconImg.alt = ''; // Clear image alt
-            // Make sure the entire social media icon container is reset to default non-colored state
-            document.querySelector('.icon-item[data-source="redes-sociales"]').classList.remove('colored');
-            socialMediaIconFA.style.filter = 'grayscale(100%)';
-        }
-
 
         async function sendMessage() {
             const messageText = chatInputField.value.trim();
@@ -1995,39 +2004,78 @@
             const thinkingIcons = document.querySelectorAll('.thinking-process .icon-item');
             thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset colors
 
-            // 1. Datos del Ayuntamiento
-            thinkingMessage.textContent = 'Analizando datos del ayuntamiento';
-            thinkingIcons[0].classList.add('colored'); // Color instantly when text appears
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
+            const socialMediaIconElement = document.querySelector('.icon-item[data-source="redes-sociales"] i');
+            // Updated to use fa-brands fa-x-twitter for the X icon (Font Awesome 6)
+            const socialMediaIconsArray = ['fa-brands fa-square-facebook', 'fa-brands fa-x-twitter', 'fa-brands fa-square-instagram'];
+            let socialIconAnimationIntervalId = null; // To store the interval ID for clearing
 
-            // 2. Redes Sociales
-            thinkingIcons[0].classList.remove('colored'); // Remove color from previous icon
-            thinkingMessage.textContent = 'Analizando redes sociales';
-            thinkingIcons[1].classList.add('colored'); // Color social media icon parent (for the overall glow)
-            startSocialMediaIconCycling(); // Start the 2-second cycling (3 icons = 6 seconds total)
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            await new Promise(resolve => setTimeout(resolve, socialMediaIcons.length * 2000)); // Wait for all social media icons to cycle
-            stopSocialMediaIconCycling(); // Stop cycling and reset the icon appearance to neutral
+            const thinkingMessagesData = [{
+                iconElement: thinkingIcons[0].querySelector('i'),
+                text: 'Analizando datos del ayuntamiento',
+                initialClass: 'fas fa-building'
+            }, {
+                iconElement: socialMediaIconElement,
+                text: 'Analizando redes sociales',
+                // initialClass will be handled by the specific social media loop
+            }, {
+                iconElement: thinkingIcons[2].querySelector('i'),
+                text: 'Analizando datos ciudadanos',
+                initialClass: 'fas fa-users'
+            },];
 
-            // 3. Datos Ciudadanos
-            thinkingMessage.textContent = 'Analizando datos ciudadanos';
-            thinkingIcons[2].classList.add('colored'); // Color citizen data icon instantly
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
 
-            // Remove color from the last icon
-            thinkingIcons[2].classList.remove('colored');
+            // Animate thinking messages and color icons
+            for (let i = 0; i < thinkingMessagesData.length; i++) {
+                const currentData = thinkingMessagesData[i];
+                thinkingMessage.textContent = currentData.text;
+
+                // Reset all icon colors, then color the current one
+                thinkingIcons.forEach(iconItem => iconItem.classList.remove('colored'));
+                currentData.iconElement.closest('.icon-item').classList.add('colored');
+
+                // Clear any existing social media interval before starting a new step
+                if (socialIconAnimationIntervalId) {
+                    clearInterval(socialIconAnimationIntervalId);
+                    socialIconAnimationIntervalId = null;
+                }
+
+                if (currentData.iconElement === socialMediaIconElement) {
+                    let socialIconIndex = 0;
+                    currentData.iconElement.className = socialMediaIconsArray[socialIconIndex]; // Set initial icon
+
+                    // This promise handles the social media icon animation and its duration
+                    await new Promise(resolve => {
+                        let count = 0;
+                        socialIconAnimationIntervalId = setInterval(() => {
+                            socialIconIndex = (socialIconIndex + 1) % socialMediaIconsArray.length;
+                            socialMediaIconElement.className = socialMediaIconsArray[socialIconIndex];
+                            count++;
+                            if (count >= socialMediaIconsArray.length) { // After cycling through all icons once
+                                clearInterval(socialIconAnimationIntervalId);
+                                socialIconAnimationIntervalId = null; // Clear the stored ID
+                                resolve(); // Resolve the promise
+                            }
+                        }, 1000); // Change icon every 1 second
+                    });
+
+                } else {
+                    // For non-social media icons, simply set the class and wait
+                    currentData.iconElement.className = currentData.initialClass;
+                    await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
+                }
+
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Ensure scrolling after each step
+            }
 
             // Final thinking message before response appears
             thinkingMessage.textContent = "Generando respuesta...";
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second for "generating response"
 
 
             // Hide thinking process
             thinkingProcess.style.display = 'none';
-            thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset icons for next time
+            thinkingIcons.forEach(icon => icon.classList.remove('colored')); // Reset colors
 
             // Stop AI avatar spin animation
             aiAvatarImage.classList.remove('spinning');
@@ -2037,16 +2085,19 @@
             let aiResponseContent = "";
             let structuredResponseData = null;
 
-            const lowerCaseMessage = messageText.toLowerCase();
+            const lowerCaseMessage = messageText.toLowerCase(); // Use messageText here as it's the original trimmed input
 
-            if (lowerCaseMessage.includes("partido final europa league") || lowerCaseMessage.includes("europa league") || lowerCaseMessage.includes("final de la liga europa") || lowerCaseMessage.includes("final europa league")) {
-                structuredResponseData = kpiResponses["partido final europa league"];
+            if (lowerCaseMessage.includes("información detallada sobre la final europa 2025") ||
+                lowerCaseMessage.includes("evento deportivo") ||
+                lowerCaseMessage.includes("final de la champions") ||
+                lowerCaseMessage.includes("eurocopa")) { // Added "eurocopa" for broader matching
+                structuredResponseData = kpiResponses["final europa 2025"];
             } else {
                 const kpiKey = Object.keys(kpiResponses).find(kpi => lowerCaseMessage.includes(kpi.toLowerCase()));
                 if (kpiKey) {
                     aiResponseContent = kpiResponses[kpiKey];
                 } else {
-                    aiResponseContent = "Actualmente, solo puedo proporcionar información detallada sobre los KPIs predefinidos o el evento de la final de la Europa League. Por favor, intenta preguntar sobre uno de ellos (Ej: 'Háblame del Índice de Calidad Urbana' o 'Información sobre el partido final de la Europa League').";
+                    aiResponseContent = "Actualmente, solo puedo proporcionar información detallada sobre los KPIs predefinidos o la Final Europa 2025. Por favor, intenta preguntar sobre uno de ellos (Ej: 'Háblame del Índice de Calidad Urbana' o 'Información sobre la Final Europa 2025').";
                 }
             }
 
@@ -2056,8 +2107,8 @@
             chatMessages.appendChild(aiMessageDiv); // Append empty div first
 
             if (structuredResponseData) {
-                const problemHtml = `<h4>Problemas Encontrados</h4><ul>${structuredResponseData.problem.map(p => `<li>${p}</li>`).join('')}</ul>`;
-                const solutionsHtml = `<h4>Posibles Soluciones</h4><ul>${structuredResponseData.solutions.map(sol => `<li>${sol}</li>`).join('')}</ul>`;
+                const problemHtml = `<h4>${structuredResponseData.problem.title}</h4><ul><li>${structuredResponseData.problem.description}</li></ul>`;
+                const solutionsHtml = `<h4>${structuredResponseData.solutions.title}</h4><ul>${structuredResponseData.solutions.list.map(sol => `<li>${sol}</li>`).join('')}</ul>`;
 
                 const fullContentHtml = `<div class="ai-structured-content">${problemHtml}${solutionsHtml}</div>`;
                 aiMessageDiv.innerHTML = fullContentHtml; // Set content directly
@@ -2109,9 +2160,11 @@
             document.getElementById('chat-tab').classList.add('active');
 
             // Pre-fill chat input with event query, but don't send automatically
-            chatInputField.value = "Información sobre el partido final de la Europa League";
+            chatInputField.value = "Información detallada sobre la Final Europa 2025"; // Updated message
             // Scroll to chat container
-            document.querySelector('.chat-container').scrollIntoView({ behavior: 'smooth' });
+            document.querySelector('.chat-container').scrollIntoView({
+                behavior: 'smooth'
+            });
 
             // No automatic send
         });
