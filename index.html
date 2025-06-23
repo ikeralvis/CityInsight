@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CityInsight - Panel de Gestión Municipal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Font Awesome for icons, including social media icons -->
-    <!-- Font Awesome for icons, including social media icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        xintegrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <style>
         /* Estilos Generales */
         :root {
@@ -161,7 +160,7 @@
         /* Estilos del Contenido Principal */
         .main-content {
             flex-grow: 1;
-            padding: 50px;
+            padding: 30px;
             overflow-y: auto;
         }
 
@@ -274,9 +273,9 @@
 
         /* Sección de KPIs */
         .kpi-section {
-            display: flex;  
+            display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 10px;
+            gap: 28px;
             /* Espacio ligeramente mayor */
             margin-bottom: 40px;
         }
@@ -290,14 +289,13 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 5px;
-            width: 60%;
+            gap: 8px;
             /* Reduced gap for smaller height */
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(var(--blur-amount));
-            min-height: 100px;
+            min-height: 180px;
             /* Adjusted min-height for smaller size */
             justify-content: space-between;
             /* Distribute content within the card */
@@ -341,14 +339,14 @@
 
         .kpi-content {
             flex-grow: 1;
-            
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
 
         .kpi-content h3 {
-            font-size: 1em;
+            font-size: 1.3em;
             /* Slightly smaller heading */
             margin-bottom: 3px;
             /* Reduced margin */
@@ -360,7 +358,7 @@
         }
 
         .kpi-value {
-            font-size: 2em;
+            font-size: 2.4em;
             /* Slightly smaller value */
             font-weight: 700;
             color: var(--primary-color);
@@ -405,7 +403,7 @@
             /* Slightly smaller font */
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            width: 70%;
+            width: 100%;
             text-align: center;
         }
 
@@ -484,14 +482,13 @@
             box-shadow: 0 12px 45px var(--shadow-light);
             display: flex;
             flex-direction: column;
-            height: 700px;
+            height: 800px;
             /* Increased height */
-            width: 80%;
+            width: 90%;
             /* Changed to 80% */
-            max-width: 800px;
+            max-width: 850px;
             /* Max-width adjusted */
             margin: 0 auto;
-            padding-left: 20px;
             /* Centered */
             overflow: hidden;
             border: 1px solid var(--border-color-light-glass);
@@ -565,6 +562,11 @@
             align-items: center;
             position: relative;
             /* Needed for tooltip positioning */
+        }
+
+        .chat-input img{
+            width: 20px;
+            height: 20px;
         }
 
         .chat-input .ai-avatar {
@@ -683,14 +685,6 @@
             justify-content: center;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .chat-input button img {
-            width: 20px;
-            height: 20px;
-            /* Tamaño del icono de enviar */
-            margin-right: 8px;
-            /* Espacio entre el icono y el texto */
         }
 
         .chat-input button:hover {
@@ -950,7 +944,6 @@
         }
 
         @keyframes thinkingDots {
-
             0%,
             20% {
                 content: '.';
@@ -976,7 +969,6 @@
             background-color: var(--card-background-light-glass);
             color: var(--text-light);
             padding: 15px 25px;
-            
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             display: flex;
@@ -985,7 +977,7 @@
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             backdrop-filter: blur(var(--blur-amount));
-            max-width: 250px;
+            max-width: 450px;
             /* Ajustar ancho */
             text-align: left;
             opacity: 0;
@@ -996,18 +988,6 @@
             /* Centrar contenido dentro de la alerta */
             position: relative;
             /* Needed for ::before pseudo-element */
-            animation: popIn 0.8s ease forwards;
-        }
-
-        @keyframes popIn {
-            from {
-            transform: translateX(-50px) scale(0.8);
-            opacity: 0;
-            }
-            to {
-            transform: translateX(0) scale(1);
-            opacity: 1;
-            }
         }
 
         body.dark-mode #event-alert {
@@ -1099,7 +1079,6 @@
             padding: 20px;
             margin-top: 20px;
             text-align: center;
-            max-width: 30%;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border-color-light-glass);
             backdrop-filter: blur(var(--blur-amount));
@@ -1118,10 +1097,10 @@
         }
 
         .thinking-process .icons-row {
-            display: block;
+            display: flex;
             gap: 20px;
             margin-bottom: 15px;
-            justify-content: baseline;
+            justify-content: center;
         }
 
         .thinking-process .icon-item {
@@ -1163,9 +1142,9 @@
             color: white;
             padding: 15px 25px;
             border-radius: 15px;
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: 600;
-            width: 50%;
+            width: 80%;
             text-align: center;
             animation: siri-wave-animation 3s infinite alternate;
         }
@@ -1199,8 +1178,8 @@
             background-color: var(--card-background-light-glass);
             /* Using glass effect for sub-content */
             border-radius: 18px;
-            padding: 20px;
-            margin-top: 15px;
+            padding: 15px;
+            margin-top: 10px;
             /* Space from previous message */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             /* Lighter shadow for sub-content */
@@ -1216,9 +1195,9 @@
         }
 
         .ai-structured-content h4 {
-            font-size: 1.4em;
+            font-size: 1.2em;
             color: var(--primary-color);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
         }
 
@@ -1264,6 +1243,37 @@
             text-decoration: underline;
         }
 
+        /* Styles for the "Ver mapa" button */
+        .map-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            padding-bottom: 10px;
+            /* removed border-top as it will be part of the ai-message content itself */
+        }
+
+        .map-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .map-button:hover {
+            background-color: #8ac052; /* Slightly darker accent color on hover */
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+        }
+
 
         /* Diseño Responsivo */
         @media (max-width: 1024px) {
@@ -1272,7 +1282,7 @@
             }
 
             .main-content {
-                padding: 20px;
+                padding: 10px;
             }
 
             .header {
@@ -1316,7 +1326,7 @@
             }
 
             .sidebar {
-                width: 100%;
+                width: 90%;
                 height: auto;
                 flex-direction: row;
                 justify-content: center;
@@ -1360,7 +1370,7 @@
             }
 
             .main-content {
-                padding: 15px;
+                padding: 10px;
             }
 
             .header {
@@ -1463,9 +1473,9 @@
             .chat-container {
                 height: 380px;
                 /* Ajuste altura */
-                width: 100%;
+                width: 95%;
                 /* Ocupar todo el ancho en móvil */
-                padding: 15px;
+                padding: 10px;
                 /* Reducir padding */
             }
 
@@ -1480,12 +1490,12 @@
             }
 
             .chat-input {
-                padding: 15px;
-                gap: 8px;
+                padding: 10px;
+                gap: 5px;
             }
 
             .chat-input input {
-                padding: 12px 18px;
+                padding: 5px 10px;
             }
 
             .chat-input button {
@@ -1554,16 +1564,12 @@
                 gap: 10px;
             }
 
-            .thinking-process .icon-row {
+            .thinking-process .icons-row {
                 gap: 10px;
             }
 
             .thinking-process .icon-item i {
                 font-size: 2em;
-            }
-
-            .thinking-process .icon-item p {
-                font-size: 0.8em;
             }
 
             .thinking-message {
@@ -1586,10 +1592,63 @@
                 padding: 8px 12px;
             }
         }
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar.collapsed {
+                display: none !important;
+            }
+
+            button,
+            .tab,
+            input {
+                min-height: 48px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .slide-in-up {
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="logo-text">
@@ -1619,7 +1678,6 @@
 
     <div class="main-content">
         <header class="header">
-
             <div class="theme-toggle-container">
                 <button id="theme-toggle">
                     <i id="theme-icon" class="fas fa-moon"></i> Cambiar Tema
@@ -1633,14 +1691,14 @@
                 <img src="calendario.png" alt="Calendario">
                 <span class="event-date-overlay">20</span>
             </div>
-            <p>Final Eurocopa 2025</p>
+            <p>Final Liga de Europa 2025 </p>
         </div>
 
 
         <!-- Indicadores Clave -->
         <h2 class="section-title"><i class="fas fa-chart-line"></i> Indicadores Clave de Rendimiento</h2>
-        <section class="kpi-section">
-            <div class="kpi-card" data-kpi="Índice de Calidad Urbana">
+        <section class="kpi-section fade-in" >
+            <div class="kpi-card"  data-aos="fade-up" data-kpi="Índice de Calidad Urbana">
                 <i class="fas fa-leaf card-icon"></i>
                 <div class="kpi-content">
                     <h3>Índice de Calidad Urbana</h3>
@@ -1691,15 +1749,15 @@
         </section>
 
         <!-- Sección de Análisis IA -->
-        <h2 class="section-title"><i class="fas fa-robot"></i> Análisis Inteligente</h2>
+        <h2 class="section-title fade-in"><i class="fas fa-robot"></i> Análisis Inteligente</h2>
 
-        <div class="tabs">
+        <div class="tabs fade-in">
             <button class="tab active" data-tab="chat">Chat con IA</button>
             <button class="tab" data-tab="neighborhood">Análisis por Barrio</button>
         </div>
 
 
-        <div id="chat-tab" class="tab-content active">
+        <div id="chat-tab" class="tab-content active slide-in-up">
             <div class="chat-container">
                 <div class="chat-messages">
                     <div class="message ai-message">
@@ -1714,7 +1772,7 @@
                         </div>
                         <div class="icon-item" data-source="redes-sociales">
                             <!-- Este <i> se actualizará dinámicamente con los iconos de redes sociales -->
-                            <i class="fa-brands fa-square-facebook"></i>
+                            <i class="fab fa-facebook"></i>
                             <p>Redes Sociales</p>
                         </div>
                         <div class="icon-item" data-source="ciudadanos"><i class="fas fa-users"></i>
@@ -1971,6 +2029,7 @@
         const thinkingMessage = document.querySelector('.thinking-message'); // Get the thinking message element
         const eventAlert = document.getElementById('event-alert');
         const aiAvatarImage = document.getElementById('ai-avatar-image'); // Get AI avatar image element
+        // Removed showMapButton from here as it will be dynamically created
 
         // Definimos las respuestas específicas para cada KPI
         const kpiResponses = {
@@ -1981,7 +2040,8 @@
             "final europa 2025": {
                 problem: {
                     title: "Problemas Identificados",
-                    description: "La Final de Europa 2025(1) es un reto en términos de seguridad ciudadana y gestión de aglomeraciones. La afluencia masiva de aficionados locales como de internacionales, puede generar congestión, aumentar el riesgo de incidentes menores (robos, desórdenes) y dificultar la respuesta de los servicios de emergencia."
+                    // The entire text "La Final de la Liga de Europa 2025" is now wrapped in <a> with underline style
+                    description: `<a href="https://es.wikipedia.org/wiki/Final_de_la_Liga_Europa_de_la_UEFA_2024-25" target="_blank" style="text-decoration: underline; color: inherit;">La Final de la Liga de Europa 2025<sup style="font-size: 0.7em; vertical-align: super; text-decoration: none;">1</sup></a> es un reto en términos de seguridad ciudadana y gestión de aglomeraciones. La afluencia masiva de aficionados locales como de internacionales, puede generar congestión, aumentar el riesgo de incidentes menores (robos, desórdenes) y dificultar la respuesta de los servicios de emergencia.`
                 },
                 solutions: {
                     title: "Soluciones Recomendadas",
@@ -1989,7 +2049,14 @@
                         "Refuerzo de la Presencia Policial y de Seguridad: Aumentar el número de efectivos policiales, seguridad privada y personal de control de multitudes en todas las zonas de alta concentración para prevenir incidentes y asegurar una respuesta rápida.",
                         "Implementación de Zonas de Acceso Controlado y Rutas de Evacuación Claras: Establecer perímetros de seguridad y puntos de acceso únicos para el estadio y las fan zones, con controles exhaustivos"
                         ]
-                }
+                },
+                mapButtonHtml: `
+                    <div class="map-button-container">
+                        <button class="map-button" id="dynamic-show-map-button">
+                            <i class="fas fa-map-marked-alt"></i> Ver mapa
+                        </button>
+                    </div>
+                `
             }
         };
 
@@ -2019,7 +2086,8 @@
 
             const socialMediaIconElement = document.querySelector('.icon-item[data-source="redes-sociales"] i');
             // Updated to use fa-brands fa-x-twitter for the X icon (Font Awesome 6)
-            const socialMediaIconsArray = ['fa-brands fa-square-facebook', 'fa-brands fa-x-twitter', 'fa-brands fa-square-instagram'];
+            // Using the square versions for Facebook and Instagram as requested
+            const socialMediaIconsArray = ['fa-brands fa-square-facebook', 'fa-brands fa-x-twitter', 'fa-brands fa-square-instagram']; 
             let socialIconAnimationIntervalId = null; // To store the interval ID for clearing
 
             const thinkingMessagesData = [{
@@ -2034,7 +2102,7 @@
                 iconElement: thinkingIcons[2].querySelector('i'),
                 text: 'Analizando datos ciudadanos',
                 initialClass: 'fas fa-users'
-            },];
+            }, ];
 
 
             // Animate thinking messages and color icons
@@ -2120,11 +2188,48 @@
             chatMessages.appendChild(aiMessageDiv); // Append empty div first
 
             if (structuredResponseData) {
+                // Directly use the problem description from kpiResponses which now includes the link and subindex
                 const problemHtml = `<h4>${structuredResponseData.problem.title}</h4><ul><li>${structuredResponseData.problem.description}</li></ul>`;
                 const solutionsHtml = `<h4>${structuredResponseData.solutions.title}</h4><ul>${structuredResponseData.solutions.list.map(sol => `<li>${sol}</li>`).join('')}</ul>`;
 
-                const fullContentHtml = `<div class="ai-structured-content">${problemHtml}${solutionsHtml}</div>`;
+                // Combine structured content with the map button HTML
+                const fullContentHtml = `
+                    <div class="ai-structured-content">
+                        ${problemHtml}
+                        ${solutionsHtml}
+                    </div>
+                    ${structuredResponseData.mapButtonHtml || ''}
+                `;
                 aiMessageDiv.innerHTML = fullContentHtml; // Set content directly
+
+                // If map button exists in this response, attach event listener
+                if (structuredResponseData.mapButtonHtml) {
+                    // Use a small delay to ensure the button is rendered in the DOM
+                    setTimeout(() => {
+                        const dynamicShowMapButton = aiMessageDiv.querySelector('#dynamic-show-map-button');
+                        if (dynamicShowMapButton) {
+                            dynamicShowMapButton.addEventListener('click', () => {
+                                const mapMessageDiv = document.createElement('div');
+                                mapMessageDiv.classList.add('message', 'ai-message');
+                                mapMessageDiv.innerHTML = `
+                                    <div class="ai-structured-content">
+                                        <h4>Funcionalidad de Mapa</h4>
+                                        <p>La funcionalidad de visualización de mapas para la Final de Europa 2025 está actualmente en desarrollo. Aquí podrás ver:</p>
+                                        <ul>
+                                            <li>Rutas de acceso al estadio y fan zones.</li>
+                                            <li>Puntos de interés y servicios cercanos.</li>
+                                            <li>Estado del tráfico en tiempo real.</li>
+                                        </ul>
+                                        <p>¡Pronto estará disponible para mejorar tu experiencia!</p>
+                                    </div>
+                                `;
+                                chatMessages.appendChild(mapMessageDiv);
+                                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+                            });
+                        }
+                    }, 0); // Short timeout to allow DOM update
+                }
+
             } else {
                 aiMessageDiv.textContent = aiResponseContent; // Set content directly
             }
@@ -2182,6 +2287,9 @@
             // No automatic send
         });
 
+        // Removed the global showMapButton event listener
+        // The "Ver mapa" button and its listener will now be dynamically added when the Eurocopa response is generated.
+
 
         // Selección de barrio
         document.querySelectorAll('.neighborhood-card').forEach(card => {
@@ -2218,6 +2326,15 @@
                 /* Asegurar que comiencen ocultas */
             });
         });
+    </script>
+     <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+        }
+    </script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true });
     </script>
 </body>
 
