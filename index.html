@@ -1660,9 +1660,9 @@
         <nav class="sidebar-nav">
             <ul>
                 <li class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
-                <li><a href="medioambiente.html" style="text-decoration: none; color: inherit;"><i
+                <li><a href="" style="text-decoration: none; color: inherit;"><i
                             class="fas fa-leaf"></i> Medio Ambiente</a></li>
-                <li><a href="trafico.html" style="text-decoration: none; color: inherit;"><i class="fas fa-bus"></i>
+                <li><a href="" style="text-decoration: none; color: inherit;"><i class="fas fa-bus"></i>
                         Trafico</a></li>
                 <li><a href="ciudadano.html" style="text-decoration: none; color: inherit;"><i
                             class="fas fa-user-friends"></i>
@@ -2336,6 +2336,15 @@
     <script>
         AOS.init({ once: true });
     </script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const nav = sidebar.querySelector('.sidebar-nav');
+  nav.style.display = (nav.style.display === 'flex' || nav.style.display === '') ? 'none' : 'flex';
+}
+</script>
+
 </body>
 
 </html>
